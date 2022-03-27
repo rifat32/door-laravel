@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WingController;
 use App\Http\Controllers\Api\CharOfAccountController;
 use App\Http\Controllers\Api\DoctorController;
+use App\Http\Controllers\Api\LabReportController;
 use App\Http\Controllers\Api\LabReportTemplateController;
 use App\Http\Controllers\Api\PatientController;
 
@@ -56,7 +57,15 @@ Route::middleware(['auth:api'])->group(function () {
 
 
 
-// Doctor
+// Lab Report
+Route::post('/v1.0/lab-reports', [LabReportController::class, "createLabReport"]);
+Route::delete('/v1.0/lab-reports/{id}', [LabReportController::class, "deleteLabReport"]);
+Route::put('/v1.0/lab-reports', [LabReportController::class, "updateLabReport"]);
+Route::get('/v1.0/lab-reports', [LabReportController::class, "getLabReports"]);
+
+
+
+// Report Template
 Route::post('/v1.0/report-templates', [LabReportTemplateController::class, "createTemplate"]);
 Route::delete('/v1.0/report-templates/{id}', [LabReportTemplateController::class, "deleteTemplate"]);
 Route::put('/v1.0/report-templates', [LabReportTemplateController::class, "updateTemplate"]);
