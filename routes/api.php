@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BalanceController;
 use App\Http\Controllers\Api\BankController;
 use App\Http\Controllers\Api\BillController;
+use App\Http\Controllers\Api\ChairmanController;
 use App\Http\Controllers\Api\CreditNoteController;
 use App\Http\Controllers\Api\DebitNoteController;
 use App\Http\Controllers\Api\ParchaseController;
@@ -16,12 +17,25 @@ use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WingController;
 use App\Http\Controllers\Api\CharOfAccountController;
+use App\Http\Controllers\Api\CitizenController;
+use App\Http\Controllers\Api\ComplainController;
+use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\LabReportController;
 use App\Http\Controllers\Api\LabReportTemplateController;
+use App\Http\Controllers\Api\MethodController;
+use App\Http\Controllers\Api\NonCitizenTaxPaymentController;
 use App\Http\Controllers\Api\PatientController;
-
+use App\Http\Controllers\Api\PostOfficeController;
+use App\Http\Controllers\Api\UnionController;
+use App\Http\Controllers\Api\UpazilaController;
+use App\Http\Controllers\Api\VillageController;
+use App\Http\Controllers\Api\WardController;
+use App\Http\Controllers\Api\NonHoldingCitizenController;
+use App\Http\Controllers\Api\TaxPaymentsController;
+use App\Http\Controllers\Api\TradeLicenseController;
 use App\Http\Controllers\SetUpController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -48,12 +62,134 @@ Route::middleware('auth:api')->get('/v1.0/user', function (Request $request) {
         200
     );
 });
+
 Route::post('/v1.0/login', [AuthController::class, "login"]);
 Route::post('/v1.0/register', [AuthController::class, "register"]);
+
 // protected routes
+
 Route::middleware(['auth:api'])->group(function () {
-    // Route::get('/v1.0/setup', [SetUpController::class, "setUp"]);
-    Route::post('/v1.0/logout', [AuthController::class, "logout"]);
+// Route::get('/v1.0/setup', [SetUpController::class, "setUp"]);
+Route::post('/v1.0/logout', [AuthController::class, "logout"]);
+
+
+
+// Unions
+Route::post('/v1.0/unions', [UnionController::class, "createUnion"]);
+Route::put('/v1.0/unions', [UnionController::class, "updateUnion"]);
+Route::get('/v1.0/unions', [UnionController::class, "getUnion"]);
+Route::get('/v1.0/unions/{id}', [UnionController::class, "getUnionById"]);
+Route::get('/v1.0/unions/search/{term}', [UnionController::class, "searchUnion"]);
+Route::delete('/v1.0/unions/{id}', [UnionController::class, "deleteUnion"]);
+
+
+// Wards
+Route::post('/v1.0/wards', [WardController::class, "createWard"]);
+Route::put('/v1.0/wards', [WardController::class, "updateWard"]);
+Route::get('/v1.0/wards', [WardController::class, "getWard"]);
+Route::get('/v1.0/wards/{id}', [WardController::class, "getWardById"]);
+Route::get('/v1.0/wards/search/{term}', [WardController::class, "searchWard"]);
+Route::delete('/v1.0/wards/{id}', [WardController::class, "deleteWard"]);
+
+
+// Village
+Route::post('/v1.0/villages', [VillageController::class, "createVillage"]);
+Route::put('/v1.0/villages', [VillageController::class, "updateVillage"]);
+Route::get('/v1.0/villages', [VillageController::class, "getVillage"]);
+Route::get('/v1.0/villages/{id}', [VillageController::class, "getVillageById"]);
+Route::get('/v1.0/villages/search/{term}', [VillageController::class, "searchVillage"]);
+Route::delete('/v1.0/villages/{id}', [VillageController::class, "deleteVillage"]);
+
+// Post Office
+Route::post('/v1.0/post-office', [PostOfficeController::class, "createPostOffice"]);
+Route::put('/v1.0/post-office', [PostOfficeController::class, "updatePostOffice"]);
+Route::get('/v1.0/post-office', [PostOfficeController::class, "getPostOffice"]);
+Route::get('/v1.0/post-office/{id}', [PostOfficeController::class, "getPostOfficeById"]);
+Route::get('/v1.0/post-office/search/{term}', [PostOfficeController::class, "searchPostOffice"]);
+Route::delete('/v1.0/post-office/{id}', [PostOfficeController::class, "deletePostOffice"]);
+
+// Citizen
+Route::post('/v1.0/citizens', [CitizenController::class, "createCitizen"]);
+Route::put('/v1.0/citizens', [CitizenController::class, "updateCitizen"]);
+Route::get('/v1.0/citizens', [CitizenController::class, "getCitizen"]);
+Route::get('/v1.0/citizens/{id}', [CitizenController::class, "getCitizenById"]);
+Route::get('/v1.0/citizens/search/{term}', [CitizenController::class, "searchCitizen"]);
+Route::delete('/v1.0/citizens/{id}', [CitizenController::class, "deleteCitizen"]);
+
+
+
+// non holding Citizen
+Route::post('/v1.0/nonholding-citizens', [NonHoldingCitizenController::class, "createCitizen"]);
+Route::put('/v1.0/nonholding-citizens', [NonHoldingCitizenController::class, "updateCitizen"]);
+Route::get('/v1.0/nonholding-citizens', [NonHoldingCitizenController::class, "getCitizen"]);
+Route::get('/v1.0/nonholding-citizens/{id}', [NonHoldingCitizenController::class, "getCitizenById"]);
+Route::get('/v1.0/nonholding-citizens/search/{term}', [NonHoldingCitizenController::class, "searchCitizen"]);
+Route::delete('/v1.0/nonholding-citizens/{id}', [NonHoldingCitizenController::class, "deleteCitizen"]);
+
+// Chairman
+Route::post('/v1.0/chairmans', [ChairmanController::class, "createChairman"]);
+Route::put('/v1.0/chairmans', [ChairmanController::class, "updateChairman"]);
+Route::get('/v1.0/chairmans', [ChairmanController::class, "getChairman"]);
+Route::get('/v1.0/chairmans/{id}', [ChairmanController::class, "getChairmanById"]);
+Route::get('/v1.0/chairmans/search/{term}', [ChairmanController::class, "searchChairman"]);
+Route::delete('/v1.0/chairmans/{id}', [ChairmanController::class, "deleteChairman"]);
+
+// Complain
+Route::post('/v1.0/complains', [ComplainController::class, "createComplain"]);
+Route::put('/v1.0/complains', [ComplainController::class, "updateComplain"]);
+Route::get('/v1.0/complains', [ComplainController::class, "getComplain"]);
+Route::get('/v1.0/complains/{id}', [ComplainController::class, "getComplainById"]);
+Route::get('/v1.0/complains/search/{term}', [ComplainController::class, "searchComplain"]);
+Route::delete('/v1.0/complains/{id}', [ComplainController::class, "deleteComplain"]);
+// trade license
+Route::post('/v1.0/trade-license', [TradeLicenseController::class, "createTradeLicense"]);
+Route::put('/v1.0/trade-license', [TradeLicenseController::class, "updateTradeLicense"]);
+Route::get('/v1.0/trade-license', [TradeLicenseController::class, "getTradeLicense"]);
+Route::get('/v1.0/trade-license/{id}', [TradeLicenseController::class, "getTradeLicenseById"]);
+Route::get('/v1.0/trade-license/search/{term}', [TradeLicenseController::class, "searchTradeLicense"]);
+Route::delete('/v1.0/trade-license/{id}', [TradeLicenseController::class, "deleteTradeLicense"]);
+
+// tax payment
+Route::post('/v1.0/tax-payments', [TaxPaymentsController::class, "createTaxPayment"]);
+Route::put('/v1.0/tax-payments', [TaxPaymentsController::class, "updateTaxPayment"]);
+Route::get('/v1.0/tax-payments', [TaxPaymentsController::class, "getTaxPayment"]);
+Route::get('/v1.0/tax-payments/{id}', [TaxPaymentsController::class, "getTaxPaymentById"]);
+Route::get('/v1.0/tax-payments/search/{term}', [TaxPaymentsController::class, "searchTaxPayment"]);
+Route::delete('/v1.0/tax-payments/{id}', [TaxPaymentsController::class, "deleteTaxPayment"]);
+
+// non citizen tax payment
+Route::post('/v1.0/non-citizen-tax-payments', [NonCitizenTaxPaymentController::class, "createNonCitizenTaxPayment"]);
+Route::put('/v1.0/non-citizen-tax-payments', [NonCitizenTaxPaymentController::class, "updateNonCitizenTaxPayment"]);
+Route::get('/v1.0/non-citizen-tax-payments', [NonCitizenTaxPaymentController::class, "getNonCitizenTaxPayment"]);
+Route::get('/v1.0/non-citizen-tax-payments/{id}', [NonCitizenTaxPaymentController::class, "getNonCitizenTaxPaymentById"]);
+Route::get('/v1.0/non-citizen-tax-payments/search/{term}', [NonCitizenTaxPaymentController::class, "searchNonCitizenTaxPayment"]);
+Route::delete('/v1.0/non-citizen-tax-payments/{id}', [NonCitizenTaxPaymentController::class, "deleteNonCitizenTaxPayment"]);
+
+
+// Upazila
+Route::post('/v1.0/upazilas', [UpazilaController::class, "createUpazila"]);
+Route::put('/v1.0/upazilas', [UpazilaController::class, "updateUpazila"]);
+Route::get('/v1.0/upazilas', [UpazilaController::class, "getUpazila"]);
+Route::get('/v1.0/upazilas/{id}', [UpazilaController::class, "getUpazilaById"]);
+Route::get('/v1.0/upazilas/search/{term}', [UpazilaController::class, "searchUpazila"]);
+Route::delete('/v1.0/upazilas/{id}', [UpazilaController::class, "deleteUpazila"]);
+
+
+// District
+Route::post('/v1.0/districts', [DistrictController::class, "createDistrict"]);
+Route::put('/v1.0/districts', [DistrictController::class, "updateDistrict"]);
+Route::get('/v1.0/districts', [DistrictController::class, "getDistrict"]);
+Route::get('/v1.0/districts/{id}', [DistrictController::class, "getDistrictById"]);
+Route::get('/v1.0/districts/search/{term}', [DistrictController::class, "searchDistrict"]);
+Route::delete('/v1.0/districts/{id}', [DistrictController::class, "deleteDistrict"]);
+
+// Methods
+Route::post('/v1.0/methods', [MethodController::class, "createMethod"]);
+Route::put('/v1.0/methods', [MethodController::class, "updateMethod"]);
+Route::get('/v1.0/methods', [MethodController::class, "getMethod"]);
+Route::get('/v1.0/methods/{id}', [MethodController::class, "getMethodById"]);
+Route::get('/v1.0/methods/search/{term}', [MethodController::class, "searchMethod"]);
+Route::delete('/v1.0/methods/{id}', [MethodController::class, "deleteMethod"]);
 
 
 
