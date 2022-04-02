@@ -5,36 +5,33 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NonCitizenTaxPayment extends Model
+class CitizenTax extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        "payment_for",
+        "note",
         "amount",
-        "due",
         "current_year",
         "union_id",
-        "non_citizen_id",
-        "method_id"
+        "citizen_id",
+        "ward_id"
      ];
      protected $casts = [
          'union_id' => 'integer',
-         'non_citizen_id' => 'integer',
-         'method_id' => 'integer',
+         'citizen_id' => 'integer',
+         'ward_id' => 'integer',
      ];
      public function union()
      {
          return $this->hasOne(Union::class, 'id', 'union_id')->withTrashed();
      }
-     public function noncitizen()
+     public function citizen()
      {
-         return $this->hasOne(NonHoldingCitizen::class, 'id', 'non_citizen_id')->withTrashed();
+         return $this->hasOne(Citizen::class, 'id', 'citizen_id')->withTrashed();
      }
-     public function method()
+     public function ward()
      {
-         return $this->hasOne(Method::class, 'id', 'method_id')->withTrashed();
+         return $this->hasOne(Ward::class, 'id', 'ward_id')->withTrashed();
      }
-
 
 }

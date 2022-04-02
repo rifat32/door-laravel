@@ -18,12 +18,14 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WingController;
 use App\Http\Controllers\Api\CharOfAccountController;
 use App\Http\Controllers\Api\CitizenController;
+use App\Http\Controllers\Api\CitizenTaxController;
 use App\Http\Controllers\Api\ComplainController;
 use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\LabReportController;
 use App\Http\Controllers\Api\LabReportTemplateController;
 use App\Http\Controllers\Api\MethodController;
+use App\Http\Controllers\Api\NonCitizenTaxController;
 use App\Http\Controllers\Api\NonCitizenTaxPaymentController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\PostOfficeController;
@@ -164,6 +166,24 @@ Route::get('/v1.0/non-citizen-tax-payments', [NonCitizenTaxPaymentController::cl
 Route::get('/v1.0/non-citizen-tax-payments/{id}', [NonCitizenTaxPaymentController::class, "getNonCitizenTaxPaymentById"]);
 Route::get('/v1.0/non-citizen-tax-payments/search/{term}', [NonCitizenTaxPaymentController::class, "searchNonCitizenTaxPayment"]);
 Route::delete('/v1.0/non-citizen-tax-payments/{id}', [NonCitizenTaxPaymentController::class, "deleteNonCitizenTaxPayment"]);
+
+// citizen taxes
+Route::post('/v1.0/cizen-taxes', [CitizenTaxController::class, "createCitizenTax"]);
+Route::put('/v1.0/cizen-taxes', [CitizenTaxController::class, "updateCitizenTax"]);
+Route::get('/v1.0/cizen-taxes', [CitizenTaxController::class, "getCitizenTax"]);
+Route::get('/v1.0/cizen-taxes/{id}', [CitizenTaxController::class, "getCitizenTaxById"]);
+Route::get('/v1.0/cizen-taxes/search/{term}', [CitizenTaxController::class, "searchCitizenTax"]);
+Route::delete('/v1.0/cizen-taxes/{id}', [CitizenTaxController::class, "deleteCitizenTax"]);
+
+// non citizen taxes
+Route::post('/v1.0/non-cizen-taxes', [NonCitizenTaxController::class, "createNonCitizenTax"]);
+Route::put('/v1.0/non-cizen-taxes', [NonCitizenTaxController::class, "updateNonCitizenTax"]);
+Route::get('/v1.0/non-cizen-taxes', [NonCitizenTaxController::class, "getNonCitizenTax"]);
+Route::get('/v1.0/non-cizen-taxes/{id}', [NonCitizenTaxController::class, "getNonCitizenTaxById"]);
+Route::get('/v1.0/non-cizen-taxes/search/{term}', [NonCitizenTaxController::class, "searchNonCitizenTax"]);
+Route::delete('/v1.0/non-cizen-taxes/{id}', [NonCitizenTaxController::class, "deleteNonCitizenTax"]);
+
+
 
 
 // Upazila

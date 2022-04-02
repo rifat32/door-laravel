@@ -26,6 +26,7 @@ class CreateMembersTable extends Migration
             $table->string("district");
             $table->string("nid");
             $table->string("image");
+            $table->foreign('citizen_id')->references('id')->on('citizens')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -50,6 +50,10 @@ class Citizen extends Model
         "upazila_id"=> 'integer',
         "district_id"=> 'integer',
      ];
+     public function member()
+     {
+         return $this->hasMany(Member::class, 'citizen_id', 'id');
+     }
      public function union()
      {
          return $this->hasOne(Union::class, 'id', 'union_id')->withTrashed();

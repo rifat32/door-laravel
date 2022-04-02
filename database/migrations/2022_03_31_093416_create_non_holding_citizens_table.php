@@ -47,7 +47,7 @@ class CreateNonHoldingCitizensTable extends Migration
             $table->foreign('upazila_id')->references('id')->on('upazilas')->onDelete('cascade');
             $table->foreign('district_id')->references('id')->on('districts')->onDelete('cascade');
 
-
+            $table->softDeletes();
 
             $table->timestamps();
         });

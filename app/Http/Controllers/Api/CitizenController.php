@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CitizenRequest;
+use App\Http\Requests\CitizenUpdateRequest;
 use App\Http\Services\CitizenService;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class CitizenController extends Controller
         return $this->createCitizenService($request);
     }
 
-    public function updateCitizen(Request $request)
+    public function updateCitizen(CitizenUpdateRequest $request)
     {
         return $this->updateCitizenService($request);
     }

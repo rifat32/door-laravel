@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Utils\ErrorUtil;
 use App\Models\Citizen;
+use App\Models\Member;
 use Exception;
 
 trait CitizenService
@@ -13,45 +14,22 @@ trait CitizenService
     {
 
         try{
-            $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path('img/citizen'), $imageName);
-            $imageName = "img/restaurant/" . $imageName;
-            $insertableData = [
-                "union_id"=>$request->union_id,
-        "ward_id"=>$request->ward_id,
-        "village_id"=>$request->village_id,
-        "post_office_id"=>$request->post_office_id,
-        "upazila_id"=>$request->upazila_id,
-        "district_id"=>$request->district_id,
+            // $imageName = time().'.'.$request->image->extension();
+            // $request->image->move(public_path('img/citizen'), $imageName);
+            // $imageName = "img/restaurant/" . $imageName;
+            $insertableData = $request->validated();
+            $insertableData["image"] = "image";
+            $citizen =   Citizen::create($insertableData);
+         $insertedMembersArray = [];
+         foreach($insertableData["members"] as $member){
+            $member["image"] = "image2";
+            $member["citizen_id"] = $citizen->id;
+         $insertedMember =  Member::create($member);
 
-        "holding_no"=>$request->holding_no,
-        "thana_head_name"=>$request->thana_head_name,
-        "thana_head_religion"=>$request->thana_head_religion,
-        "thana_head_gender"=>$request->thana_head_gender,
-        "thana_head_occupation"=>$request->thana_head_occupation,
-        "mobile"=>$request->mobile,
-        "guardian"=>$request->guardian,
-        "c_mother_name"=>$request->c_mother_name,
-        "nid_no"=>$request->nid_no,
-        "is_tubewell"=>$request->is_tubewell,
-        "latrin_type"=>$request->latrin_type,
-        "type_of_living"=>$request->type_of_living,
-        "type_of_organization"=>$request->type_of_organization,
-        "previous_due"=>$request->previous_due,
-        "tax_amount"=>$request->tax_amount,
-        "male"=>$request->male,
-        "female"=>$request->female,
-        "annual_price"=>$request->annual_price,
-        "gov_advantage"=>$request->gov_advantage,
-        "image"=>$imageName,
-        "current_year"=>$request->current_year,
-        "raw_house"=>$request->raw_house,
-        "half_building_house"=>$request->half_building_house,
-        "building_house"=>$request->building_house
-            ];
-        
-            $data['data'] =   Citizen::create($insertableData);
-
+        }
+     array_push($insertedMembersArray, $insertedMember);
+     $data['data'] = $citizen;
+      $data['data']["members"] = $insertedMembersArray;
             return response()->json($data, 201);
         } catch(Exception $e){
         return $this->sendError($e,500);
@@ -62,47 +40,77 @@ trait CitizenService
     {
 
         try{
-            $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path('img/citizen'), $imageName);
-            $imageName = "img/restaurant/" . $imageName;
-            $insertableData = [
-                "union_id"=>$request->union_id,
-        "ward_id"=>$request->ward_id,
-        "village_id"=>$request->village_id,
-        "post_office_id"=>$request->post_office_id,
-        "upazila_id"=>$request->upazila_id,
-        "district_id"=>$request->district_id,
+            // $imageName = time().'.'.$request->image->extension();
+            // $request->image->move(public_path('img/citizen'), $imageName);
+            // $imageName = "img/restaurant/" . $imageName;
+            $updatableData = $request->validated();
+             $updatableData["image"] = "image";
 
-        "holding_no"=>$request->holding_no,
-        "thana_head_name"=>$request->thana_head_name,
-        "thana_head_religion"=>$request->thana_head_religion,
-        "thana_head_gender"=>$request->thana_head_gender,
-        "thana_head_occupation"=>$request->thana_head_occupation,
-        "mobile"=>$request->mobile,
-        "guardian"=>$request->guardian,
-        "c_mother_name"=>$request->c_mother_name,
-        "nid_no"=>$request->nid_no,
-        "is_tubewell"=>$request->is_tubewell,
-        "latrin_type"=>$request->latrin_type,
-        "type_of_living"=>$request->type_of_living,
-        "type_of_organization"=>$request->type_of_organization,
-        "previous_due"=>$request->previous_due,
-        "tax_amount"=>$request->tax_amount,
-        "male"=>$request->male,
-        "female"=>$request->female,
-        "annual_price"=>$request->annual_price,
-        "gov_advantage"=>$request->gov_advantage,
-        "image"=>$imageName,
-        "current_year"=>$request->current_year,
-        "raw_house"=>$request->raw_house,
-        "half_building_house"=>$request->half_building_house,
-        "building_house"=>$request->building_house
-            ];
-            $data['data'] = tap(Citizen::where(["id" =>  $request["id"]]))->update(
-                $insertableData
-            )
-            ->with("union","ward","village","postOffice","upazila","district")
-            ->first();
+
+
+            foreach($updatableData["members"] as $member){
+                $member["image"] = "image";
+             $updatedMember =  Member::where([
+             "id" =>  $member["id"],
+             ])->update(
+
+        collect($member)->only([
+            "name",
+            "father_name",
+            "mother_name",
+            "village_name",
+            "post_office",
+            "upazila",
+            "district",
+            "nid",
+            "image"
+           ])
+           ->toArray()
+    );
+
+            }
+
+
+
+            $data['data'] = tap(Citizen::where(["id" =>  $updatableData["id"]]))->update(
+                collect($updatableData)->only([
+                    "union_id",
+                    "ward_id",
+                    "village_id",
+                    "post_office_id",
+                    "upazila_id",
+                    "district_id",
+
+                    "holding_no",
+                    "thana_head_name",
+                    "thana_head_religion",
+                    "thana_head_gender",
+                    "thana_head_occupation",
+                    "mobile",
+                    "guardian",
+                    "c_mother_name",
+                    "nid_no",
+                    "is_tubewell",
+                    "latrin_type",
+                    "type_of_living",
+                    "type_of_organization",
+                    "previous_due",
+                    "tax_amount",
+                    "male",
+                    "female",
+                    "annual_price",
+                    "gov_advantage",
+                    "image",
+                    "current_year",
+                    "raw_house",
+                    "half_building_house",
+                    "building_house"
+                ])
+                ->toArray()
+             )
+
+             ->with("union","ward","village","postOffice","upazila","district","member")
+             ->first();
             return response()->json($data, 200);
         } catch(Exception $e){
         return $this->sendError($e,500);
