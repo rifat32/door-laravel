@@ -52,6 +52,19 @@ trait WardService
         }
 
     }
+    public function getWardByUnionService($request,$unionId)
+    {
+
+        try{
+            $data['data'] =   Ward::with("union")->where(["union_id" => $unionId])->get();
+        return response()->json($data, 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
+    }
+
+
     public function getWardByIdService($id,$request)
     {
 

@@ -24,6 +24,11 @@ class UnionController extends Controller
     {
         return $this->getUnionsService($request);
     }
+    public function getAllUnion(Request $request)
+    {
+        return $this->getAllUnionsService($request);
+    }
+
     public function getUnionById($id,Request $request)
     {
 

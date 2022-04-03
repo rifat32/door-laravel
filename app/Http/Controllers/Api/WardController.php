@@ -25,6 +25,11 @@ class WardController extends Controller
     {
         return $this->getWardService($request);
     }
+    public function getWardByUnion(Request $request,$unionId)
+    {
+        return $this->getWardByUnionService($request,$unionId);
+    }
+
     public function getWardById($id,Request $request)
     {
 

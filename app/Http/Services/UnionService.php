@@ -48,6 +48,18 @@ trait UnionService
         }
 
     }
+    public function getAllUnionsService($request)
+    {
+
+        try{
+            $data['data'] =   Union::all();
+        return response()->json($data, 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
+    }
+
     public function getUnionByIdService($id,$request)
     {
 
