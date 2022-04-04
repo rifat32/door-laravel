@@ -31,7 +31,7 @@ trait PostOfficeService
                     "union_id"
                 )
             )
-            ->with("union","ward")
+            ->with("ward.union")
             ->first();
             return response()->json($data, 200);
         } catch(Exception $e){
@@ -44,7 +44,7 @@ trait PostOfficeService
     {
 
         try{
-            $data['data'] =   PostOffice::with("union","ward")->paginate(10);
+            $data['data'] =   PostOffice::with("ward.union")->paginate(10);
         return response()->json($data, 200);
         } catch(Exception $e){
         return $this->sendError($e,500);
