@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BalanceController;
 use App\Http\Controllers\Api\BankController;
 use App\Http\Controllers\Api\BillController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ChairmanController;
 use App\Http\Controllers\Api\CreditNoteController;
 use App\Http\Controllers\Api\DebitNoteController;
@@ -73,6 +74,18 @@ Route::post('/v1.0/register', [AuthController::class, "register"]);
 Route::middleware(['auth:api'])->group(function () {
 // Route::get('/v1.0/setup', [SetUpController::class, "setUp"]);
 Route::post('/v1.0/logout', [AuthController::class, "logout"]);
+
+
+
+// Category
+Route::post('/v1.0/categories', [CategoryController::class, "createCategory"]);
+Route::put('/v1.0/categories', [CategoryController::class, "updateCategory"]);
+Route::get('/v1.0/categories', [CategoryController::class, "getCategory"]);
+Route::get('/v1.0/categories/all', [CategoryController::class, "getAllCategory"]);
+Route::get('/v1.0/categories/{id}', [CategoryController::class, "getCategoryById"]);
+Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "searchCategory"]);
+Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
+
 
 
 
