@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\WardController;
 use App\Http\Controllers\Api\NonHoldingCitizenController;
 use App\Http\Controllers\Api\TaxPaymentsController;
 use App\Http\Controllers\Api\TradeLicenseController;
+use App\Http\Controllers\Api\VariationTemplateController;
 use App\Http\Controllers\SetUpController;
 
 use Illuminate\Http\Request;
@@ -87,6 +88,18 @@ Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "search
 Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
 
 
+
+
+// Citizen
+Route::post('/v1.0/variation-templates', [VariationTemplateController::class, "createVariationTemplate"]);
+Route::put('/v1.0/variation-templates', [VariationTemplateController::class, "updateVariationTemplate"]);
+Route::get('/v1.0/variation-templates', [VariationTemplateController::class, "getVariationTemplate"]);
+Route::get('/v1.0/variation-templates/all', [VariationTemplateController::class, "getAllVariationTemplate"]);
+Route::get('/v1.0/variation-templates/{id}', [
+    VariationTemplateController::class, "getVariationTemplateById"
+]);
+Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateController::class, "searchVariationTemplate"]);
+Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::class, "deleteVariationTemplate"]);
 
 
 // Unions
