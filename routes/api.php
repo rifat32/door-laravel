@@ -90,7 +90,7 @@ Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCatego
 
 
 
-// Citizen
+// Variation Templates
 Route::post('/v1.0/variation-templates', [VariationTemplateController::class, "createVariationTemplate"]);
 Route::put('/v1.0/variation-templates', [VariationTemplateController::class, "updateVariationTemplate"]);
 Route::get('/v1.0/variation-templates', [VariationTemplateController::class, "getVariationTemplate"]);
@@ -100,6 +100,17 @@ Route::get('/v1.0/variation-templates/{id}', [
 ]);
 Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateController::class, "searchVariationTemplate"]);
 Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::class, "deleteVariationTemplate"]);
+
+
+// product
+Route::post('/v1.0/products', [ProductController::class, "createProduct"]);
+Route::put('/v1.0/products', [ProductController::class, "updateProduct"]);
+Route::get('/v1.0/products', [ProductController::class, "getProduct"]);
+Route::get('/v1.0/products/{id}', [ProductController::class, "getProductById"]);
+Route::get('/v1.0/products/search/{term}', [ProductController::class, "searchProduct"]);
+Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
+
+
 
 
 // Unions
@@ -281,12 +292,13 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
     Route::get('/v1.0/patients/all', [PatientController::class, "getAllPatients"]);
 
     // products
-    Route::post('/v1.0/products', [ProductController::class, "createProduct"]);
-    Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
-    Route::put('/v1.0/products', [ProductController::class, "updateProduct"]);
-    Route::get('/v1.0/products', [ProductController::class, "getProducts"]);
-    Route::get('/v1.0/products/search/{search}', [ProductController::class, "searchProductByName"]);
-    Route::get('/v1.0/products/{id}', [ProductController::class, "getProductById"]);
+
+    // Route::post('/v1.0/products', [ProductController::class, "createProduct"]);
+    // Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
+    // Route::put('/v1.0/products', [ProductController::class, "updateProduct"]);
+    // Route::get('/v1.0/products', [ProductController::class, "getProducts"]);
+    // Route::get('/v1.0/products/search/{search}', [ProductController::class, "searchProductByName"]);
+    // Route::get('/v1.0/products/{id}', [ProductController::class, "getProductById"]);
     // requisitions
     Route::post('/v1.0/requisitions', [RequisitionController::class, "createRequisition"]);
     Route::get('/v1.0/requisitions', [RequisitionController::class, "getRequisitions"]);

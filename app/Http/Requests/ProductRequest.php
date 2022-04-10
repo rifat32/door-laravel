@@ -25,11 +25,16 @@ class ProductRequest extends FormRequest
     {
         return [
             "name" => "required",
-            "brand" => "required",
-            "category" => "required",
-            "sku" => "required",
-            "price" => "required",
-            "wing_id" => "required",
+            "type" => "required",
+            "category_id" => "required",
+            "sku" => "required|unique:products,sku",
+            "image" => "nullable",
+            "description" => "required",
+            "price" => "required_if:type,single",
+            "variation" => "required_if:type,variable|array",
+            "variation.*.variation_template_id"  => "required_if:type,variable",
+            "variation.*.variation_value_template"  => "required_if:type,variable|array",
+            "variation.*.variation_value_template.*.price"  => "required_if:type,variable|not_in:0,0",
         ];
     }
 }

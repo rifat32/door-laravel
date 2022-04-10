@@ -98,7 +98,7 @@ trait VariationTemplateService
     {
 
         try {
-            $data['data'] =   VariationTemplate::with("variation_value_template")->paginate(10);
+            $data['data'] =   VariationTemplate::with("variation_value_template")->get();
             return response()->json($data, 200);
         } catch (Exception $e) {
             return $this->sendError($e, 500);

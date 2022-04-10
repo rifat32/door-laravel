@@ -13,7 +13,6 @@ class ProductController extends Controller
     use ProductServices;
     public function createProduct(ProductRequest $request)
     {
-
         return $this->createProductService($request);
     }
     public function updateProduct(ProductRequest $request)

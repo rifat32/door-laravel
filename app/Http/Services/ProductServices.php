@@ -2,14 +2,53 @@
 
 namespace App\Http\Services;
 
+use App\Http\Utils\ErrorUtil;
 use App\Models\Product;
+use Exception;
 
 trait ProductServices
 {
+    use ErrorUtil;
     public function createProductService($request)
     {
-        $product =   Product::create($request->all());
-        return response()->json(["product" => $product], 201);
+
+        try {
+            // $imageName = time().'.'.$request->image->extension();
+            // $request->image->move(public_path('img/VariationTemplate'), $imageName);
+            // $imageName = "img/restaurant/" . $imageName;
+
+            $insertableData = $request->validated();
+            $inserted_product =   Product::create($insertableData);
+            if($insertableData["type"] == "single"){
+                $inserted_product->product_variations()->create([
+                    "name" => "Dummy",
+                ]);
+                $variation_data = [
+
+                    "price" => $insertableData["price"],
+                    'name' => 'DUMMY',
+                ];
+            $inserted_product->variations()->create($variation_data);
+            }
+
+
+
+
+
+
+            // $insertedVariationValueTemplateArray = [];
+            // foreach ($insertableData["variation_value_template"] as $value) {
+            //     $value["variation_template_id"] = $inserted_variation_template->id;
+            //     $insertedVariationValue = $inserted_variation_template->variation_value_template()->create($value);
+            //     array_push($insertedVariationValueTemplateArray, $insertedVariationValue);
+            // }
+
+             $data['data'] = $inserted_product;
+            // $data['data']["variation_value_template"] = $insertedVariationValueTemplateArray;
+            return response()->json($data, 201);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
     }
     public function updateProductService($request)
     {

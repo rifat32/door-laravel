@@ -11,19 +11,24 @@ class Product extends Model
     protected $table = "products";
     protected $fillable = [
         "name",
-        "brand",
-        "category",
+        "type",
+        "category_id",
         "sku",
-        "price",
-        "wing_id",
+        "image",
+        "description",
     ];
     protected $casts = [
-        'price' => 'integer',
-        "wing_id" => "integer",
+        'category_id' => 'integer'
     ];
 
-
-
+    public function product_variations()
+    {
+        return $this->hasMany(ProductVariation::class,"product_id","id");
+    }
+    public function variations()
+    {
+        return $this->hasMany(Variation::class,"product_id","id");
+    }
 
 
 
