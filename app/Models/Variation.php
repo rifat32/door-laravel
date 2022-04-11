@@ -22,5 +22,10 @@ class Variation extends Model
         'product_variation_id' => 'integer',
 
     ];
+    public function product()
+    {
+        return $this->belongsTo(Product::class,"product_id","id");
+    }
+
 
 }

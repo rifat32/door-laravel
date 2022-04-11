@@ -14,6 +14,7 @@ trait ErrorUtil
             $data["message"] = "something went wrong";
         }
         $data["StatucCode"] = $statusCode;
+        $data["line"] = $e->getLine();
 return response()->json($data,$statusCode);
 
     }

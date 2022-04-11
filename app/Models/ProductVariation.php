@@ -18,4 +18,12 @@ class ProductVariation extends Model
         'variation_template_id' => 'integer',
 
     ];
+    public function variations()
+    {
+        return $this->hasMany(Variation::class,"product_variation_id","id");
+    }
+    public function variation_template()
+    {
+        return $this->belongsTo(VariationTemplate::class,"variation_template_id","id");
+    }
 }
