@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Utils\ErrorUtil;
+use App\Http\Utils\ProductUtil;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use App\Models\Variation;
@@ -11,7 +12,7 @@ use Exception;
 
 trait ProductServices
 {
-    use ErrorUtil;
+    use ErrorUtil, ProductUtil;
     public function createProductService($request)
     {
 
@@ -23,49 +24,10 @@ trait ProductServices
             $insertableData = $request->validated();
             $inserted_product =   Product::create($insertableData);
             if ($insertableData["type"] == "single") {
-                $inserted_product->product_variations()->create([
-                    "name" => "Dummy",
-                ]);
-                $variation_data = [
-
-                    "price" => $insertableData["price"],
-                    'name' => 'DUMMY',
-                ];
-                $inserted_product->variations()->create($variation_data);
+                $this->createSingleVariationUtil($insertableData, $inserted_product);
             } else {
-
-                foreach ($insertableData["variation"] as $varation) {
-
-                    $variationTemplate = VariationTemplate::where([
-                        "id" => $varation["variation_template_id"]
-                    ])
-                        ->first();
-                    $product_variation_data = [
-                        'name' =>  $variationTemplate->name,
-                        'variation_template_id' => $variationTemplate->id
-                    ];
-                    $product_variation =     $inserted_product->product_variations()->create($product_variation_data);
-                    foreach ($varation["variation_value_template"] as $variationValue) {
-
-
-
-                        $variation_data = [
-                            'name' => $variationValue["name"],
-                            "price" => $variationValue["price"],
-                            "product_id" => $inserted_product->id,
-                            "product_variation_id" => $product_variation->id
-                        ];
-                        $product_variation->variations()->create($variation_data);
-                    }
-                }
+                $this->createVariationProductUtil($insertableData, $inserted_product);
             }
-
-
-
-
-
-
-
             $data['data'] = $inserted_product;
 
             return response()->json($data, 201);
@@ -81,7 +43,7 @@ trait ProductServices
             // $imageName = "img/restaurant/" . $imageName;
 
             $updatableData = $request->validated();
-            $inserted_product =  tap(Product::where(["id" =>  $updatableData["id"]]))->update(
+            $updated_product =  tap(Product::where(["id" => $updatableData["id"]]))->update(
                 collect($updatableData)->only([
                     "name",
                     "type",
@@ -93,74 +55,14 @@ trait ProductServices
                 ])
                     ->toArray()
 
-            )->first();
+            )
+            ->first();
 
 
             if ($updatableData["type"] == "single") {
-
-                $variation_data = [
-                    "price" => $updatableData["price"],
-                ];
-                $inserted_product->variations()->update($variation_data);
+                $this->updateSingleVariationUtil($updatableData, $updated_product);
             } else {
-
-                foreach ($updatableData["variation"] as $varation) {
-
-                    $variationTemplate = VariationTemplate::where([
-                        "id" => $varation["variation_template_id"]
-                    ])
-                        ->first();
-
-
-                    $productVariation = ProductVariation::where([
-                        "id" => $varation["id"],
-                        'variation_template_id' => $variationTemplate->id
-                    ])->first();
-                    if ($productVariation) {
-                        $productVariation->name = $variationTemplate->name;
-                        $productVariation->variation_template_id = $variationTemplate->id;
-                        $productVariation->save();
-                    } else {
-                        $product_variation_data = [
-                            "id" => $varation["id"],
-                            'name' =>  $variationTemplate->name,
-                            'variation_template_id' => $variationTemplate->id
-                        ];
-                        $productVariation =     $inserted_product->product_variations()->create($product_variation_data);
-                    }
-
-
-
-                    foreach ($varation["variation_value_template"] as $variationValue) {
-
-
-                        $variation = Variation::where([
-                            "id" => $variationValue["id"],
-                            'product_variation_id' => $productVariation->id
-                        ])->first();
-
-
-                        if ($variation) {
-
-                            $variation->name = $variationValue["name"];
-                            $variation->price = $variationValue["price"];
-                            $variation->product_id = $inserted_product->id;
-                            $variation->product_variation_id = $productVariation->id;
-                            $variation->save();
-                        } else {
-
-
-                            $variation_data = [
-                                'name' => $variationValue["name"],
-                                "price" => $variationValue["price"],
-                                "product_id" => $inserted_product->id,
-                                "product_variation_id" => $productVariation->id
-                            ];
-                            $productVariation->variations()->create($variation_data);
-
-                        }
-                    }
-                }
+                $this->updateVariationProductUtil($updatableData, $updated_product);
             }
 
 
