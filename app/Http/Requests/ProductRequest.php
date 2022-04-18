@@ -28,7 +28,8 @@ class ProductRequest extends FormRequest
             "type" => "required",
             "category_id" => "required",
             "sku" => "required|unique:products,sku",
-            "image" => "nullable",
+            "image"   =>"nullable",
+            "images"   =>"nullable|array",
             "description" => "required",
             "price" => "required_if:type,single",
             "variation" => "required_if:type,variable|array",
@@ -36,7 +37,7 @@ class ProductRequest extends FormRequest
             "variation.*.variation_value_template"  => "required_if:type,variable|array",
             "variation.*.variation_value_template.*.price"  => "required_if:type,variable|not_in:0,0",
             "variation.*.variation_value_template.*.name"  => "required_if:type,variable",
-        
+
         ];
     }
 }

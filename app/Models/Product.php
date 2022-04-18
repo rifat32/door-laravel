@@ -14,7 +14,7 @@ class Product extends Model
         "type",
         "category_id",
         "sku",
-        "image",
+         "image",
         "description",
     ];
     protected $casts = [
@@ -34,14 +34,15 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class,"category_id","id");
     }
-
-
-
-
-
-
-    public function wing()
+    public function images()
     {
-        return $this->hasOne(Wing::class, 'id', 'wing_id')->withTrashed();
+        return $this->hasMany(ProductImage::class,"product_id","id");
     }
+
+
+
+
+
+
+
 }

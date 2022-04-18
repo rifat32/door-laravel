@@ -15,6 +15,7 @@ trait ErrorUtil
         }
         $data["StatucCode"] = $statusCode;
         $data["line"] = $e->getLine();
+        $data["file"] = $e->getFile();
 return response()->json($data,$statusCode);
 
     }

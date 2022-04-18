@@ -39,7 +39,7 @@ use App\Http\Controllers\Api\TaxPaymentsController;
 use App\Http\Controllers\Api\TradeLicenseController;
 use App\Http\Controllers\Api\VariationTemplateController;
 use App\Http\Controllers\SetUpController;
-
+use App\Http\Requests\ImageRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -88,7 +88,15 @@ Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "search
 Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
 
 
+Route::post('/v1.0/image/upload/single/{location}',function(ImageRequest $request,$location){
 
+                     $new_file_name = time() . '_' . $request->image->getClientOriginalName();
+
+                     $request->image->move($location, $new_file_name);
+                     $imageName = $location . "/" . $new_file_name;
+                     return response()->json(["image" => $imageName],201);
+
+});
 
 // Variation Templates
 Route::post('/v1.0/variation-templates', [VariationTemplateController::class, "createVariationTemplate"]);

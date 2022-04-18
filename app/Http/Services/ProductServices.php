@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Http\Utils\ErrorUtil;
 use App\Http\Utils\ProductUtil;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\ProductVariation;
 use App\Models\Variation;
 use App\Models\VariationTemplate;
@@ -22,7 +23,20 @@ trait ProductServices
             // $imageName = "img/restaurant/" . $imageName;
 
             $insertableData = $request->validated();
+
+
+
             $inserted_product =   Product::create($insertableData);
+
+            if(!empty($insertableData["images"])){
+                foreach($insertableData["images"] as  $image){
+                    $inserted_product->images()->create(["file" => $image]);
+                }
+
+            }
+
+
+
             if ($insertableData["type"] == "single") {
                 $this->createSingleVariationUtil($insertableData, $inserted_product);
             } else {
@@ -51,13 +65,23 @@ trait ProductServices
                     "sku",
                     "image",
                     "description",
-
                 ])
                     ->toArray()
 
             )
             ->first();
+            if(!empty($updated_product["images"])){
 
+     $updated_product->images()->delete();
+
+    foreach($updatableData["images"] as  $image){
+        $updated_product->images()->create(["file" => $image]);
+    }
+
+
+
+
+            }
 
             if ($updatableData["type"] == "single") {
                 $this->updateSingleVariationUtil($updatableData, $updated_product);
