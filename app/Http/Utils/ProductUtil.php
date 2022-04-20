@@ -18,6 +18,7 @@ trait ProductUtil
         $variation_data = [
 
             "price" => $insertableData["price"],
+            "qty" => $insertableData["qty"],
             'name' => 'DUMMY',
         ];
         $inserted_product->variations()->create($variation_data);
@@ -43,6 +44,7 @@ trait ProductUtil
                 $variation_data = [
                     'name' => $variationValue["name"],
                     "price" => $variationValue["price"],
+                    "qty" => $variationValue["qty"],
                     "product_id" => $inserted_product->id,
                     "product_variation_id" => $product_variation->id
                 ];
@@ -55,6 +57,7 @@ trait ProductUtil
     {
         $variation_data = [
             "price" => $updatableData["price"],
+            "qty" => $updatableData["qty"],
         ];
         $updated_product->variations()->update($variation_data);
 
@@ -129,6 +132,7 @@ trait ProductUtil
 
                     $variation->name = $variationValue["name"];
                     $variation->price = $variationValue["price"];
+                    $variation->qty = $variationValue["qty"];
                     $variation->product_id = $updated_product->id;
                     $variation->product_variation_id = $productVariation->id;
                     $variation->save();
@@ -138,6 +142,7 @@ trait ProductUtil
                     $variation_data = [
                         'name' => $variationValue["name"],
                         "price" => $variationValue["price"],
+                        "qty" => $variationValue["qty"],
                         "product_id" => $updated_product->id,
                         "product_variation_id" => $productVariation->id
                     ];

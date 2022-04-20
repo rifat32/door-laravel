@@ -32,6 +32,7 @@ class ProductUpdateRequest extends FormRequest
             "images"   =>"nullable|array",
             "description" => "required",
             "price" => "required_if:type,single",
+            "qty" => "required_if:type,single",
             "variation" => "required_if:type,variable|array",
             "variation.*.variation_template_id"  => "required_if:type,variable",
             "variation.*.variation_value_template"  => "required_if:type,variable|array",

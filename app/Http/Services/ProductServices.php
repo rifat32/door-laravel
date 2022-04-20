@@ -104,6 +104,7 @@ trait ProductServices
                     'products.type',
                     'c.name as category',
                     'variations.price',
+                    'variations.qty',
                     'products.sku',
                     'products.image'
                 )
@@ -132,7 +133,8 @@ trait ProductServices
                 'c.name as category',
                 'variations.price',
                 'products.sku',
-                'products.image'
+                'products.image',
+
             )
             ->orderByDesc("id")
             ->paginate(10);
@@ -144,6 +146,38 @@ trait ProductServices
             "products" => $products
         ], 200);
     }
+    public function getProductPaginationService($perPage,$request)
+    {
+        // $products =   Variation::with("product.category")->paginate(10);
+        $products =    Product::join('variations', 'products.id', '=', 'variations.product_id')
+
+
+            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
+            ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id')
+            ->select(
+                'products.id',
+                'products.name',
+                'products.type',
+                'c.name as category',
+                'variations.price',
+                'variations.qty',
+                'products.sku',
+                'products.image',
+                'variations.id as vid',
+                'variations.name as vvalue',
+                'product_variations.name as vname'
+            )
+            ->orderByDesc("id")
+            ->paginate($perPage);
+
+
+
+
+        return response()->json([
+            "products" => $products
+        ], 200);
+    }
+
     public function getProductByIdService($request, $id)
     {
         $product =   Product::with("product_variations.variations", "variations")->where([

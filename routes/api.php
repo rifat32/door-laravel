@@ -114,6 +114,7 @@ Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::cl
 Route::post('/v1.0/products', [ProductController::class, "createProduct"]);
 Route::put('/v1.0/products', [ProductController::class, "updateProduct"]);
 Route::get('/v1.0/products', [ProductController::class, "getProduct"]);
+Route::get('/v1.0/products/pagination/{perPage}', [ProductController::class, "getProductPagination"]);
 Route::get('/v1.0/products/{id}', [ProductController::class, "getProductById"]);
 Route::get('/v1.0/products/search/{term}', [ProductController::class, "searchProduct"]);
 Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
