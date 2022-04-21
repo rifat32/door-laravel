@@ -118,84 +118,161 @@ trait ProductServices
             return $this->sendError($e, 500);
         }
     }
+    public function updateProductBulkPriceService($request)
+    {
+        try{
+            $updatableData = $request->validated();
+            $amount = $updatableData["amount"];
+            $type = $updatableData["type"];
+           foreach( $updatableData["variations"] as $variation){
+               if( $type == "fixed"){
+                Variation::where([
+                    "id" => $variation["vid"]
+                ])
+                ->increment("price",$amount);
+
+               } else {
+               $updatableVariation =  Variation::where([
+                    "id" => $variation["vid"]
+                ])->first();
+
+                $increaseAmount = $updatableVariation->price * ($amount / 100);
+                $finalAmount = $updatableVariation->price + $increaseAmount;
+                $updatableVariation->price =  $finalAmount;
+                $updatableVariation->save();
+
+
+
+               }
+
+
+           }
+
+
+
+
+                    return response()->json([
+                        "ok" => true
+                    ], 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
+    }
+
+    public function bulkDeleteService($request)
+    {
+
+        try{
+            foreach($request["products"] as $product){
+                Product::where(["id" => $product["id"]])->delete();
+            }
+
+            return response()->json(["ok" => true], 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
+    }
     public function getProductService($request)
     {
-        // $products =   Variation::with("product.category")->paginate(10);
+        try{
+             // $products =   Variation::with("product.category")->paginate(10);
         $products =    Product::join('variations', 'products.id', '=', 'variations.product_id')
 
 
-            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
+        ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
 
-            ->select(
-                'products.id',
-                'products.name',
-                'products.type',
-                'c.name as category',
-                'variations.price',
-                'products.sku',
-                'products.image',
+        ->select(
+            'products.id',
+            'products.name',
+            'products.type',
+            'c.name as category',
+            'variations.price',
+            'products.sku',
+            'products.image',
 
-            )
-            ->orderByDesc("id")
-            ->paginate(10);
-
-
+        )
+        ->orderByDesc("id")
+        ->paginate(10);
 
 
-        return response()->json([
-            "products" => $products
-        ], 200);
+
+
+    return response()->json([
+        "products" => $products
+    ], 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
     }
     public function getProductPaginationService($perPage,$request)
     {
-        // $products =   Variation::with("product.category")->paginate(10);
+        try{
+            // $products =   Variation::with("product.category")->paginate(10);
         $products =    Product::join('variations', 'products.id', '=', 'variations.product_id')
 
 
-            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
-            ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id')
-            ->select(
-                'products.id',
-                'products.name',
-                'products.type',
-                'c.name as category',
-                'variations.price',
-                'variations.qty',
-                'products.sku',
-                'products.image',
-                'variations.id as vid',
-                'variations.name as vvalue',
-                'product_variations.name as vname'
-            )
-            ->orderByDesc("id")
-            ->paginate($perPage);
+        ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
+        ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id')
+        ->select(
+            'products.id',
+            'products.name',
+            'products.type',
+            'c.name as category',
+            'variations.price',
+            'variations.qty',
+            'products.sku',
+            'products.image',
+            'variations.id as vid',
+            'variations.name as vvalue',
+            'product_variations.name as vname'
+        )
+        ->orderByDesc("id")
+        ->paginate($perPage);
 
 
 
 
-        return response()->json([
-            "products" => $products
-        ], 200);
+    return response()->json([
+        "products" => $products
+    ], 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
     }
 
     public function getProductByIdService($request, $id)
     {
-        $product =   Product::with("product_variations.variations", "variations")->where([
-            "id" => $id
-        ])->first();
-        if (!$product) {
+        try{
+            $product =   Product::with("product_variations.variations", "variations")->where([
+                "id" => $id
+            ])->first();
+            if (!$product) {
+                return response()->json([
+                    "message" => "No product is found"
+                ], 404);
+            }
             return response()->json([
-                "message" => "No product is found"
-            ], 404);
+                "product" => $product
+            ], 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
         }
-        return response()->json([
-            "product" => $product
-        ], 200);
+
     }
     public function deleteProductServices($request)
     {
-        Product::where(["id" => $request["id"]])->delete();
-        return response()->json(["ok" => true], 200);
+
+        try{
+            Product::where(["id" => $request["id"]])->delete();
+            return response()->json(["ok" => true], 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
     }
 
 

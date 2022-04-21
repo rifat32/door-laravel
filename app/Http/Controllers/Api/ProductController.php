@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductPriceUpdateRequest;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
@@ -22,6 +23,16 @@ class ProductController extends Controller
 
         return $this->updateProductService($request);
     }
+    public function updateBulkPrice(ProductPriceUpdateRequest $request)
+    {
+        return $this->updateProductBulkPriceService($request);
+    }
+    public function bulkDelete(Request $request)
+    {
+        return $this->bulkDeleteService($request);
+    }
+
+
     public function getProduct(Request $request)
     {
 
