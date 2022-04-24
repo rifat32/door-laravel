@@ -162,10 +162,10 @@ trait ProductServices
 
     public function bulkDeleteService($request)
     {
-
+        
         try{
-            foreach($request["products"] as $product){
-                Product::where(["id" => $product["id"]])->delete();
+            foreach($request["variations"] as $variation){
+                Variation::where(["id" => $variation["vid"]])->delete();
             }
 
             return response()->json(["ok" => true], 200);
@@ -229,7 +229,7 @@ trait ProductServices
             'variations.name as vvalue',
             'product_variations.name as vname'
         )
-        ->orderByDesc("id")
+        ->orderByDesc("vid")
         ->paginate($perPage);
 
 
