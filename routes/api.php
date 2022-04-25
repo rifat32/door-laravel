@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\CharOfAccountController;
 use App\Http\Controllers\Api\CitizenController;
 use App\Http\Controllers\Api\CitizenTaxController;
 use App\Http\Controllers\Api\ComplainController;
+use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\LabReportController;
@@ -121,7 +122,14 @@ Route::get('/v1.0/products/{id}', [ProductController::class, "getProductById"]);
 Route::get('/v1.0/products/search/{term}', [ProductController::class, "searchProduct"]);
 Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
 
-
+// Category
+Route::post('/v1.0/coupons', [CouponController::class, "createCoupon"]);
+Route::put('/v1.0/coupons', [CouponController::class, "updateCoupon"]);
+Route::get('/v1.0/coupons', [CouponController::class, "getCoupon"]);
+Route::get('/v1.0/coupons/all', [CouponController::class, "getAllCoupon"]);
+Route::get('/v1.0/coupons/{id}', [CouponController::class, "getCouponById"]);
+Route::get('/v1.0/coupons/search/{term}', [CouponController::class, "searchCoupon"]);
+Route::delete('/v1.0/coupons/{id}', [CouponController::class, "deleteCoupon"]);
 
 
 // Unions

@@ -162,7 +162,7 @@ trait ProductServices
 
     public function bulkDeleteService($request)
     {
-        
+
         try{
             foreach($request["variations"] as $variation){
                 Variation::where(["id" => $variation["vid"]])->delete();
@@ -267,7 +267,7 @@ trait ProductServices
     {
 
         try{
-            Product::where(["id" => $request["id"]])->delete();
+            Variation::where(["id" => $request["id"]])->delete();
             return response()->json(["ok" => true], 200);
         } catch(Exception $e){
         return $this->sendError($e,500);

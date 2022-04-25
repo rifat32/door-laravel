@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Models\Coupon;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,6 +27,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        $schedule->call(function () {
+         Coupon::whereDate('expire_date', '<', Carbon::today())
+         ->update([
+             "is_active" => 0
+         ]);
+        })->everyMinute();
+       
+
     }
 
     /**
