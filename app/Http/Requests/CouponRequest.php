@@ -25,7 +25,7 @@ class CouponRequest extends FormRequest
     {
         return [
         "name" =>"required",
-        "category_id"   =>"required",
+        "category_id"   =>"nullable",
         "discount"  =>"required",
          "expire_date"  =>"required",
         "is_active"  =>"required",
