@@ -15,12 +15,10 @@ class ProductController extends Controller
     use ProductServices;
     public function createProduct(ProductRequest $request)
     {
-
         return $this->createProductService($request);
     }
     public function updateProduct(ProductUpdateRequest $request)
     {
-
         return $this->updateProductService($request);
     }
     public function updateBulkPrice(ProductPriceUpdateRequest $request)
@@ -35,12 +33,10 @@ class ProductController extends Controller
 
     public function getProduct(Request $request)
     {
-
         return $this->getProductService($request);
     }
     public function getProductPagination($perPage,Request $request)
     {
-
         return $this->getProductPaginationService($perPage,$request);
     }
 

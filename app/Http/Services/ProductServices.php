@@ -211,7 +211,8 @@ trait ProductServices
     {
         try{
             // $products =   Variation::with("product.category")->paginate(10);
-        $products =    Product::join('variations', 'products.id', '=', 'variations.product_id')
+        $products =    Product::with("images")
+        ->join('variations', 'products.id', '=', 'variations.product_id')
 
 
         ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')

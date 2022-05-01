@@ -41,6 +41,7 @@ use App\Http\Controllers\Api\TradeLicenseController;
 use App\Http\Controllers\Api\VariationTemplateController;
 use App\Http\Controllers\SetUpController;
 use App\Http\Requests\ImageRequest;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -404,4 +405,19 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
     Route::get('/v1.0/accounts', [CharOfAccountController::class, "getAccounts"]);
     Route::post('/v1.0/chart-of-account', [CharOfAccountController::class, "createCharOfAccount"]);
     Route::get('/v1.0/chart-of-account', [CharOfAccountController::class, "getChartOfAccounts"]);
+});
+
+Route::get('/v1.0/client/products/pagination/{perPage}', [ProductController::class, "getProductPagination"]);
+Route::post('/v1.0/client/orders', function(Request $request){
+       Order::create($request->toArray());
+       return response()->json([
+           "success" => true
+       ]);
+});
+
+Route::get('/v1.0/orders', function(Request $request){
+
+    $data["data"] = Order::paginate(10);
+    return response()->json($data,200);
+
 });
