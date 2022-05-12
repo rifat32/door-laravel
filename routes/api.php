@@ -94,7 +94,7 @@ Route::post('/v1.0/image/upload/single/{location}',function(ImageRequest $reques
 
                      $new_file_name = time() . '_' . $request->image->getClientOriginalName();
 
-                     $request->image->move($location, $new_file_name);
+                     $request->image->move(public_path($location), $new_file_name);
                      $imageName = $location . "/" . $new_file_name;
                      return response()->json(["image" => $imageName],201);
 
