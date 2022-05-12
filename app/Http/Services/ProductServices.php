@@ -211,12 +211,21 @@ trait ProductServices
     {
         try{
             // $products =   Variation::with("product.category")->paginate(10);
-        $products =    Product::with("images")
-        ->join('variations', 'products.id', '=', 'variations.product_id')
+            $query = Product::with("images")
+            ->join('variations', 'products.id', '=', 'variations.product_id')
 
 
-        ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
-        ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id')
+            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
+            ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id');
+
+            if(!empty($request->category)){
+                $query
+                ->where([
+               "c.id" => $request->category
+                ]);
+            }
+
+        $products =  $query
         ->select(
             'products.id',
             'products.name',

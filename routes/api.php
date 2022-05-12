@@ -421,3 +421,4 @@ Route::get('/v1.0/orders', function(Request $request){
     return response()->json($data,200);
 
 });
+Route::get('/v1.0/client/categories/all', [CategoryController::class, "getAllCategory"]);
