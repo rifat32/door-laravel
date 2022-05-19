@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\WingController;
 use App\Http\Controllers\Api\CharOfAccountController;
 use App\Http\Controllers\Api\CitizenController;
 use App\Http\Controllers\Api\CitizenTaxController;
+use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\ComplainController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\DistrictController;
@@ -108,6 +109,18 @@ Route::get('/v1.0/variation-templates/all', [VariationTemplateController::class,
 Route::get('/v1.0/variation-templates/{id}', [
     VariationTemplateController::class, "getVariationTemplateById"
 ]);
+
+
+// Color Templates
+Route::post('/v1.0/colors', [ColorController::class, "createColor"]);
+Route::put('/v1.0/colors', [ColorController::class, "updateColor"]);
+Route::get('/v1.0/colors', [ColorController::class, "getColor"]);
+Route::get('/v1.0/colors/all', [ColorController::class, "getAllColor"]);
+Route::get('/v1.0/colors/{id}', [
+    ColorController::class, "getColorById"
+]);
+
+
 Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateController::class, "searchVariationTemplate"]);
 Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::class, "deleteVariationTemplate"]);
 

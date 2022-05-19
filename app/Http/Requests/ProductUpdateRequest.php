@@ -40,6 +40,8 @@ class ProductUpdateRequest extends FormRequest
             "variation.*.variation_value_template.*.qty"  => "required_if:type,variable|not_in:0,0",
             "variation.*.variation_value_template.*.name"  => "required_if:type,variable",
             "variation.*.variation_value_template.*.id"  => "required_if:type,variable",
+            "colors" => "array",
+            "colors.*.color_id"  => "required",
         ];
     }
 }

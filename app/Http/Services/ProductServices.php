@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Http\Utils\ErrorUtil;
 use App\Http\Utils\ProductUtil;
 use App\Models\Product;
+use App\Models\ProductColor;
 use App\Models\ProductImage;
 use App\Models\ProductVariation;
 use App\Models\Variation;
@@ -34,7 +35,13 @@ trait ProductServices
                 }
 
             }
+            if(!empty($insertableData["colors"])){
 
+                foreach($insertableData["colors"] as  $color){
+                    $inserted_product->colors()->create($color);
+                }
+
+            }
 
 
             if ($insertableData["type"] == "single") {
@@ -82,6 +89,19 @@ trait ProductServices
 
 
             }
+
+            if(!empty($updated_product["colors"])){
+
+                $updated_product->colors()->delete();
+
+               foreach($updatableData["colors"] as  $color){
+                   $updated_product->colors()->create($color);
+               }
+
+
+
+
+             }
 
             if ($updatableData["type"] == "single") {
                 $this->updateSingleVariationUtil($updatableData, $updated_product);
@@ -211,7 +231,7 @@ trait ProductServices
     {
         try{
             // $products =   Variation::with("product.category")->paginate(10);
-            $query = Product::with("images")
+            $query = Product::with("images","colors")
             ->join('variations', 'products.id', '=', 'variations.product_id')
 
 
@@ -248,6 +268,8 @@ trait ProductServices
     return response()->json([
         "products" => $products
     ], 200);
+
+
         } catch(Exception $e){
         return $this->sendError($e,500);
         }
@@ -257,7 +279,7 @@ trait ProductServices
     public function getProductByIdService($request, $id)
     {
         try{
-            $product =   Product::with("product_variations.variations", "variations")->where([
+            $product =   Product::with("product_variations.variations", "variations","colors.color")->where([
                 "id" => $id
             ])->first();
             if (!$product) {
