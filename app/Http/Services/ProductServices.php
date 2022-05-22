@@ -72,6 +72,8 @@ trait ProductServices
                     "sku",
                     "image",
                     "description",
+                    "status",
+                    "is_featured"
                 ])
                     ->toArray()
 
@@ -144,22 +146,25 @@ trait ProductServices
             $updatableData = $request->validated();
             $amount = $updatableData["amount"];
             $type = $updatableData["type"];
-           foreach( $updatableData["variations"] as $variation){
+           foreach( $updatableData["products"] as $product){
                if( $type == "fixed"){
                 Variation::where([
-                    "id" => $variation["vid"]
+                    "product_id" => $product["id"]
                 ])
                 ->increment("price",$amount);
 
                } else {
-               $updatableVariation =  Variation::where([
-                    "id" => $variation["vid"]
-                ])->first();
+               $updatableVariations =  Variation::where([
+                    "product_id" => $product["id"]
+                ])->get();
 
-                $increaseAmount = $updatableVariation->price * ($amount / 100);
-                $finalAmount = $updatableVariation->price + $increaseAmount;
-                $updatableVariation->price =  $finalAmount;
-                $updatableVariation->save();
+foreach($updatableVariations as $updatableVariation){
+    $increaseAmount = $updatableVariation->price * ($amount / 100);
+    $finalAmount = $updatableVariation->price + $increaseAmount;
+    $updatableVariation->price =  $finalAmount;
+    $updatableVariation->save();
+
+}
 
 
 
@@ -184,8 +189,8 @@ trait ProductServices
     {
 
         try{
-            foreach($request["variations"] as $variation){
-                Variation::where(["id" => $variation["vid"]])->delete();
+            foreach($request["products"] as $product){
+                Product::where(["id" => $product["id"]])->delete();
             }
 
             return response()->json(["ok" => true], 200);
@@ -211,6 +216,7 @@ trait ProductServices
             'variations.price',
             'products.sku',
             'products.image',
+            'products.is_featured',
 
         )
         ->orderByDesc("id")
@@ -231,12 +237,12 @@ trait ProductServices
     {
         try{
             // $products =   Variation::with("product.category")->paginate(10);
-            $query = Product::with("images","colors")
-            ->join('variations', 'products.id', '=', 'variations.product_id')
+            $query = Product::with("variations","images","colors")
+            // ->join('variations', 'products.id', '=', 'variations.product_id')
 
+            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id');
 
-            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
-            ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id');
+            // ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id');
 
             if(!empty($request->category)){
                 $query
@@ -245,21 +251,79 @@ trait ProductServices
                 ]);
             }
 
+
+        //     $query
+        //     ->where([
+        //    "products.status" => "active"
+        //     ]);
+
         $products =  $query
         ->select(
             'products.id',
             'products.name',
             'products.type',
             'c.name as category',
-            'variations.price',
-            'variations.qty',
             'products.sku',
             'products.image',
-            'variations.id as vid',
-            'variations.name as vvalue',
-            'product_variations.name as vname'
+            'products.status',
+            'products.is_featured',
+            "products.style_id"
+
         )
-        ->orderByDesc("vid")
+        ->orderByDesc("id")
+        ->paginate($perPage);
+
+
+
+
+    return response()->json([
+        "products" => $products
+    ], 200);
+
+
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
+    }
+    public function getProductPaginationServiceClient($perPage,$request)
+    {
+        try{
+            // $products =   Variation::with("product.category")->paginate(10);
+            $query = Product::with("variations","images","colors")
+            // ->join('variations', 'products.id', '=', 'variations.product_id')
+
+            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id');
+
+            // ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id');
+
+            if(!empty($request->category)){
+                $query
+                ->where([
+               "c.id" => $request->category
+                ]);
+            }
+
+
+            $query
+            ->where([
+           "products.status" => "active"
+            ]);
+
+        $products =  $query
+        ->select(
+            'products.id',
+            'products.name',
+            'products.type',
+            'c.name as category',
+            'products.sku',
+            'products.image',
+            'products.status',
+            'products.is_featured',
+            "products.style_id"
+
+        )
+        ->orderByDesc("id")
         ->paginate($perPage);
 
 
@@ -295,6 +359,26 @@ trait ProductServices
         }
 
     }
+    public function getProductByIdServiceClient($request, $id)
+    {
+        try{
+            $product =   Product::with("product_variations.variations", "variations","colors.color","category","images")->where([
+                "id" => $id
+            ])->first();
+            if (!$product) {
+                return response()->json([
+                    "message" => "No product is found"
+                ], 404);
+            }
+            return response()->json([
+                "product" => $product
+            ], 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
+    }
+
     public function deleteProductServices($request)
     {
 

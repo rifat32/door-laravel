@@ -13,12 +13,16 @@ class Product extends Model
         "name",
         "type",
         "category_id",
+        "style_id",
         "sku",
          "image",
         "description",
+        "status",
+        "is_featured"
     ];
     protected $casts = [
-        'category_id' => 'integer'
+        'category_id' => 'integer',
+        "style_id" => 'integer'
     ];
 
     public function product_variations()
@@ -34,6 +38,11 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class,"category_id","id");
     }
+    public function style()
+    {
+        return $this->belongsTo(Style::class,"style_id","id");
+    }
+
     public function images()
     {
         return $this->hasMany(ProductImage::class,"product_id","id");

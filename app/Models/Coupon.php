@@ -12,7 +12,9 @@ class Coupon extends Model
         "name",
         "category_id",
         "code",
-        "discount",
+        "is_all_category_product",
+        "discount_amount",
+        "discount_type",
          "expire_date",
         "is_active",
     ];

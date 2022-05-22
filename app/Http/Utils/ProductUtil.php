@@ -6,6 +6,7 @@ use App\Models\ProductVariation;
 use App\Models\Variation;
 use App\Models\VariationTemplate;
 use Exception;
+use Illuminate\Support\Str;
 
 trait ProductUtil
 {
@@ -15,11 +16,14 @@ trait ProductUtil
         $inserted_product->product_variations()->create([
             "name" => "Dummy",
         ]);
+        if(empty($insertableData["sku"])) {
+            $insertableData["sku"] = Str::random(10);
+        }
         $variation_data = [
-
             "price" => $insertableData["price"],
             "qty" => $insertableData["qty"],
             'name' => 'DUMMY',
+            'sub_sku' => $insertableData["sku"]
         ];
         $inserted_product->variations()->create($variation_data);
 
@@ -39,12 +43,16 @@ trait ProductUtil
             $product_variation =     $inserted_product->product_variations()->create($product_variation_data);
             foreach ($varation["variation_value_template"] as $variationValue) {
 
+                if(empty($variationValue["sub_sku"])) {
+                    $variationValue["sub_sku"] = Str::random(10);
+                }
 
 
                 $variation_data = [
                     'name' => $variationValue["name"],
                     "price" => $variationValue["price"],
                     "qty" => $variationValue["qty"],
+                    "sub_sku" => $variationValue["sub_sku"],
                     "product_id" => $inserted_product->id,
                     "product_variation_id" => $product_variation->id
                 ];
@@ -55,9 +63,13 @@ trait ProductUtil
     }
     public function updateSingleVariationUtil($updatableData,$updated_product)
     {
+        if(empty($updatableData["sku"])) {
+            $updatableData["sku"] = Str::random(10);
+        }
         $variation_data = [
             "price" => $updatableData["price"],
             "qty" => $updatableData["qty"],
+            "sub_sku" => $updatableData["sku"],
         ];
         $updated_product->variations()->update($variation_data);
 
@@ -127,12 +139,16 @@ trait ProductUtil
                     'product_variation_id' => $productVariation->id
                 ])->first();
 
+                if(empty($variationValue["sub_sku"])) {
+                    $variationValue["sub_sku"] = Str::random(10);
+                }
 
                 if ($variation) {
 
                     $variation->name = $variationValue["name"];
                     $variation->price = $variationValue["price"];
                     $variation->qty = $variationValue["qty"];
+                    $variation->sub_sku = $variationValue["sub_sku"];
                     $variation->product_id = $updated_product->id;
                     $variation->product_variation_id = $productVariation->id;
                     $variation->save();
@@ -143,6 +159,7 @@ trait ProductUtil
                         'name' => $variationValue["name"],
                         "price" => $variationValue["price"],
                         "qty" => $variationValue["qty"],
+                        "sub_sku" => $variationValue["sub_sku"],
                         "product_id" => $updated_product->id,
                         "product_variation_id" => $productVariation->id
                     ];

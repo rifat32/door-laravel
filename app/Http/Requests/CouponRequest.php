@@ -26,9 +26,11 @@ class CouponRequest extends FormRequest
         return [
         "name" =>"required",
         "category_id"   =>"nullable",
-        "discount"  =>"required",
-         "expire_date"  =>"required",
-        "is_active"  =>"required",
+        "is_all_category_product"  =>"required|boolean",
+        "discount_amount"  =>"required|numeric",
+        "discount_type"  =>"required|string",
+        "expire_date"  =>"required",
+        "is_active"  =>"required|boolean",
         ];
     }
 }

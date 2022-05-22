@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\UpazilaController;
 use App\Http\Controllers\Api\VillageController;
 use App\Http\Controllers\Api\WardController;
 use App\Http\Controllers\Api\NonHoldingCitizenController;
+use App\Http\Controllers\Api\StyleController;
 use App\Http\Controllers\Api\TaxPaymentsController;
 use App\Http\Controllers\Api\TradeLicenseController;
 use App\Http\Controllers\Api\VariationTemplateController;
@@ -89,6 +90,15 @@ Route::get('/v1.0/categories/all', [CategoryController::class, "getAllCategory"]
 Route::get('/v1.0/categories/{id}', [CategoryController::class, "getCategoryById"]);
 Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "searchCategory"]);
 Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
+
+// Style
+Route::post('/v1.0/styles', [StyleController::class, "createStyle"]);
+Route::put('/v1.0/styles', [StyleController::class, "updateStyle"]);
+Route::get('/v1.0/styles', [StyleController::class, "getStyle"]);
+Route::get('/v1.0/styles/all', [StyleController::class, "getAllStyle"]);
+Route::get('/v1.0/styles/{id}', [StyleController::class, "getStyleById"]);
+Route::get('/v1.0/styles/search/{term}', [StyleController::class, "searchStyle"]);
+Route::delete('/v1.0/styles/{id}', [StyleController::class, "deleteStyle"]);
 
 
 Route::post('/v1.0/image/upload/single/{location}',function(ImageRequest $request,$location){
@@ -420,7 +430,7 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
     Route::get('/v1.0/chart-of-account', [CharOfAccountController::class, "getChartOfAccounts"]);
 });
 
-Route::get('/v1.0/client/products/pagination/{perPage}', [ProductController::class, "getProductPagination"]);
+Route::get('/v1.0/client/products/pagination/{perPage}', [ProductController::class, "getProductPaginationClient"]);
 Route::post('/v1.0/client/orders', function(Request $request){
        Order::create($request->toArray());
        return response()->json([
@@ -435,3 +445,4 @@ Route::get('/v1.0/orders', function(Request $request){
 
 });
 Route::get('/v1.0/client/categories/all', [CategoryController::class, "getAllCategory"]);
+Route::get('/v1.0/client/products/{id}', [ProductController::class, "getProductByIdClient"]);

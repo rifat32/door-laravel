@@ -29,7 +29,9 @@ trait CouponService
     {
 
         try{
+
             $updatableData = $request->validated();
+           
             $data['data'] = tap(Coupon::where(["id" =>  $request["id"]]))->update(
                 $updatableData
             )

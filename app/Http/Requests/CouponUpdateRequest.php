@@ -27,9 +27,11 @@ class CouponUpdateRequest extends FormRequest
             "id" =>"required",
             "name" =>"required",
             "category_id"  =>"nullable",
-            "discount"  =>"required",
+            "is_all_category_product"  =>"nullable|boolean",
+            "discount_amount"  =>"required|numeric",
+            "discount_type"  =>"required|string",
              "expire_date"  =>"required",
-            "is_active"  =>"required",
+            "is_active"  =>"required|boolean",
         ];
     }
 }

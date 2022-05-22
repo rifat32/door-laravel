@@ -19,9 +19,13 @@ class CreateProductsTable extends Migration
             $table->enum('type', ['single', 'variable']);
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('style_id');
+            $table->foreign('style_id')->references('id')->on('styles')->onDelete('cascade');
             $table->string("sku")->unique();
             $table->string("image")->nullable();
             $table->string("description");
+            $table->enum('status', ['draft', 'active',"inactive"]);
+            $table->boolean("is_featured");
             $table->timestamps();
         });
     }

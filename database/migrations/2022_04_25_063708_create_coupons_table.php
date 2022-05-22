@@ -18,9 +18,11 @@ class CreateCouponsTable extends Migration
             $table->string("name");
             $table->unsignedBigInteger("category_id")->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->boolean("is_all_category_product")->nullable();
             $table->string("code");
-            $table->double("discount");
-            $table->date("expire_date");
+            $table->enum('discount_type', ['fixed', 'percentage']);
+            $table->double("discount_amount");
+            $table->dateTime("expire_date");
             $table->boolean("is_active");
             $table->timestamps();
         });

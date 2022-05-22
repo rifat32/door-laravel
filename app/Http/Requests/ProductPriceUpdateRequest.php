@@ -27,8 +27,8 @@ class ProductPriceUpdateRequest extends FormRequest
 
             "type" => "required",
             "amount" => "required",
-            "variations" => "required|array",
-            "variations.*.vid"  => "required",
+            "products" => "required|array",
+            "products.*.id"  => "required",
         ];
     }
 }
