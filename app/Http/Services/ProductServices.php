@@ -69,6 +69,7 @@ trait ProductServices
                     "name",
                     "type",
                     "category_id",
+                    "style_id",
                     "sku",
                     "image",
                     "description",
@@ -81,10 +82,16 @@ trait ProductServices
             ->first();
             if(!empty($updated_product["images"])){
 
-     $updated_product->images()->delete();
 
-    foreach($updatableData["images"] as  $image){
-        $updated_product->images()->create(["file" => $image]);
+
+    foreach(collect($updatableData["images"])->toArray() as  $key=>$image){
+
+   if($key == 0){
+    $updated_product->images()->delete();
+   }
+    $updated_product->images()->create(["file" => $image]);
+
+
     }
 
 
@@ -94,9 +101,11 @@ trait ProductServices
 
             if(!empty($updated_product["colors"])){
 
+
                 $updated_product->colors()->delete();
 
                foreach($updatableData["colors"] as  $color){
+
                    $updated_product->colors()->create($color);
                }
 
@@ -290,11 +299,12 @@ foreach($updatableVariations as $updatableVariation){
     {
         try{
             // $products =   Variation::with("product.category")->paginate(10);
-            $query = Product::with("variations","images","colors")
+            $query = Product::with("variations","images","colors.color")
             // ->join('variations', 'products.id', '=', 'variations.product_id')
 
-            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id');
-
+            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
+            ->leftJoin('styles as s', 'products.style_id', '=', 's.id')
+            ->leftJoin('product_colors as co', 'products.id', '=', 'co.product_id');
             // ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id');
 
             if(!empty($request->category)){
@@ -303,12 +313,26 @@ foreach($updatableVariations as $updatableVariation){
                "c.id" => $request->category
                 ]);
             }
+            if(!empty($request->style)){
+                $query
+                ->where([
+               "s.id" => $request->style
+                ]);
+            }
+            if(!empty($request->color)){
+                $query
+                ->where([
+               "co.color_id" => $request->color
+                ]);
+            }
+
 
 
             $query
             ->where([
            "products.status" => "active"
-            ]);
+            ])
+            ->distinct("products.id");
 
         $products =  $query
         ->select(

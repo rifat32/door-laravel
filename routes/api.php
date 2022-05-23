@@ -445,4 +445,6 @@ Route::get('/v1.0/orders', function(Request $request){
 
 });
 Route::get('/v1.0/client/categories/all', [CategoryController::class, "getAllCategory"]);
+Route::get('/v1.0/client/styles/all', [StyleController::class, "getAllStyle"]);
+Route::get('/v1.0/client/colors/all', [ColorController::class, "getAllColor"]);
 Route::get('/v1.0/client/products/{id}', [ProductController::class, "getProductByIdClient"]);

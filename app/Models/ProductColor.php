@@ -10,7 +10,8 @@ class ProductColor extends Model
     use HasFactory;
     protected $fillable = [
         "color_id",
-        "product_id"
+        "product_id",
+        "color_image"
     ];
     protected $casts = [
         'color_id' => 'integer',

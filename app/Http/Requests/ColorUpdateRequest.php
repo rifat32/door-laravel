@@ -24,7 +24,7 @@ class ColorUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            
+
             "name" => "required|string",
             "code"      => "required|string"
         ];

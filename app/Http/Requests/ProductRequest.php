@@ -45,6 +45,8 @@ class ProductRequest extends FormRequest
             "variation.*.variation_value_template.*.sub_sku"  => "nullable",
             "colors" => "array",
             "colors.*.color_id"  => "required",
+
+            "colors.*.color_image"  => "required",
         ];
     }
 }
