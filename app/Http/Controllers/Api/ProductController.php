@@ -43,6 +43,11 @@ class ProductController extends Controller
     {
         return $this->getProductPaginationServiceClient($perPage,$request);
     }
+    public function getFeatutedProductClient(Request $request)
+    {
+        return $this->getFeaturedProductServiceClient($request);
+    }
+
     public function getProductById(Request $request, $id)
     {
         return $this->getProductByIdService($request, $id);

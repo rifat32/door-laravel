@@ -363,6 +363,78 @@ foreach($updatableVariations as $updatableVariation){
         }
 
     }
+    public function getFeaturedProductServiceClient($request)
+    {
+        try{
+            // $products =   Variation::with("product.category")->paginate(10);
+            $query = Product::with("variations","images","colors.color")
+            // ->join('variations', 'products.id', '=', 'variations.product_id')
+
+            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
+            ->leftJoin('styles as s', 'products.style_id', '=', 's.id')
+            ->leftJoin('product_colors as co', 'products.id', '=', 'co.product_id');
+            // ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id');
+
+            // if(!empty($request->category)){
+            //     $query
+            //     ->where([
+            //    "c.id" => $request->category
+            //     ]);
+            // }
+            // if(!empty($request->style)){
+            //     $query
+            //     ->where([
+            //    "s.id" => $request->style
+            //     ]);
+            // }
+            // if(!empty($request->color)){
+            //     $query
+            //     ->where([
+            //    "co.color_id" => $request->color
+            //     ]);
+            // }
+
+
+
+            $query
+            ->where([
+           "products.status" => "active",
+           "products.is_featured" => 1
+            ])
+
+            ->distinct("products.id");
+
+        $products =  $query
+        ->select(
+            'products.id',
+            'products.name',
+            'products.type',
+            'c.name as category',
+            'products.sku',
+            'products.image',
+            'products.status',
+            'products.is_featured',
+            "products.style_id"
+
+        )
+        ->orderByDesc("id")
+        ->take(5)
+        ->get();
+
+
+
+
+    return response()->json([
+        "products" => $products
+    ], 200);
+
+
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
+    }
+
 
     public function getProductByIdService($request, $id)
     {
@@ -386,7 +458,7 @@ foreach($updatableVariations as $updatableVariation){
     public function getProductByIdServiceClient($request, $id)
     {
         try{
-            $product =   Product::with("product_variations.variations", "variations","colors.color","category","images")->where([
+            $product =   Product::with("product_variations.variations", "variations","colors.color","category","images","style")->where([
                 "id" => $id
             ])->first();
             if (!$product) {

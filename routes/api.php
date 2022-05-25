@@ -430,7 +430,6 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
     Route::get('/v1.0/chart-of-account', [CharOfAccountController::class, "getChartOfAccounts"]);
 });
 
-Route::get('/v1.0/client/products/pagination/{perPage}', [ProductController::class, "getProductPaginationClient"]);
 Route::post('/v1.0/client/orders', function(Request $request){
        Order::create($request->toArray());
        return response()->json([
@@ -448,3 +447,7 @@ Route::get('/v1.0/client/categories/all', [CategoryController::class, "getAllCat
 Route::get('/v1.0/client/styles/all', [StyleController::class, "getAllStyle"]);
 Route::get('/v1.0/client/colors/all', [ColorController::class, "getAllColor"]);
 Route::get('/v1.0/client/products/{id}', [ProductController::class, "getProductByIdClient"]);
+
+Route::get('/v1.0/client/products/pagination/{perPage}', [ProductController::class, "getProductPaginationClient"]);
+
+Route::get('/v1.0/client/products/featured/all', [ProductController::class, "getFeatutedProductClient"]);
