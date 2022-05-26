@@ -129,6 +129,10 @@ Route::get('/v1.0/colors/all', [ColorController::class, "getAllColor"]);
 Route::get('/v1.0/colors/{id}', [
     ColorController::class, "getColorById"
 ]);
+Route::delete('/v1.0/colors/{id}', [
+    ColorController::class, "deleteColor"
+]);
+
 
 
 Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateController::class, "searchVariationTemplate"]);

@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Utils\ErrorUtil;
 use App\Models\Color;
-
+use App\Models\ProductColor;
 use App\Models\VariationValueTemplate;
 use Exception;
 
@@ -95,8 +95,16 @@ trait ColorService
     public function deleteColorService($id, $request)
     {
         try {
-            Color::where(["id" => $id])->delete();
-            return response()->json(["ok" => true], 200);
+            $colorExists =      ProductColor::where([
+                "color_id"=>$id
+            ])->first();
+            if(!$colorExists) {
+                Color::where(["id" => $id])->delete();
+                return response()->json(["ok" => true], 200);
+            }
+
+            return response()->json(["ok" => true], 500);
+
         } catch (Exception $e) {
             return $this->sendError($e, 500);
         }
