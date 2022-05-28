@@ -479,7 +479,7 @@ foreach($updatableVariations as $updatableVariation){
     {
 
         try{
-            Variation::where(["id" => $request["id"]])->delete();
+            Product::where(["id" => $request["id"]])->delete();
             return response()->json(["ok" => true], 200);
         } catch(Exception $e){
         return $this->sendError($e,500);

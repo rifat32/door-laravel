@@ -44,6 +44,8 @@ use App\Http\Controllers\Api\VariationTemplateController;
 use App\Http\Controllers\SetUpController;
 use App\Http\Requests\ImageRequest;
 use App\Models\Order;
+use App\Models\ProductVariation;
+use App\Models\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -455,3 +457,31 @@ Route::get('/v1.0/client/products/{id}', [ProductController::class, "getProductB
 Route::get('/v1.0/client/products/pagination/{perPage}', [ProductController::class, "getProductPaginationClient"]);
 
 Route::get('/v1.0/client/products/featured/all', [ProductController::class, "getFeatutedProductClient"]);
+
+Route::get('/v1.0/client/check-height', function(Request $request){
+    $product =  ProductVariation::where(
+        "name",">=", $request->height
+    )
+    ->where(
+        "product_id","=", $request->product_id
+    )
+    ->orderBy("name")
+    ->first();
+    return response()->json([
+        "product" => $product
+    ], 200);
+});
+Route::get('/v1.0/client/check-width', function(Request $request){
+    $product =  Variation::where(
+        "name",">=", $request->width
+    )
+    ->where(
+        "product_variation_id","=", $request->product_variation_id
+    )
+    ->orderBy("name")
+    ->first();
+   
+    return response()->json([
+        "product" => $product
+    ], 200);
+});

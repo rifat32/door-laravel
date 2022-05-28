@@ -14,7 +14,7 @@ trait ProductUtil
     public function createSingleVariationUtil($insertableData,$inserted_product)
     {
         $inserted_product->product_variations()->create([
-            "name" => "Dummy",
+            "name" => 0,
         ]);
         if(empty($insertableData["sku"])) {
             $insertableData["sku"] = Str::random(10);
@@ -22,7 +22,7 @@ trait ProductUtil
         $variation_data = [
             "price" => $insertableData["price"],
             "qty" => $insertableData["qty"],
-            'name' => 'DUMMY',
+            'name' => 0,
             'sub_sku' => $insertableData["sku"]
         ];
         $inserted_product->variations()->create($variation_data);
