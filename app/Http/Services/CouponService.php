@@ -18,7 +18,18 @@ trait CouponService
         try{
             $insertableData = $request->validated();
             $insertableData["code"] = Str::random(15);
-            $data['data'] =   Coupon::create($insertableData);
+            $insertedData =   Coupon::create($insertableData);
+            if(!$insertableData["is_all_category_product"]) {
+
+                foreach($insertableData["products"] as $product){
+                    $insertedData->cproducts()->create([
+                        "product_id" => $product["id"],
+                        "coupon_id" => $insertedData->id
+                    ]);
+                }
+
+            }
+            $data['data'] = $insertedData;
             return response()->json($data, 201);
         } catch(Exception $e){
         return $this->sendError($e,500);
@@ -31,7 +42,7 @@ trait CouponService
         try{
 
             $updatableData = $request->validated();
-           
+
             $data['data'] = tap(Coupon::where(["id" =>  $request["id"]]))->update(
                 $updatableData
             )

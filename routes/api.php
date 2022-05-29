@@ -43,6 +43,7 @@ use App\Http\Controllers\Api\TradeLicenseController;
 use App\Http\Controllers\Api\VariationTemplateController;
 use App\Http\Controllers\SetUpController;
 use App\Http\Requests\ImageRequest;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\ProductVariation;
 use App\Models\Variation;
@@ -141,7 +142,7 @@ Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateControll
 Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::class, "deleteVariationTemplate"]);
 
 
-// product
+// Product
 Route::post('/v1.0/products', [ProductController::class, "createProduct"]);
 Route::put('/v1.0/products', [ProductController::class, "updateProduct"]);
 Route::put('/v1.0/products/bulkedit/price', [ProductController::class, "updateBulkPrice"]);
@@ -151,6 +152,8 @@ Route::get('/v1.0/products/pagination/{perPage}', [ProductController::class, "ge
 Route::get('/v1.0/products/{id}', [ProductController::class, "getProductById"]);
 Route::get('/v1.0/products/search/{term}', [ProductController::class, "searchProduct"]);
 Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
+
+
 
 // Category
 Route::post('/v1.0/coupons', [CouponController::class, "createCoupon"]);
@@ -458,6 +461,7 @@ Route::get('/v1.0/client/products/pagination/{perPage}', [ProductController::cla
 
 Route::get('/v1.0/client/products/featured/all', [ProductController::class, "getFeatutedProductClient"]);
 
+
 Route::get('/v1.0/client/check-height', function(Request $request){
     $product =  ProductVariation::where(
         "name",">=", $request->height
@@ -471,6 +475,7 @@ Route::get('/v1.0/client/check-height', function(Request $request){
         "product" => $product
     ], 200);
 });
+
 Route::get('/v1.0/client/check-width', function(Request $request){
     $product =  Variation::where(
         "name",">=", $request->width
@@ -480,8 +485,23 @@ Route::get('/v1.0/client/check-width', function(Request $request){
     )
     ->orderBy("name")
     ->first();
-   
+
     return response()->json([
         "product" => $product
+    ], 200);
+});
+
+Route::get('/v1.0/client/check-coupon', function(Request $request){
+
+   $coupon = Coupon::with("cproducts")
+   -> where([
+        "code" => $request->coupon,
+   ])
+
+
+   ->first();
+
+    return response()->json([
+        "coupon" => $coupon
     ], 200);
 });

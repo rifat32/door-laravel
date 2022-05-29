@@ -31,6 +31,7 @@ class CouponRequest extends FormRequest
         "discount_type"  =>"required|string",
         "expire_date"  =>"required",
         "is_active"  =>"required|boolean",
+        "products"  =>"nullable|array",
         ];
     }
 }

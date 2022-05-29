@@ -25,4 +25,8 @@ class Coupon extends Model
     {
         return $this->belongsTo(Category::class,"category_id","id");
     }
+    public function cproducts()
+    {
+        return $this->hasMany(CouponProduct::class,"coupon_id","id");
+    }
 }
