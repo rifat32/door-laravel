@@ -38,6 +38,7 @@ class ProductRequest extends FormRequest
             "qty" => "required_if:type,single",
             "variation" => "required_if:type,variable|array",
             "variation.*.variation_template_id"  => "required_if:type,variable",
+            "variation.*.color_id"  => "required_if:type,variable",
             "variation.*.variation_value_template"  => "required_if:type,variable|array",
             "variation.*.variation_value_template.*.price"  => "required_if:type,variable|not_in:0,0",
             "variation.*.variation_value_template.*.qty"  => "required_if:type,variable|not_in:0,0",

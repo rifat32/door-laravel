@@ -11,19 +11,25 @@ class ProductVariation extends Model
     protected $fillable = [
         "name",
         "product_id",
-        "variation_template_id"
+        "variation_template_id",
+        "color_id"
     ];
     protected $casts = [
         'product_id' => 'integer',
         'variation_template_id' => 'integer',
-
+        'color_id' => 'integer',
     ];
     public function variations()
     {
         return $this->hasMany(Variation::class,"product_variation_id","id");
     }
+
     public function variation_template()
     {
         return $this->belongsTo(VariationTemplate::class,"variation_template_id","id");
+    }
+    public function color()
+    {
+        return $this->belongsTo(Color::class,"color_id","id");
     }
 }

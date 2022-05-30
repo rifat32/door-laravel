@@ -38,6 +38,7 @@ class ProductUpdateRequest extends FormRequest
             "is_featured"   =>"required|boolean",
             "status" => "required",
             "variation" => "required_if:type,variable|array",
+            "variation.*.color_id"  => "required_if:type,variable",
             "variation.*.variation_template_id"  => "required_if:type,variable",
             "variation.*.variation_value_template"  => "required_if:type,variable|array",
             "variation.*.variation_value_template.*.price"  => "required_if:type,variable|not_in:0,0",

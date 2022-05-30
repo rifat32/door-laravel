@@ -38,7 +38,8 @@ trait ProductUtil
                 ->first();
             $product_variation_data = [
                 'name' =>  $variationTemplate->name,
-                'variation_template_id' => $variationTemplate->id
+                'variation_template_id' => $variationTemplate->id,
+                'color_id' => $varation["color_id"]
             ];
             $product_variation =     $inserted_product->product_variations()->create($product_variation_data);
             foreach ($varation["variation_value_template"] as $variationValue) {
@@ -101,17 +102,22 @@ trait ProductUtil
 
             $productVariation = ProductVariation::where([
                 "id" => $varation["id"],
-                'variation_template_id' => $variationTemplate->id
+                // 'variation_template_id' => $variationTemplate->id,
+                // 'color_id' => $varation["color_id"]
             ])->first();
             if ($productVariation) {
                 $productVariation->name = $variationTemplate->name;
                 $productVariation->variation_template_id = $variationTemplate->id;
+                $productVariation->color_id = $varation["color_id"];
                 $productVariation->save();
             } else {
+                // return response()->json($varation["color_id"],500);
                 $product_variation_data = [
                     "id" => $varation["id"],
                     'name' =>  $variationTemplate->name,
-                    'variation_template_id' => $variationTemplate->id
+                    'variation_template_id' => $variationTemplate->id,
+                    'color_id' => $varation["color_id"]
+
                 ];
                 $productVariation =     $updated_product->product_variations()->create($product_variation_data);
             }

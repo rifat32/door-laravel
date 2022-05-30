@@ -458,7 +458,7 @@ foreach($updatableVariations as $updatableVariation){
     public function getProductByIdServiceClient($request, $id)
     {
         try{
-            $product =   Product::with("product_variations.variations", "variations","colors.color","category","images","style")->where([
+            $product =   Product::with("product_variations.variations","product_variations.color", "variations","colors.color","category","images","style")->where([
                 "id" => $id
             ])->first();
             if (!$product) {

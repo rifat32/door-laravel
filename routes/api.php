@@ -467,8 +467,14 @@ Route::get('/v1.0/client/check-height', function(Request $request){
         "name",">=", $request->height
     )
     ->where(
-        "product_id","=", $request->product_id
+        "product_id","=", $request->product_id,
+
     )
+    ->where(
+        "color_id","=", $request->color_id,
+
+    )
+
     ->orderBy("name")
     ->first();
     return response()->json([
@@ -497,7 +503,6 @@ Route::get('/v1.0/client/check-coupon', function(Request $request){
    -> where([
         "code" => $request->coupon,
    ])
-
 
    ->first();
 
