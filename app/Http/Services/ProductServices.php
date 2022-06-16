@@ -4,12 +4,14 @@ namespace App\Http\Services;
 
 use App\Http\Utils\ErrorUtil;
 use App\Http\Utils\ProductUtil;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\ProductImage;
 use App\Models\ProductVariation;
 use App\Models\Variation;
 use App\Models\VariationTemplate;
+use Illuminate\Support\Facades\DB;
 use Exception;
 
 trait ProductServices
@@ -25,33 +27,38 @@ trait ProductServices
 
             $insertableData = $request->validated();
 
+            DB::transaction(function ()use(&$insertableData) {
+                $inserted_product =   Product::create($insertableData);
 
+                if(!empty($insertableData["images"])){
+                    foreach($insertableData["images"] as  $image){
+                        $inserted_product->images()->create(["file" => $image]);
+                    }
 
-            $inserted_product =   Product::create($insertableData);
+                }
+                if(!empty($insertableData["colors"])){
 
-            if(!empty($insertableData["images"])){
-                foreach($insertableData["images"] as  $image){
-                    $inserted_product->images()->create(["file" => $image]);
+                    foreach($insertableData["colors"] as  $color){
+                        if($color["color_id"] && $color["color_image"]){
+                            $inserted_product->colors()->create($color);
+                        }
+
+                    }
+
                 }
 
-            }
-            if(!empty($insertableData["colors"])){
 
-                foreach($insertableData["colors"] as  $color){
-                    $inserted_product->colors()->create($color);
+                if ($insertableData["type"] == "single") {
+                    $this->createSingleVariationUtil($insertableData, $inserted_product);
+                } else {
+                    $this->createVariationProductUtil($insertableData, $inserted_product);
                 }
+                $data['data'] = $inserted_product;
 
-            }
+                return response()->json($data, 201);
+            });
 
 
-            if ($insertableData["type"] == "single") {
-                $this->createSingleVariationUtil($insertableData, $inserted_product);
-            } else {
-                $this->createVariationProductUtil($insertableData, $inserted_product);
-            }
-            $data['data'] = $inserted_product;
-
-            return response()->json($data, 201);
         } catch (Exception $e) {
             return $this->sendError($e, 500);
         }
@@ -311,6 +318,15 @@ foreach($updatableVariations as $updatableVariation){
                 $query
                 ->where([
                "c.id" => $request->category
+                ]);
+            }
+            if(!empty($request->category_name)){
+              $category =  Category::
+                where("name","=",$request->category_name)
+                ->first();
+                $query
+                ->where([
+               "c.id" => $category->id
                 ]);
             }
             if(!empty($request->style)){

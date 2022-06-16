@@ -11,7 +11,8 @@ class ProductColor extends Model
     protected $fillable = [
         "color_id",
         "product_id",
-        "color_image"
+        "color_image",
+        "is_variation_specific"
     ];
     protected $casts = [
         'color_id' => 'integer',

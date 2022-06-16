@@ -92,6 +92,7 @@ Route::get('/v1.0/categories', [CategoryController::class, "getCategory"]);
 Route::get('/v1.0/categories/all', [CategoryController::class, "getAllCategory"]);
 Route::get('/v1.0/categories/{id}', [CategoryController::class, "getCategoryById"]);
 Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "searchCategory"]);
+
 Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
 
 // Style
@@ -456,6 +457,7 @@ Route::get('/v1.0/client/categories/all', [CategoryController::class, "getAllCat
 Route::get('/v1.0/client/styles/all', [StyleController::class, "getAllStyle"]);
 Route::get('/v1.0/client/colors/all', [ColorController::class, "getAllColor"]);
 Route::get('/v1.0/client/products/{id}', [ProductController::class, "getProductByIdClient"]);
+Route::get('/v1.0/client/categories/search/exact/{term}', [CategoryController::class, "searchExactCategory"]);
 
 Route::get('/v1.0/client/products/pagination/{perPage}', [ProductController::class, "getProductPaginationClient"]);
 
@@ -463,16 +465,18 @@ Route::get('/v1.0/client/products/featured/all', [ProductController::class, "get
 
 
 Route::get('/v1.0/client/check-height', function(Request $request){
-    $product =  ProductVariation::where(
+    $product =  ProductVariation::
+
+where(
         "name",">=", $request->height
     )
     ->where(
         "product_id","=", $request->product_id,
 
     )
+
     ->where(
         "color_id","=", $request->color_id,
-
     )
 
     ->orderBy("name")

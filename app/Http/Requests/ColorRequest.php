@@ -25,7 +25,7 @@ class ColorRequest extends FormRequest
     {
         return [
             "name" => "required|string",
-            "code"      => "required|string"
+            "code"      => "required|string|unique:colors,code"
         ];
     }
 }

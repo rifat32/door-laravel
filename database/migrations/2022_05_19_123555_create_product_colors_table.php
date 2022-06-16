@@ -20,6 +20,7 @@ class CreateProductColorsTable extends Migration
             $table->unsignedBigInteger("color_id");
             $table->foreign('color_id')->references('id')->on('colors')->onDelete('cascade');
             $table->string("color_image")->nullable();
+            $table->boolean("is_variation_specific")->default(false);
             $table->timestamps();
         });
     }

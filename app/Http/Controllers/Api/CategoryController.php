@@ -40,6 +40,11 @@ class CategoryController extends Controller
     {
         return $this->searchCategoryService($term,$request);
     }
+    public function searchExactCategory($term,Request $request)
+    {
+        return $this->searchExactCategoryService($term,$request);
+    }
+
     public function deleteCategory($id,Request $request)
     {
         return $this->deleteCategoryService($id,$request);

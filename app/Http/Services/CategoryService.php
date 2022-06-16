@@ -82,6 +82,19 @@ trait CategoryService
         }
 
     }
+    public function searchExactCategoryService($term,$request)
+    {
+        try{
+            $data['data'] =   Category::
+        where("name","=",$term)
+        ->first();
+        return response()->json($data, 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
+    }
+
 
     public function deleteCategoryService($id,$request)
     {
