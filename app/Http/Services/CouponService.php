@@ -17,7 +17,7 @@ trait CouponService
 
         try{
             $insertableData = $request->validated();
-            $insertableData["code"] = Str::random(15);
+            $insertableData["code"] = str_replace(' ', '', strtolower($insertableData["name"]));
             $insertedData =   Coupon::create($insertableData);
             if(!$insertableData["is_all_category_product"]) {
 

@@ -27,7 +27,7 @@ class ProductRequest extends FormRequest
             "name" => "required",
             "type" => "required",
             "category_id" => "required",
-            "style_id" => "required",
+            "style_id" => "nullable",
             "sku" => "required|unique:products,sku",
             "status"   =>"required",
             "is_featured"   =>"required|boolean",
@@ -41,7 +41,7 @@ class ProductRequest extends FormRequest
             "variation.*.color_id"  => "nullable",
             "variation.*.variation_value_template"  => "required_if:type,variable|array",
             "variation.*.variation_value_template.*.price"  => "required_if:type,variable|not_in:0,0",
-            "variation.*.variation_value_template.*.qty"  => "required_if:type,variable|not_in:0,0",
+            "variation.*.variation_value_template.*.qty"  => "required_if:type,variable|numeric",
             "variation.*.variation_value_template.*.name"  => "required_if:type,variable",
             "variation.*.variation_value_template.*.sub_sku"  => "nullable",
 

@@ -22,7 +22,7 @@ class CreateVariationsTable extends Migration
             $table->unsignedBigInteger('product_variation_id')->nullable();;
             $table->foreign('product_variation_id')->references('id')->on('product_variations')->onDelete('cascade');
             $table->float('price')->nullable();
-            $table->integer('qty')->nullable();
+            $table->integer('qty')->default(0);
 
             $table->timestamps();
         });

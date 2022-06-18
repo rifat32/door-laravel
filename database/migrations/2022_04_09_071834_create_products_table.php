@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->enum('type', ['single', 'variable']);
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->unsignedBigInteger('style_id');
+            $table->unsignedBigInteger('style_id')->nullable();
             $table->foreign('style_id')->references('id')->on('styles')->onDelete('cascade');
             $table->string("sku")->unique();
             $table->string("image")->nullable();

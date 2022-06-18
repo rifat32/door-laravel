@@ -251,13 +251,14 @@ foreach($updatableVariations as $updatableVariation){
     }
     public function getProductPaginationService($perPage,$request)
     {
+
         try{
             // $products =   Variation::with("product.category")->paginate(10);
             $query = Product::with("variations","images","colors")
             // ->join('variations', 'products.id', '=', 'variations.product_id')
 
-            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id');
-
+            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
+            ->leftJoin('styles as s', 'products.style_id', '=', 's.id');
             // ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id');
 
             if(!empty($request->category)){
@@ -279,6 +280,7 @@ foreach($updatableVariations as $updatableVariation){
             'products.name',
             'products.type',
             'c.name as category',
+            's.name as style',
             'products.sku',
             'products.image',
             'products.status',
@@ -434,7 +436,7 @@ foreach($updatableVariations as $updatableVariation){
 
         )
         ->orderByDesc("id")
-        ->take(5)
+       
         ->get();
 
 
