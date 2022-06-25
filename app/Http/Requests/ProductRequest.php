@@ -49,7 +49,7 @@ class ProductRequest extends FormRequest
             "colors.*.color_id"  => "required_if:type,variable",
             "colors.*.color_image"  => "required_if:type,variable",
             "colors.*.is_variation_specific"  => "required_if:type,variable|boolean",
-
+            "options" => "array"
         ];
     }
 }

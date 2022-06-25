@@ -36,6 +36,7 @@ trait ProductServices
                     }
 
                 }
+
                 if(!empty($insertableData["colors"])){
 
                     foreach($insertableData["colors"] as  $color){
@@ -46,7 +47,16 @@ trait ProductServices
                     }
 
                 }
+                if(!empty($insertableData["options"])){
+                    foreach($insertableData["options"] as  $option){
 
+                        $inserted_product->options()->create([
+                            "option_id" => $option["id"],
+                            "product_id" => $inserted_product->id
+                            ]);
+                    }
+
+                }
 
                 if ($insertableData["type"] == "single") {
                     $this->createSingleVariationUtil($insertableData, $inserted_product);
@@ -90,16 +100,24 @@ trait ProductServices
             if(!empty($updated_product["images"])){
 
 
-
+        $updated_product->images()->delete();
     foreach(collect($updatableData["images"])->toArray() as  $key=>$image){
-
-   if($key == 0){
-    $updated_product->images()->delete();
-   }
     $updated_product->images()->create(["file" => $image]);
-
-
     }
+
+
+    $updated_product->options()->delete();
+    foreach(collect($updatableData["options"])->toArray() as  $key=>$option){
+
+
+         $updated_product->options()->create([
+            "option_id" => $option['id'],
+            "product_id"=> $updated_product->id
+        ]);
+
+
+         }
+
 
 
 
@@ -436,7 +454,7 @@ foreach($updatableVariations as $updatableVariation){
 
         )
         ->orderByDesc("id")
-       
+
         ->get();
 
 
@@ -457,7 +475,7 @@ foreach($updatableVariations as $updatableVariation){
     public function getProductByIdService($request, $id)
     {
         try{
-            $product =   Product::with("product_variations.variations", "variations","colors.color")->where([
+            $product =   Product::with("product_variations.variations", "variations","colors.color","options")->where([
                 "id" => $id
             ])->first();
             if (!$product) {
@@ -476,7 +494,7 @@ foreach($updatableVariations as $updatableVariation){
     public function getProductByIdServiceClient($request, $id)
     {
         try{
-            $product =   Product::with("product_variations.variations","product_variations.color", "variations","colors.color","category","images","style")->where([
+            $product =   Product::with("product_variations.variations","product_variations.color", "variations","colors.color","category","images","style","options.option.option_value_template")->where([
                 "id" => $id
             ])->first();
             if (!$product) {

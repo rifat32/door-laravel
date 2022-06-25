@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\UpazilaController;
 use App\Http\Controllers\Api\VillageController;
 use App\Http\Controllers\Api\WardController;
 use App\Http\Controllers\Api\NonHoldingCitizenController;
+use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\StyleController;
 use App\Http\Controllers\Api\TaxPaymentsController;
 use App\Http\Controllers\Api\TradeLicenseController;
@@ -123,6 +124,20 @@ Route::get('/v1.0/variation-templates/all', [VariationTemplateController::class,
 Route::get('/v1.0/variation-templates/{id}', [
     VariationTemplateController::class, "getVariationTemplateById"
 ]);
+Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateController::class, "searchVariationTemplate"]);
+Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::class, "deleteVariationTemplate"]);
+
+// Option Templates
+Route::post('/v1.0/options', [OptionController::class, "createOptionTemplate"]);
+Route::put('/v1.0/options', [OptionController::class, "updateOptionTemplate"]);
+Route::get('/v1.0/options', [OptionController::class, "getOptionTemplate"]);
+Route::get('/v1.0/options/all', [OptionController::class, "getAllOptionTemplate"]);
+Route::get('/v1.0/options/{id}', [
+    OptionController::class, "getOptionTemplateById"
+]);
+Route::get('/v1.0/options/search/{term}', [OptionController::class, "searchVariationTemplate"]);
+Route::delete('/v1.0/options/{id}', [OptionController::class, "deleteOptionTemplate"]);
+
 
 
 // Color Templates
@@ -139,8 +154,7 @@ Route::delete('/v1.0/colors/{id}', [
 
 
 
-Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateController::class, "searchVariationTemplate"]);
-Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::class, "deleteVariationTemplate"]);
+
 
 
 // Product

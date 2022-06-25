@@ -29,6 +29,7 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariation::class,"product_id","id");
     }
+
     public function variations()
     {
         return $this->hasMany(Variation::class,"product_id","id");
@@ -47,12 +48,16 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class,"product_id","id");
     }
+
     public function colors()
     {
         return $this->hasMany(ProductColor::class,"product_id","id");
     }
 
-
+    public function options()
+    {
+        return $this->hasMany(ProductOption::class,"product_id","id");
+    }
 
 
 
