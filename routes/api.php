@@ -42,6 +42,7 @@ use App\Http\Controllers\Api\StyleController;
 use App\Http\Controllers\Api\TaxPaymentsController;
 use App\Http\Controllers\Api\TradeLicenseController;
 use App\Http\Controllers\Api\VariationTemplateController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SetUpController;
 use App\Http\Requests\ImageRequest;
 use App\Models\Coupon;
@@ -127,6 +128,22 @@ Route::get('/v1.0/variation-templates/{id}', [
 Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateController::class, "searchVariationTemplate"]);
 Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::class, "deleteVariationTemplate"]);
 
+
+// Option Templates
+Route::post('/v1.0/menus', [MenuController::class, "createMenu"]);
+Route::put('/v1.0/menus', [MenuController::class, "updateMenu"]);
+Route::get('/v1.0/menus', [MenuController::class, "getMenu"]);
+Route::get('/v1.0/menus/all', [MenuController::class, "getAllMenu"]);
+Route::get('/v1.0/menus/{id}', [
+    MenuController::class, "getMenuById"
+]);
+ Route::get('/v1.0/menus/search/{term}', [MenuController::class, "searchMenu"]);
+Route::delete('/v1.0/menus/{id}', [MenuController::class, "deleteMenu"]);
+
+
+
+
+
 // Option Templates
 Route::post('/v1.0/options', [OptionController::class, "createOptionTemplate"]);
 Route::put('/v1.0/options', [OptionController::class, "updateOptionTemplate"]);
@@ -135,7 +152,7 @@ Route::get('/v1.0/options/all', [OptionController::class, "getAllOptionTemplate"
 Route::get('/v1.0/options/{id}', [
     OptionController::class, "getOptionTemplateById"
 ]);
-Route::get('/v1.0/options/search/{term}', [OptionController::class, "searchVariationTemplate"]);
+Route::get('/v1.0/options/search/{term}', [OptionController::class, "searchOptionTemplate"]);
 Route::delete('/v1.0/options/{id}', [OptionController::class, "deleteOptionTemplate"]);
 
 
@@ -472,6 +489,8 @@ Route::get('/v1.0/client/styles/all', [StyleController::class, "getAllStyle"]);
 Route::get('/v1.0/client/colors/all', [ColorController::class, "getAllColor"]);
 Route::get('/v1.0/client/products/{id}', [ProductController::class, "getProductByIdClient"]);
 Route::get('/v1.0/client/categories/search/exact/{term}', [CategoryController::class, "searchExactCategory"]);
+
+Route::get('/v1.0/client/menus/all', [MenuController::class, "getAllMenu"]);
 
 Route::get('/v1.0/client/products/pagination/{perPage}', [ProductController::class, "getProductPaginationClient"]);
 
