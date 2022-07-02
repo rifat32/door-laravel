@@ -12,7 +12,6 @@ class Order extends Model
         "fname",
         "lname",
         "cname",
-        "country",
         "billing_address",
         "billing_address2",
         "city",
@@ -20,6 +19,19 @@ class Order extends Model
         "phone",
         "email",
         "additional_info",
-        "payment_option"
+        "payment_option",
+        "status",
+        "coupon_id"
     ];
+    public function order_details()
+    {
+        return $this->hasMany(OrderDetail::class,"order_id","id");
+    }
+
+    public function coupon()
+    {
+        return $this->hasOne(Coupon::class,"id","coupon_id");
+    }
+
+
 }

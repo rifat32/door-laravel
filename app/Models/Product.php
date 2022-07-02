@@ -18,7 +18,9 @@ class Product extends Model
          "image",
         "description",
         "status",
-        "is_featured"
+        "is_featured",
+        "length_lower_limit",
+        "length_upper_limit"
     ];
     protected $casts = [
         'category_id' => 'integer',

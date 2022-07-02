@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\VillageController;
 use App\Http\Controllers\Api\WardController;
 use App\Http\Controllers\Api\NonHoldingCitizenController;
 use App\Http\Controllers\Api\OptionController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\StyleController;
 use App\Http\Controllers\Api\TaxPaymentsController;
 use App\Http\Controllers\Api\TradeLicenseController;
@@ -469,21 +470,23 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
     Route::get('/v1.0/accounts', [CharOfAccountController::class, "getAccounts"]);
     Route::post('/v1.0/chart-of-account', [CharOfAccountController::class, "createCharOfAccount"]);
     Route::get('/v1.0/chart-of-account', [CharOfAccountController::class, "getChartOfAccounts"]);
-});
+    Route::get('/v1.0/orders', function(Request $request){
 
-Route::post('/v1.0/client/orders', function(Request $request){
-       Order::create($request->toArray());
-       return response()->json([
-           "success" => true
-       ]);
-});
+        $data["data"] = Order::paginate(10);
+        return response()->json($data,200);
 
-Route::get('/v1.0/orders', function(Request $request){
-
-    $data["data"] = Order::paginate(10);
-    return response()->json($data,200);
+    });
+    Route::get('/v1.0/orders/{id}', [OrderController::class,"showOrder"]);
+    Route::post('/v1.0/orders/status/{id}', [OrderController::class,"changeStatus"]);
 
 });
+
+Route::post('/v1.0/client/orders', [OrderController::class,"create"]);
+
+
+
+
+
 Route::get('/v1.0/client/categories/all', [CategoryController::class, "getAllCategory"]);
 Route::get('/v1.0/client/styles/all', [StyleController::class, "getAllStyle"]);
 Route::get('/v1.0/client/colors/all', [ColorController::class, "getAllColor"]);
@@ -540,6 +543,7 @@ Route::get('/v1.0/client/check-coupon', function(Request $request){
    -> where([
         "code" => $request->coupon,
    ])
+
 
    ->first();
 

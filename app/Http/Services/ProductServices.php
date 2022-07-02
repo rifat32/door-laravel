@@ -91,7 +91,9 @@ trait ProductServices
                     "image",
                     "description",
                     "status",
-                    "is_featured"
+                    "is_featured",
+                    "length_lower_limit",
+                    "length_upper_limit"
                 ])
                     ->toArray()
 
@@ -493,7 +495,7 @@ foreach($updatableVariations as $updatableVariation){
     }
     public function getProductByIdServiceClient($request, $id)
     {
-        try{ 
+        try{
             $product =   Product::with("product_variations.variations","product_variations.color", "variations","colors.color","category","images","style","options.option.option_value_template")->where([
                 "id" => $id
             ])->first();

@@ -17,17 +17,26 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->string("fname");
             $table->string("lname");
-            $table->string("cname");
-            $table->string("country");
+            $table->string("cname")->nullable();
             $table->string("billing_address");
-            $table->string("billing_address2");
+            $table->string("billing_address2")->nullable();
 
             $table->string("city");
             $table->string("zipcode");
             $table->string("phone");
             $table->string("email");
-            $table->string("additional_info");
+            $table->string("additional_info")->nullable();
             $table->string("payment_option");
+
+
+
+            $table->string("coupon_id")->nullable();
+            $table->string("coupon_discount_type")->nullable();
+            $table->string("coupon_discount_amount")->nullable();
+
+
+            $table->string("status")->default("pending");
+
             $table->timestamps();
         });
     }

@@ -36,6 +36,10 @@ class ProductRequest extends FormRequest
             "description" => "required",
             "price" => "required_if:type,single",
             "qty" => "required_if:type,single",
+
+            "length_lower_limit" => "nullable",
+            "length_upper_limit" => "nullable",
+
             "variation" => "required_if:type,variable|array",
             "variation.*.variation_template_id"  => "required_if:type,variable",
             "variation.*.color_id"  => "nullable",

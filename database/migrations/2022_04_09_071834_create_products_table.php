@@ -26,6 +26,9 @@ class CreateProductsTable extends Migration
             $table->string("description");
             $table->enum('status', ['draft', 'active',"inactive"]);
             $table->boolean("is_featured");
+
+            $table->integer("length_lower_limit")->nullable();
+            $table->integer("length_upper_limit")->nullable();
             $table->timestamps();
         });
     }

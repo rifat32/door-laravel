@@ -14,7 +14,9 @@ return [
     ],
     "roles" => [
         "system user",
-        "trader"
+        "trader",
+        "customer",
+
 
     ],
     "permissions" => [
