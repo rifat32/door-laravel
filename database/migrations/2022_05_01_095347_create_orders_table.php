@@ -18,13 +18,22 @@ class CreateOrdersTable extends Migration
             $table->string("fname");
             $table->string("lname");
             $table->string("cname")->nullable();
-            $table->string("billing_address");
-            $table->string("billing_address2")->nullable();
-
-            $table->string("city");
-            $table->string("zipcode");
             $table->string("phone");
             $table->string("email");
+
+
+
+
+
+            $table->string("customer_id");
+            $table->string("billing_address");
+            $table->string("billing_address2")->nullable();
+            $table->string("city");
+            $table->string("zipcode");
+
+
+
+
             $table->string("additional_info")->nullable();
             $table->string("payment_option");
 

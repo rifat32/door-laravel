@@ -21,7 +21,8 @@ class Order extends Model
         "additional_info",
         "payment_option",
         "status",
-        "coupon_id"
+        "coupon_id",
+        "customer_id"
     ];
     public function order_details()
     {

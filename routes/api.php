@@ -472,12 +472,25 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
     Route::get('/v1.0/chart-of-account', [CharOfAccountController::class, "getChartOfAccounts"]);
     Route::get('/v1.0/orders', function(Request $request){
 
-        $data["data"] = Order::paginate(10);
+        $data["data"] = Order::latest()->paginate(10);
+        return response()->json($data,200);
+
+    });
+    Route::get('/v1.0/orders/customers/{customerId}', function($customerId,Request $request){
+
+        $data["data"] = Order::where([
+            "customer_id" => $customerId
+        ])->paginate(10);
         return response()->json($data,200);
 
     });
     Route::get('/v1.0/orders/{id}', [OrderController::class,"showOrder"]);
+
+    Route::get('/v1.0/customers/{id}', [OrderController::class,"showCustomer"]);
+
     Route::post('/v1.0/orders/status/{id}', [OrderController::class,"changeStatus"]);
+    Route::get('/v1.0/customers', [OrderController::class,"getCustomers"]);
+
 
 });
 
