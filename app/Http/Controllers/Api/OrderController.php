@@ -20,7 +20,7 @@ class OrderController extends Controller
 {
     public function create(OrderRequest $request)
     {
-        DB::transaction(function () use (&$request) {
+       return DB::transaction(function () use (&$request) {
 
             $coupon = null;
             if (!empty($request["order_coupon"]["id"])) {
@@ -154,12 +154,14 @@ class OrderController extends Controller
                     }
                 }
             }
+            return response()->json([
+                "success" => true,
+                "order"=>$order
+            ]);
         });
 
 
-        return response()->json([
-            "success" => true
-        ]);
+
     }
 
 
