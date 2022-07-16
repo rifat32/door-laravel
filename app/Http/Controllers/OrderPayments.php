@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Stripe\StripeClient;
 use App\Models\Order;
-
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 class OrderPayments extends Controller
 {
     function stripepayments(Request $request)
@@ -99,5 +99,48 @@ class OrderPayments extends Controller
         $url = $session["url"] ?? null;
         sleep(1);
         echo "<script>window.location.href='$url'</script>";
+    }
+    function paypalpayment()
+    {
+        $provider = new PayPalClient([]);
+        $token = $provider->getAccessToken();
+        $tokendetails = $provider->setAccessToken($token);
+        $order = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "purchase_units" => [[
+                "amount" => [
+                    "currency_code" => "USD",
+                    "value" => 31,
+                ],
+            ],],
+            "application_context" => [
+                "shipping_preference" => "NO_SHIPPING",
+                "cancel_url" => "http://localhost:8000/paypalcancel",
+                "return_url" => "http://localhost:8000/payaplsuccess",
+                "brand_name" => "Doors And Cabinet",
+
+            ],
+        ]);
+        /*    echo "<pre>";
+        print_r($order);
+        echo "</pre>"; */
+
+        return redirect($order["links"][1]["href"]);
+    }
+    function payaplsuccess(Request $request)
+    {
+        $provider = new PayPalClient([]);
+
+        $provider->getAccessToken();
+        $provider->authorizePaymentOrder($request["token"]);
+        $response = $provider->capturePaymentOrder($request["token"]);
+        echo $request["PayerID"];
+        echo $request["token"];
+        dd($response);
+        // echo $response["status"] ?? "error";
+    }
+    function paypalcancel(Request $request)
+    {
+        dd($request->all());
     }
 }

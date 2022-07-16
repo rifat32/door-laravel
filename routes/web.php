@@ -61,3 +61,6 @@ Route::get('/checkout', function (Request $request) {
     ]);
 });
 Route::get("/payment",[OrderPayments::class,"stripepayments"]);
+Route::get("/paypalpayment",[OrderPayments::class,"paypalpayment"]);
+Route::get("/payaplsuccess",[OrderPayments::class,"payaplsuccess"]);
+Route::get("/paypalcancel",[OrderPayments::class,"paypalcancel"]);
