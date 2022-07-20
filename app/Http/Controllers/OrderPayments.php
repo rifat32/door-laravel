@@ -57,14 +57,14 @@ class OrderPayments extends Controller
         ];
 
         foreach ($order->order_details as $key => $order_detail) {
-            $product_price = 0;
-            if ($order_detail->product->type == "variation") {
-                $product_price = $order_detail->variation->price;
-                echo "if block product price " . $product_price;
-            } else {
-                $product_price = $order_detail->product->variations[0]->price;
-                echo "else block product price " . $product_price;
-            }
+            // $product_price = 0;
+            // if ($order_detail->product->type == "variation") {
+            //     $product_price = $order_detail->variation->price;
+            //     echo "if block product price " . $product_price;
+            // } else {
+            //     $product_price = $order_detail->product->variations[0]->price;
+            //     echo "else block product price " . $product_price;
+            // }
             echo $order_detail->product->name . " " . $order_detail->product->variations[0]->price . " " . $order_detail->qty . "<br>";
             $array["Product_info"][$key] = [
                 'price_data' => [
@@ -79,9 +79,6 @@ class OrderPayments extends Controller
                 'quantity' => $order_detail->qty,
             ];
         }
-        echo "<pre>";
-        print_r($array["Product_info"]);
-        echo "</pre>";
         $url = null;
         if ($array["data"]) {
             $session = $stripe->checkout->sessions->create(
@@ -90,8 +87,18 @@ class OrderPayments extends Controller
                     "cancel_url" => "http://localhost:3000/other/not-found",
                     'mode' => 'payment',
                     $array["shipping_data"],
-                    'line_items' => [$array["Product_info"]],
-                    'discounts' => [$array["coupon_data"]["discounts"]],
+                    'line_items' => [
+                        'price_data' => [
+                            'currency' => 'eur',
+
+                            'product_data' => [
+                                'name' => "Ashford",
+
+                            ],
+                            'unit_amount' => 35 * 100,
+                        ],
+                        'quantity' => 1,
+                    ],
 
                 ]
             );
