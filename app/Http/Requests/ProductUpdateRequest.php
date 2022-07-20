@@ -36,6 +36,7 @@ class ProductUpdateRequest extends FormRequest
             "qty" => "required_if:type,single",
             "length_lower_limit" => "nullable",
             "length_upper_limit" => "nullable",
+            "length_is_required" => "nullable",
             "sku" => "required",
             "is_featured"   =>"required|boolean",
             "status" => "required",

@@ -43,11 +43,32 @@ trait CouponService
 
             $updatableData = $request->validated();
 
-            $data['data'] = tap(Coupon::where(["id" =>  $request["id"]]))->update(
-                $updatableData
+            $coupon = tap(Coupon::where(["id" =>  $request["id"]]))->update(
+                collect($updatableData)->only([
+                    "name",
+                    "category_id",
+                    "code",
+                    "is_all_category_product",
+                    "discount_amount",
+                    "discount_type",
+                     "expire_date",
+                    "is_active",
+                ])
+                    ->toArray()
             )
             ->with("category")
             ->first();
+            $coupon->cproducts()->delete();
+            if(!$updatableData["is_all_category_product"]) {
+                    foreach($updatableData["products"] as $product){
+                    $coupon->cproducts()->create([
+                        "product_id" => $product["id"],
+                        "coupon_id" => $coupon->id
+                    ]);
+                }
+
+            }
+            $data["data"] = $coupon;
             return response()->json($data, 200);
         } catch(Exception $e){
         return $this->sendError($e,500);
@@ -82,7 +103,7 @@ trait CouponService
     {
 
         try{
-            $data['data'] =   Coupon::where(["id" => $id])->with("category")->first();
+            $data['data'] =   Coupon::where(["id" => $id])->with("category","cproducts")->first();
             return response()->json($data, 200);
         } catch(Exception $e){
         return $this->sendError($e,500);

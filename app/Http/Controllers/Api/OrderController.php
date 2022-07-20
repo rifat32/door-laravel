@@ -144,7 +144,7 @@ class OrderController extends Controller
 
                 $order_details =  OrderDetail::create($cart);
 
-                foreach ($cart["options"] as $option) {
+                foreach (json_decode($cart["options"],true) as $option) {
                     if (!empty($option["selectedValue"])) {
                         OrderDetailOption::create([
                             "option_id" => $option["option_id"],

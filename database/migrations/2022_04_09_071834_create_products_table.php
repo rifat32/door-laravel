@@ -29,6 +29,8 @@ class CreateProductsTable extends Migration
 
             $table->integer("length_lower_limit")->nullable();
             $table->integer("length_upper_limit")->nullable();
+            $table->boolean("length_is_required")->default(0);
+
             $table->timestamps();
         });
     }

@@ -27,7 +27,7 @@ trait ProductServices
 
             $insertableData = $request->validated();
 
-            DB::transaction(function ()use(&$insertableData) {
+      return      DB::transaction(function ()use(&$insertableData) {
                 $inserted_product =   Product::create($insertableData);
 
                 if(!empty($insertableData["images"])){
@@ -47,11 +47,14 @@ trait ProductServices
                     }
 
                 }
+
                 if(!empty($insertableData["options"])){
                     foreach($insertableData["options"] as  $option){
 
                         $inserted_product->options()->create([
-                            "option_id" => $option["id"],
+                            "option_id" => $option["option_id"],
+                            "color_id" => $option["color_id"],
+                            "is_required" => $option["is_required"],
                             "product_id" => $inserted_product->id
                             ]);
                     }
@@ -61,7 +64,9 @@ trait ProductServices
                 if ($insertableData["type"] == "single") {
                     $this->createSingleVariationUtil($insertableData, $inserted_product);
                 } else {
+
                     $this->createVariationProductUtil($insertableData, $inserted_product);
+
                 }
                 $data['data'] = $inserted_product;
 
@@ -93,7 +98,8 @@ trait ProductServices
                     "status",
                     "is_featured",
                     "length_lower_limit",
-                    "length_upper_limit"
+                    "length_upper_limit",
+                    "length_is_required"
                 ])
                     ->toArray()
 
@@ -109,13 +115,17 @@ trait ProductServices
 
 
     $updated_product->options()->delete();
+
     foreach(collect($updatableData["options"])->toArray() as  $key=>$option){
 
 
          $updated_product->options()->create([
-            "option_id" => $option['id'],
+            "option_id" => $option["option_id"],
+            "color_id" => $option["color_id"],
+            "is_required" => $option["is_required"],
             "product_id"=> $updated_product->id
         ]);
+
 
 
          }
@@ -496,7 +506,9 @@ foreach($updatableVariations as $updatableVariation){
     public function getProductByIdServiceClient($request, $id)
     {
         try{
-            $product =   Product::with("product_variations.variations","product_variations.color", "variations","colors.color","category","images","style","options.option.option_value_template")->where([
+            $product =   Product::with("product_variations.variations","product_variations.color", "variations","colors.color","category","images","style","options.option.option_value_template",
+            "options.color"
+            )->where([
                 "id" => $id
             ])->first();
             if (!$product) {
