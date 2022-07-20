@@ -13,18 +13,7 @@ class OrderPayments extends Controller
 
         $orderid  = $request->order_id;
         $order = Order::where("id", $orderid)->first();
-
         $coupon = $order->coupon;
-
-
-
-
-
-
-
-
-
-
         // return response()->json($order);
 
         $stripe = new StripeClient('sk_test_51Kdy9JE00LZ83RrlSJYCuLu7imUQTeGTUbTgxfAx1lpsVhiPcxcYcegCSGyUW9UY0PdzukNxesWQyCTbK9EFHOWk000bHfgH9O');
@@ -41,7 +30,7 @@ class OrderPayments extends Controller
         */
 
         $array = [
-            "data" => false,
+            "data" => true,
             "Product_info" => [],
             "coupon_data" => [
                 'discounts' => [
@@ -56,15 +45,25 @@ class OrderPayments extends Controller
             "payment_method" => ['payment_method_types' => ['card', 'sofort', 'sepa_debit', 'p24', 'klarna', 'ideal', 'giropay', 'eps', 'bancontact'],],
         ];
 
+        $coupon_discount = 0;
         foreach ($order->order_details as $key => $order_detail) {
-            // $product_price = 0;
-            // if ($order_detail->product->type == "variation") {
-            //     $product_price = $order_detail->variation->price;
-            //     echo "if block product price " . $product_price;
-            // } else {
-            //     $product_price = $order_detail->product->variations[0]->price;
-            //     echo "else block product price " . $product_price;
-            // }
+            $product_price = 0;
+            if ($order_detail->product->type == "variable") {
+                $product_price = $order_detail->variation->price;
+                echo "if block product price " . $product_price;
+            } else {
+                $product_price = $order_detail->product->variations[0]->price;
+                echo "else block product price " . $product_price;
+            }
+            if($order_detail->coupon_discount_type == "percentage") {
+                $coupon_discount += (($order_detail->coupon_discount_amount * $product_price) / 100);
+            } else {
+                $coupon_discount +=   $order_detail->coupon_discount_amount;
+            }
+
+
+
+
             echo $order_detail->product->name . " " . $order_detail->product->variations[0]->price . " " . $order_detail->qty . "<br>";
             $array["Product_info"][$key] = [
                 'price_data' => [
