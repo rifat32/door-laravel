@@ -83,8 +83,8 @@ class OrderPayments extends Controller
         if ($array["data"]) {
             $session = $stripe->checkout->sessions->create(
                 [
-                    "success_url" => "http://localhost:3000/other/order-completed",
-                    "cancel_url" => "http://localhost:3000/other/not-found",
+                    "success_url" => "https://door-next.vercel.app/other/order-completed",
+                    "cancel_url" => "https://door-next.vercel.app/other/not-found",
                     'mode' => 'payment',
                     $array["shipping_data"],
                     'line_items' => [
