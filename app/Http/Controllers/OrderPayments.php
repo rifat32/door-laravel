@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Stripe\StripeClient;
 use App\Models\Order;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
+
 class OrderPayments extends Controller
 {
     function stripepayments(Request $request)
@@ -55,7 +56,7 @@ class OrderPayments extends Controller
                 $product_price = $order_detail->product->variations[0]->price;
                 echo "else block product price " . $product_price;
             }
-            if($order_detail->coupon_discount_type == "percentage") {
+            if ($order_detail->coupon_discount_type == "percentage") {
                 $coupon_discount += (($order_detail->coupon_discount_amount * $product_price) / 100);
             } else {
                 $coupon_discount +=   $order_detail->coupon_discount_amount;
