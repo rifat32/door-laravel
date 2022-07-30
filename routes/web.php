@@ -56,11 +56,11 @@ Route::post('webhook', function (Request $request) {
     return view("checkout");
 }); */
 Route::get('/checkout', function (Request $request) {
-    return view("checkout",[
-       "order_id" => $request->order_id
+    return view("checkout", [
+        "order_id" => $request->order_id
     ]);
 });
-Route::get("/payment",[OrderPayments::class,"stripepayments"]);
-Route::get("/paypalpayment",[OrderPayments::class,"paypalpayment"]);
-Route::get("/payaplsuccess",[OrderPayments::class,"payaplsuccess"]);
-Route::get("/paypalcancel",[OrderPayments::class,"paypalcancel"]);
+Route::get("/payment", [OrderPayments::class, "stripepayments"]);
+Route::get("/paypalpayment", [OrderPayments::class, "paypalpayment"]);
+Route::get("/payaplsuccess", [OrderPayments::class, "payaplsuccess"]);
+Route::get("/paypalcancel", [OrderPayments::class, "paypalcancel"]);

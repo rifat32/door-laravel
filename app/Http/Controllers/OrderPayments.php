@@ -15,6 +15,7 @@ class OrderPayments extends Controller
         $orderid  = $request->order_id;
         $order = Order::where("id", $orderid)->first();
         $coupon = $order->coupon;
+
         // return response()->json($order);
 
         $stripe = new StripeClient('sk_test_51Kdy9JE00LZ83RrlSJYCuLu7imUQTeGTUbTgxfAx1lpsVhiPcxcYcegCSGyUW9UY0PdzukNxesWQyCTbK9EFHOWk000bHfgH9O');
@@ -42,19 +43,20 @@ class OrderPayments extends Controller
             ],
             "shipping_data" => ['shipping_options' => [['shipping_rate_data' => ['display_name' => 'Shipping Cost', 'type' => 'fixed_amount', 'fixed_amount' => ['amount' => 5 * 100, 'currency' => 'eur']]]],],
             "vat" => [],
-            "order_id" => ['metadata' => ['order_id' => 2]],
-            "payment_method" => ['payment_method_types' => ['card', 'sofort', 'sepa_debit', 'p24', 'klarna', 'ideal', 'giropay', 'eps', 'bancontact'],],
+            "order_id" => ['metadata' => ['order_id' => $orderid]],
+            "payment_method" => ['payment_method_types' => ['card', 'klarna'],],
         ];
 
         $coupon_discount = 0;
+        $i = 0;
         foreach ($order->order_details as $key => $order_detail) {
             $product_price = 0;
             if ($order_detail->product->type == "variable") {
                 $product_price = $order_detail->variation->price;
-                echo "if block product price " . $product_price;
+                // echo "if block product price " . $product_price . "<br>";
             } else {
                 $product_price = $order_detail->product->variations[0]->price;
-                echo "else block product price " . $product_price;
+                // echo "else block product price " . $product_price . "<br>";
             }
             if ($order_detail->coupon_discount_type == "percentage") {
                 $coupon_discount += (($order_detail->coupon_discount_amount * $product_price) / 100);
@@ -65,47 +67,59 @@ class OrderPayments extends Controller
 
 
 
-            echo $order_detail->product->name . " " . $order_detail->product->variations[0]->price . " " . $order_detail->qty . "<br>";
-            $array["Product_info"][$key] = [
+            /*   echo $order_detail->product->name . " " . $order_detail->product->variations[0]->price . " " . $order_detail->qty . "<br>"; */
+            $array["Product_info"][$i] = [
                 'price_data' => [
-                    'currency' => 'eur',
+                    'currency' => 'gbp',
 
                     'product_data' => [
                         'name' => $order_detail->product->name,
 
                     ],
-                    'unit_amount' => $order_detail->product->variations[0]->price * 100,
+                    'unit_amount' => $product_price * 100,
                 ],
                 'quantity' => $order_detail->qty,
             ];
+            $i++;
         }
+        /*         echo "<pre>";
+        print_r($coupon);
+        echo $coupon->name . "<br>";
+        echo $coupon->discount_type . "<br>";
+        echo $coupon->discount_amount . "<br>";
+        return; */
         $url = null;
         if ($array["data"]) {
-            $session = $stripe->checkout->sessions->create(
+            /*         
+ shipping data availabe object and coupon data availabe object
+ $session = $stripe->checkout->sessions->create(
                 [
                     "success_url" => "https://door-next.vercel.app/other/order-completed",
                     "cancel_url" => "https://door-next.vercel.app/other/not-found",
                     'mode' => 'payment',
                     $array["shipping_data"],
-                    'line_items' => [
-                        'price_data' => [
-                            'currency' => 'eur',
-
-                            'product_data' => [
-                                'name' => "Ashford",
-
-                            ],
-                            'unit_amount' => 35 * 100,
-                        ],
-                        'quantity' => 1,
-                    ],
-
+                    'line_items' => $array["Product_info"],
+                      "discounts" => $array["coupon_data"]["discounts"],
+                ]
+            ); */
+            $session = $stripe->checkout->sessions->create(
+                [
+                    "success_url" => "https://door-next.vercel.app/other/order-completed",
+                    "cancel_url" => "https://door-next.vercel.app/other/not-found",
+                    'mode' => 'payment',
+                    'line_items' => $array["Product_info"],
+                    "metadata" => $array["order_id"]["metadata"],
+                    "payment_method_types" => $array["payment_method"]["payment_method_types"],
                 ]
             );
         }
         $url = $session["url"] ?? null;
-        sleep(1);
-        echo "<script>window.location.href='$url'</script>";
+        if ($url != null) {
+            sleep(1);
+            echo "<script>window.location.href='$url'</script>";
+        } else {
+            echo "<script>window.location.href='127.0.0.1'</script>";
+        }
     }
     function paypalpayment()
     {
