@@ -19,8 +19,6 @@ class Customer extends Model
         "billing_address",
         "billing_address2",
         "city",
-        "zipcode"
-
-
+        "zipcode",
     ];
 }
