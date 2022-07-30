@@ -18,19 +18,12 @@ class CreateCustomersTable extends Migration
             $table->string("fname");
             $table->string("lname");
             $table->string("cname")->nullable();
-
             $table->string("phone");
             $table->string("email");
-
-
             $table->string("billing_address");
             $table->string("billing_address2")->nullable();
             $table->string("city");
             $table->string("zipcode");
-
-
-
-
             $table->string("type");
 
 

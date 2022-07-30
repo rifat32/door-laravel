@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
+use App\Http\Requests\OrderRequest2;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Order;
@@ -163,7 +164,139 @@ class OrderController extends Controller
 
 
     }
+    public function create2(OrderRequest2 $request)
+    {
+       return DB::transaction(function () use (&$request) {
 
+            $coupon = null;
+            if (!empty($request["order_coupon"]["id"])) {
+                $coupon =  Coupon::where([
+                    "id" => $request["order_coupon"]["id"],
+                    "is_active" => true
+                ])
+                    ->where(
+                        "expire_date",
+                        ">",
+                        today()
+                    )
+                    ->first();
+            }
+
+            $customer = Customer::where([
+                "email" => $request['email']
+            ])
+                ->first();
+
+            if ($customer) {
+                $customer->total_order += 1;
+                $customer->fname = $request["fname"];
+                $customer->lname = $request["lname"];
+                $customer->cname = $request["cname"];
+                $customer->phone = $request["phone"];
+                $customer->billing_address = $request["billing_address"];
+                $customer->billing_address2 = $request["billing_address2"];
+                $customer->city = $request["city"];
+                $customer->zipcode = $request["zipcode"];
+                if ($request['create_account'] == 1) {
+                    $customer->type = "registered customer";
+                }
+
+                $customer->save();
+            } else {
+                $customer = Customer::create(
+                    [
+                        "fname" =>  $request["fname"],
+                        "lname" =>  $request["lname"],
+                        "cname" =>  $request["cname"],
+                        "phone" =>  $request["phone"],
+                        "email" =>  $request["email"],
+                        "type" =>  $request['create_account'] == 1 ? "registered customer" : "guest",
+                        "billing_address" =>  $request["billing_address"],
+                        "billing_address2" =>  $request["billing_address2"],
+                        "city" =>  $request["city"],
+                        "zipcode" =>  $request["zipcode"],
+                    ]
+                );
+            }
+
+
+
+
+
+            $request["customer_id"] = $customer->id;
+            // return response()->json($coupon,500);
+
+
+
+
+            if ($coupon) {
+                $request["coupon_id"] = $coupon->id;
+            }
+
+
+            $order = Order::create($request->toArray());
+            foreach ($request['cart'] as $cart) {
+
+                $product = Product::where([
+                    "id" => $cart["id"]
+                ])
+                    ->first();
+
+                $cart["order_id"] = $order->id;
+                $cart["product_id"] = $cart["id"];
+
+
+                if ($coupon) {
+                    if (!$coupon->category_id) {
+                        $cart["coupon_discount_type"] = $coupon->discount_type;
+                        $cart["coupon_discount_amount"] = $coupon->discount_amount;
+                    } else {
+
+                        if ($product->category_id == $coupon->category_id) {
+                            if ($coupon->is_all_category_product) {
+                                $cart["coupon_discount_type"] = $coupon->discount_type;
+                                $cart["coupon_discount_amount"] = $coupon->discount_amount;
+                            } else {
+                                $found = false;
+                                foreach ($coupon->cproducts as $cproduct) {
+                                    if ($cproduct->product_id == $product->id) {
+                                        $found = true;
+                                    }
+                                }
+                                if ($found) {
+                                    $cart["coupon_discount_type"] = $coupon->discount_type;
+                                    $cart["coupon_discount_amount"] = $coupon->discount_amount;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+
+
+                $order_details =  OrderDetail::create($cart);
+
+                foreach (json_decode($cart["options"],true) as $option) {
+                    if (!empty($option["selectedValue"])) {
+                        OrderDetailOption::create([
+                            "option_id" => $option["option_id"],
+                            "option_value_id" => $option["selectedValue"],
+                            "order_detail_id" => $order_details->id
+                        ]);
+                    }
+                }
+            }
+            return response()->json([
+                "success" => true,
+                "order"=>$order
+            ]);
+        });
+
+
+
+    }
 
 
 

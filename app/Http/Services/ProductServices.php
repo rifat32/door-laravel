@@ -113,28 +113,20 @@ trait ProductServices
     $updated_product->images()->create(["file" => $image]);
     }
 
-
-    $updated_product->options()->delete();
-
-    foreach(collect($updatableData["options"])->toArray() as  $key=>$option){
-
-
-         $updated_product->options()->create([
-            "option_id" => $option["option_id"],
-            "color_id" => $option["color_id"],
-            "is_required" => $option["is_required"],
-            "product_id"=> $updated_product->id
-        ]);
-
-
-
-         }
-
-
-
-
-
             }
+            $updated_product->options()->delete();
+
+            foreach(collect($updatableData["options"])->toArray() as  $key=>$option){
+
+
+                 $updated_product->options()->create([
+                    "option_id" => $option["option_id"],
+                    "color_id" => $option["color_id"],
+                    "is_required" => $option["is_required"],
+                    "product_id"=> $updated_product->id
+                ]);
+
+                 }
 
             if(!empty($updated_product["colors"])){
 
@@ -411,6 +403,87 @@ foreach($updatableVariations as $updatableVariation){
         }
 
     }
+    public function getRelatedProductServiceClient($request)
+    {
+        try{
+
+            // $products =   Variation::with("product.category")->paginate(10);
+            $query = Product::with("variations","images","colors.color")
+            // ->join('variations', 'products.id', '=', 'variations.product_id')
+
+            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
+            ->leftJoin('styles as s', 'products.style_id', '=', 's.id')
+            ->leftJoin('product_colors as co', 'products.id', '=', 'co.product_id');
+            // ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id');
+
+            if(!empty($request->category)){
+                $query
+                ->where([
+               "c.id" => $request->category
+                ]);
+            }
+            if(!empty($request->category_name)){
+              $category =  Category::
+                where("name","=",$request->category_name)
+                ->first();
+                $query
+                ->where([
+               "c.id" => $category->id
+                ]);
+            }
+            if(!empty($request->style)){
+                $query
+                ->where([
+               "s.id" => $request->style
+                ]);
+            }
+            if(!empty($request->color)){
+                $query
+                ->where([
+               "co.color_id" => $request->color
+                ]);
+            }
+
+
+
+            $query
+            ->where([
+           "products.status" => "active"
+            ])
+            ->distinct("products.id");
+
+        $products =  $query
+        ->select(
+            'products.id',
+            'products.name',
+            'products.type',
+            'c.name as category',
+            'products.sku',
+            'products.image',
+            'products.status',
+            'products.is_featured',
+            "products.style_id"
+
+        )
+        ->orderByDesc("id")
+        ->inRandomOrder()
+        ->take(9)
+        ->get();
+
+
+
+
+    return response()->json([
+        "products" => $products
+    ], 200);
+
+
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
+    }
+
     public function getFeaturedProductServiceClient($request)
     {
         try{

@@ -37,6 +37,29 @@ class AuthController extends Controller
         $data["roles"] = $user->roles->pluck('name');
         return response(["ok" => true, "message" => "You have successfully registered", "data" => $data, "token" => $token], 200);
     }
+    public function register2(AuthRegisterRequest $request)
+    {
+
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required|string|max:255',
+        //     'email' => 'required|string|email|indisposable|max:255|unique:users',
+        //     'password' => 'required|confirmed|string|min:6',
+        // ]);
+        // if ($validator->fails()) {
+
+        //     return response(['errors' => $validator->errors()->all()], 422);
+        // }
+        $request['password'] = Hash::make($request['password']);
+        $request['remember_token'] = Str::random(10);
+        $user =  User::create($request->toArray());
+        $user->assignRole("customer");
+
+        $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+        $data["user"] = $user;
+        $data["permissions"]  = $user->getAllPermissions()->pluck('name');
+        $data["roles"] = $user->roles->pluck('name');
+        return response(["ok" => true, "message" => "You have successfully registered", "data" => $data, "token" => $token], 200);
+    }
     public function login(Request $request)
     {
         $loginData = $request->validate([

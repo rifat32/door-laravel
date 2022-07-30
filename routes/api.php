@@ -47,6 +47,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SetUpController;
 use App\Http\Requests\ImageRequest;
 use App\Models\Coupon;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\ProductVariation;
 use App\Models\Variation;
@@ -79,6 +80,7 @@ Route::middleware('auth:api')->get('/v1.0/user', function (Request $request) {
 
 Route::post('/v1.0/login', [AuthController::class, "login"]);
 Route::post('/v1.0/register', [AuthController::class, "register"]);
+Route::post('/v1.0/register2', [AuthController::class, "register2"]);
 
 // protected routes
 
@@ -476,6 +478,21 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
         return response()->json($data,200);
 
     });
+    Route::get('/v1.0/orders/client/customers', function(Request $request){
+      $customerId =  Customer::where(["email" => $request->user()->email])->first()->id;
+      if($customerId) {
+        $data["data"] = Order::where([
+            "customer_id" => Customer::where(["email" => $request->user()->email])->first()->id
+        ])->paginate(10);
+        return response()->json($data,200);
+      } else {
+        return response()->json([
+            "message" => "No Orders"
+        ],404);
+      }
+
+
+    });
     Route::get('/v1.0/orders/customers/{customerId}', function($customerId,Request $request){
 
         $data["data"] = Order::where([
@@ -490,6 +507,33 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
 
     Route::post('/v1.0/orders/status/{id}', [OrderController::class,"changeStatus"]);
     Route::get('/v1.0/customers', [OrderController::class,"getCustomers"]);
+
+
+    Route::get('/v1.0/client/customer/info', function(Request $request){
+
+        $customer = Customer::
+        where([
+             "email" => $request->user()->email,
+        ])
+        ->first();
+
+         return response()->json([
+             "customer" => $customer
+         ], 200);
+     });
+
+
+     Route::post('/v1.0/client/orders/loggedin', [OrderController::class,"create2"]);
+
+
+
+
+
+
+
+
+
+
 
 
 });
@@ -509,6 +553,8 @@ Route::get('/v1.0/client/categories/search/exact/{term}', [CategoryController::c
 Route::get('/v1.0/client/menus/all', [MenuController::class, "getAllMenu"]);
 
 Route::get('/v1.0/client/products/pagination/{perPage}', [ProductController::class, "getProductPaginationClient"]);
+Route::get('/v1.0/client/products/relatedproduct/get', [ProductController::class, "getRelatedProductClient"]);
+
 
 Route::get('/v1.0/client/products/featured/all', [ProductController::class, "getFeatutedProductClient"]);
 
@@ -564,3 +610,5 @@ Route::get('/v1.0/client/check-coupon', function(Request $request){
         "coupon" => $coupon
     ], 200);
 });
+
+
