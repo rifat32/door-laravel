@@ -384,8 +384,8 @@ foreach($updatableVariations as $updatableVariation){
             'products.image',
             'products.status',
             'products.is_featured',
-            "products.style_id"
-
+            "products.style_id",
+            "products.slug"
         )
         ->orderByDesc("id")
         ->paginate($perPage);
@@ -576,13 +576,13 @@ foreach($updatableVariations as $updatableVariation){
         }
 
     }
-    public function getProductByIdServiceClient($request, $id)
+    public function getProductByIdServiceClient($request, $slug)
     {
         try{
             $product =   Product::with("product_variations.variations","product_variations.color", "variations","colors.color","category","images","style","options.option.option_value_template",
             "options.color"
             )->where([
-                "id" => $id
+                "slug" => $slug
             ])->first();
             if (!$product) {
                 return response()->json([

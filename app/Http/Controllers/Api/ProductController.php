@@ -58,9 +58,9 @@ class ProductController extends Controller
     {
         return $this->getProductByIdService($request, $id);
     }
-    public function getProductByIdClient(Request $request, $id)
+    public function getProductByIdClient(Request $request, $slug)
     {
-        return $this->getProductByIdServiceClient($request, $id);
+        return $this->getProductByIdServiceClient($request, $slug);
     }
 
     public function deleteProduct(Request $request)

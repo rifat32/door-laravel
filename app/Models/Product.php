@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Cviebrock\EloquentSluggable\Sluggable;
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
     protected $table = "products";
     protected $fillable = [
         "name",
@@ -21,7 +21,8 @@ class Product extends Model
         "is_featured",
         "length_lower_limit",
         "length_upper_limit",
-        "length_is_required"
+        "length_is_required",
+        "slug"
     ];
     protected $casts = [
         'category_id' => 'integer',
@@ -62,7 +63,14 @@ class Product extends Model
         return $this->hasMany(ProductOption::class,"product_id","id");
     }
 
-
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
 
 
 }
