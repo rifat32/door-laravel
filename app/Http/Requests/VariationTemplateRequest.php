@@ -24,9 +24,9 @@ class VariationTemplateRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|string",
+            "name" => "required|numeric",
             "variation_value_template"      => "required|array",
-            "variation_value_template.*.name"      => "required|string",
+            "variation_value_template.*.name"      => "required|numeric",
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\OrderRequest2;
+use App\Models\Address;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Order;
@@ -24,6 +25,7 @@ class OrderController extends Controller
        return DB::transaction(function () use (&$request) {
 
             $coupon = null;
+            $insertableData = $request->validated();
             if (!empty($request["order_coupon"]["id"])) {
                 $coupon =  Coupon::where([
                     "id" => $request["order_coupon"]["id"],
@@ -93,6 +95,9 @@ class OrderController extends Controller
                 $data["user"] = $user;
                 $data["permissions"]  = $user->getAllPermissions()->pluck('name');
                 $data["roles"] = $user->roles->pluck('name');
+                $insertableData["is_default"] = 1;
+                $insertableData["user_id"] = $user->id;
+                Address::create($insertableData);
             }
 
 

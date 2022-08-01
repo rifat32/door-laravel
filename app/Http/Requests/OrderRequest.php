@@ -38,7 +38,12 @@ class OrderRequest extends FormRequest
 
             'password' => 'nullable',
             "cart" => "required|array",
-            "order_coupon" => "nullable"
+            "order_coupon" => "nullable",
+
+
+
+            "country" => "required|string",
+            "state" => "required|string",
 
         ];
     }

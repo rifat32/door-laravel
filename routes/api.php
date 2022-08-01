@@ -45,6 +45,7 @@ use App\Http\Controllers\Api\TradeLicenseController;
 use App\Http\Controllers\Api\VariationTemplateController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SetUpController;
+use App\Http\Requests\AccountDetailsRequest;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\ImageRequest;
 use App\Models\Address;
@@ -52,8 +53,10 @@ use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\ProductVariation;
+use App\Models\User;
 use App\Models\Variation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -297,8 +300,16 @@ Route::delete('/v1.0/coupons/{id}', [CouponController::class, "deleteCoupon"]);
      Route::post('/v1.0/client/orders/loggedin', [OrderController::class,"create2"]);
 
      Route::post('/v1.0/client/addresses', function (AddressRequest $request) {
+
         $insertableData = $request->validated();
         $insertableData["user_id"] = $request->user()->id;
+
+        if(Address::where([
+            "user_id" => $request->user()->id
+        ])
+        ->count() == 0) {
+            $insertableData["is_default"] = 1;
+        }
        $inserted_address = Address::create($insertableData);
        if($inserted_address->is_default) {
         Address::where(
@@ -324,6 +335,28 @@ Route::delete('/v1.0/coupons/{id}', [CouponController::class, "deleteCoupon"]);
 
         return response()->json($data, 201);
      });
+     Route::post('/v1.0/client/account-details', function (AccountDetailsRequest $request) {
+
+     $request_user = $request->user();
+//    $user = User::where([
+//     "email" => $request_user->email
+//    ])
+//    ->first();
+$insertableData = $request->validated();
+
+if(!Hash::check($insertableData["current_password"],$request_user->password)) {
+    return response()->json(["message"=>"current password not matching"], 403);
+}
+$request->user()->update([
+    "password" => Hash::make($insertableData['password'])
+]);
+
+
+
+
+        return response()->json(["ok"=>$request_user->password], 201);
+     });
+
 
 
 

@@ -387,8 +387,22 @@ foreach($updatableVariations as $updatableVariation){
             "products.style_id",
             "products.slug"
         )
-        ->orderByDesc("id")
-        ->paginate($perPage);
+        ->join('variations', 'products.id', '=', 'variations.product_id')
+        ;
+        if(!empty($request->priceHighToLow)) {
+            if($request->priceHighToLow == "default") {
+                $products = $products->orderByDesc("products.id");
+            }
+            if($request->priceHighToLow == "priceHighToLow") {
+                $products = $products->orderByDesc("variations.price");
+            }
+            if($request->priceHighToLow == "priceLowToHigh") {
+                $products = $products->orderBy("variations.price");
+            }
+
+        }
+
+        $products =    $products->paginate($perPage);
 
 
 
@@ -535,8 +549,8 @@ foreach($updatableVariations as $updatableVariation){
             'products.image',
             'products.status',
             'products.is_featured',
-            "products.style_id"
-
+            "products.style_id",
+            "products.slug"
         )
         ->orderByDesc("id")
 
