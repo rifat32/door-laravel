@@ -120,9 +120,19 @@ trait OptionTemplateService
     public function searchOptionTemplateService($term, $request)
     {
         try {
+
             $data['data'] =   Option::with("option_value_template")
-                ->where("name", "like", "%" . $term . "%")
-                ->get();
+            ->leftJoin('option_values', 'options.id', '=', 'option_values.option_id')
+            ->where(function($query) use ($term){
+        $query->where("options.name", "like", "%" . $term . "%");
+        $query->orWhere("option_values.name", "like", "%" . $term . "%");
+    })
+    ->select("options.id as id","options.name as name")
+    ->groupBy("id","name")
+
+                ->orderByDesc("options.id")
+                ->paginate(10);
+
             return response()->json($data, 200);
         } catch (Exception $e) {
             return $this->sendError($e, 500);

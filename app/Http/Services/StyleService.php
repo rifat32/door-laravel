@@ -72,15 +72,19 @@ trait StyleService
     }
     public function searchStyleService($term,$request)
     {
-        try{
-            $data['data'] =   Style::
-        where("name","like","%".$term."%")
-        ->get();
-        return response()->json($data, 200);
-        } catch(Exception $e){
-        return $this->sendError($e,500);
-        }
+        try {
 
+            $data['data'] =   Style::where(function($query) use ($term){
+        $query->where("name", "like", "%" . $term . "%");
+    })
+
+                ->latest()
+                ->paginate(10);
+
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
     }
 
     public function deleteStyleService($id,$request)

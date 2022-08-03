@@ -22,4 +22,9 @@ class UserController extends Controller
     {
         return $this->deleteUserService($request, $id);
     }
+    public function searchUser(Request $request, $term)
+    {
+        return $this->searchUserService($term,$request);
+    }
+
 }

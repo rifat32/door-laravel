@@ -176,6 +176,7 @@ Route::get('/v1.0/colors/{id}', [
 Route::delete('/v1.0/colors/{id}', [
     ColorController::class, "deleteColor"
 ]);
+Route::get('/v1.0/colors/search/{term}', [ColorController::class, "searchColor"]);
 
 
 
@@ -238,6 +239,7 @@ Route::delete('/v1.0/coupons/{id}', [CouponController::class, "deleteCoupon"]);
     Route::post('/v1.0/users', [UserController::class, "createUser"]);
     Route::get('/v1.0/users', [UserController::class, "getUsers"]);
     Route::delete('/v1.0/users/{id}', [UserController::class, "deleteUser"]);
+    Route::get('/v1.0/users/search/{term}', [UserController::class, "searchUser"]);
     // roles
     Route::post('/v1.0/roles', [RolesController::class, "createRole"]);
     Route::get('/v1.0/roles', [RolesController::class, "getRoles"]);

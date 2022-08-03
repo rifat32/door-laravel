@@ -625,18 +625,43 @@ foreach($updatableVariations as $updatableVariation){
     }
 
 
-    public function searchProductByNameService($request)
+    public function searchProductService($term, $request)
     {
-        $product =   Product::where([
-            "name" => $request->search
-        ])->with("wing")->first();
-        if (!$product) {
-            return response()->json([
-                "message" => "No product is found"
-            ], 404);
+        try {
+            $data['products'] =   Product::with("variations","images","colors")
+            ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
+            ->leftJoin('styles as s', 'products.style_id', '=', 's.id')
+            ->leftJoin('product_colors as co', 'products.id', '=', 'co.product_id')
+            ->leftJoin('colors', 'co.color_id', '=', 'colors.id')
+
+            ->where(function($query) use ($term){
+        $query->where("products.name", "like", "%" . $term . "%");
+        $query->orWhere("products.type", "like", "%" . $term . "%");
+        $query->orWhere("products.sku", "like", "%" . $term . "%");
+        $query->orWhere("c.name", "like", "%" . $term . "%");
+        $query->orWhere("s.name", "like", "%" . $term . "%");
+        $query->orWhere("colors.name", "like", "%" . $term . "%");
+    })
+    ->select(
+        'products.id',
+            'products.name',
+            'products.type',
+            'c.name as category',
+            'products.sku',
+            'products.image',
+            'products.status',
+            'products.is_featured',
+            "products.style_id",
+            "products.slug"
+
+    )
+
+                ->orderByDesc("products.id")
+                ->paginate(10);
+
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
         }
-        return response()->json([
-            "product" => $product
-        ], 200);
     }
 }

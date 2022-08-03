@@ -69,9 +69,10 @@ class ProductController extends Controller
     }
 
 
-    public function searchProductByName(Request $request)
+    public function searchProduct(Request $request,$term)
     {
-        return $this->searchProductByNameService($request);
+        return $this->searchProductService($term,$request);
     }
+
 
 }

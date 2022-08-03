@@ -135,9 +135,20 @@ $inserted_data->children()->create([
     public function searchMenuService($term, $request)
     {
         try {
-            $data['data'] =   Menu::with("Menu_value_template")
-                ->where("name", "like", "%" . $term . "%")
-                ->get();
+
+            $data['data'] =   Menu:: where(
+                "type", "!=", "children"
+            )
+
+    ->where(function($query) use ($term){
+        $query->where("name", "like", "%" . $term . "%");
+        $query->orWhere("type", "like", "%" . $term . "%");
+        $query->orWhere("url", "like", "%" . $term . "%");
+    })
+
+                ->latest()
+                ->paginate(10);
+
             return response()->json($data, 200);
         } catch (Exception $e) {
             return $this->sendError($e, 500);

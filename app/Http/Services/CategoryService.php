@@ -72,15 +72,19 @@ trait CategoryService
     }
     public function searchCategoryService($term,$request)
     {
-        try{
-            $data['data'] =   Category::
-        where("name","like","%".$term."%")
-        ->get();
-        return response()->json($data, 200);
-        } catch(Exception $e){
-        return $this->sendError($e,500);
-        }
+        try {
 
+            $data['data'] =   Category::where(function($query) use ($term){
+        $query->where("name", "like", "%" . $term . "%");
+    })
+
+                ->latest()
+                ->paginate(10);
+
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
     }
     public function searchExactCategoryService($term,$request)
     {

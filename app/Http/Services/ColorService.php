@@ -84,8 +84,15 @@ trait ColorService
     public function searchColorService($term, $request)
     {
         try {
-            $data['data'] =   Color::where("name", "like", "%" . $term . "%")
-                ->get();
+
+            $data['data'] =   Color::where(function($query) use ($term){
+        $query->where("name", "like", "%" . $term . "%");
+        $query->orWhere("code", "like", "%" . $term . "%");
+    })
+
+                ->latest()
+                ->paginate(10);
+
             return response()->json($data, 200);
         } catch (Exception $e) {
             return $this->sendError($e, 500);
