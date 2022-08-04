@@ -63,20 +63,7 @@ class OrderPayments extends Controller
             } else {
                 $coupon_discount_price +=   $order_detail->coupon_discount_amount;
             }
-            dd($order->order_details);
-            if (!empty($coupon)) {
 
-
-                $couponstripe = $stripe->coupons->create([
-                    "name" => $coupon->name,
-                    "amount_off" => $coupon_discount_price * 100,
-                    "currency" => "gbp",
-                    "duration" => "once",
-                    /* "max_redemptions" => 1, */
-                ]);
-
-                array_push($array["coupon_data"]["discounts"], ["coupon" => $couponstripe->id ?? "coupon"]);
-            }
 
             /*   echo $order_detail->product->name . " " . $order_detail->product->variations[0]->price . " " . $order_detail->qty . "<br>"; */
             $array["Product_info"][$i] = [
@@ -92,6 +79,19 @@ class OrderPayments extends Controller
                 'quantity' => $order_detail->qty,
             ];
             $i++;
+        }
+        if (!empty($coupon) && $coupon_discount_price != 0) {
+
+
+            $couponstripe = $stripe->coupons->create([
+                "name" => $coupon->name,
+                "amount_off" => $coupon_discount_price * 100,
+                "currency" => "gbp",
+                "duration" => "once",
+                /* "max_redemptions" => 1, */
+            ]);
+
+            array_push($array["coupon_data"]["discounts"], ["coupon" => $couponstripe->id ?? "coupon"]);
         }
         /*  echo "<pre>";
         print_r($couponstripe);
