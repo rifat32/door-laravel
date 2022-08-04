@@ -385,7 +385,8 @@ foreach($updatableVariations as $updatableVariation){
             'products.status',
             'products.is_featured',
             "products.style_id",
-            "products.slug"
+            "products.slug",
+            
         )
         ->join('variations', 'products.id', '=', 'variations.product_id')
         ;

@@ -103,7 +103,7 @@ class OrderPayments extends Controller
 
         $url = null;
         if ($array["data"]) {
-            /*         
+            /*
  shipping data availabe object and coupon data availabe object
  $session = $stripe->checkout->sessions->create(
                 [

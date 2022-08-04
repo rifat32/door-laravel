@@ -127,8 +127,8 @@ trait OptionTemplateService
         $query->where("options.name", "like", "%" . $term . "%");
         $query->orWhere("option_values.name", "like", "%" . $term . "%");
     })
-    ->select("options.id as id","options.name as name")
-    ->groupBy("id","name")
+    ->select("options.id","options.name")
+     ->groupBy("id","name")
 
                 ->orderByDesc("options.id")
                 ->paginate(10);

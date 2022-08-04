@@ -252,12 +252,32 @@ Route::middleware(['auth:api'])->group(function () {
         $data["data"] = Order::latest()->paginate(10);
         return response()->json($data, 200);
     });
+
+    Route::get('/v1.0/orders/search/{term}', function ($term, Request $request) {
+
+        $data["data"] = Order::where(function ($query) use ($term) {
+            $query->where("fname", "like", "%" . $term . "%");
+            $query->orWhere("lname", "like", "%" . $term . "%");
+            $query->orWhere("cname", "like", "%" . $term . "%");
+            $query->orWhere("billing_address", "like", "%" . $term . "%");
+            $query->orWhere("billing_address2", "like", "%" . $term . "%");
+            $query->orWhere("city", "like", "%" . $term . "%");
+            $query->orWhere("zipcode", "like", "%" . $term . "%");
+            $query->orWhere("phone", "like", "%" . $term . "%");
+            $query->orWhere("email", "like", "%" . $term . "%");
+            $query->orWhere("additional_info", "like", "%" . $term . "%");
+        })
+            ->latest()
+            ->paginate(10);
+        return response()->json($data, 200);
+    });
+
     Route::get('/v1.0/orders/client/customers', function (Request $request) {
         $customerId =  Customer::where(["email" => $request->user()->email])->first()->id;
         if ($customerId) {
             $data["data"] = Order::where([
                 "customer_id" => Customer::where(["email" => $request->user()->email])->first()->id
-            ])->orderByDesc('id')->paginate(10);
+            ])->orderByDesc("id")->paginate(10);
             return response()->json($data, 200);
         } else {
             return response()->json([
@@ -272,13 +292,31 @@ Route::middleware(['auth:api'])->group(function () {
         ])->paginate(10);
         return response()->json($data, 200);
     });
+
     Route::get('/v1.0/orders/{id}', [OrderController::class, "showOrder"]);
 
     Route::get('/v1.0/customers/{id}', [OrderController::class, "showCustomer"]);
 
     Route::post('/v1.0/orders/status/{id}', [OrderController::class, "changeStatus"]);
     Route::get('/v1.0/customers', [OrderController::class, "getCustomers"]);
+    Route::get('/v1.0/customers/search/{term}', function ($term, Request $request) {
 
+        $data["data"] = Customer::where(function ($query) use ($term) {
+            $query->where("fname", "like", "%" . $term . "%");
+            $query->orWhere("lname", "like", "%" . $term . "%");
+            $query->orWhere("cname", "like", "%" . $term . "%");
+            $query->orWhere("billing_address", "like", "%" . $term . "%");
+            $query->orWhere("billing_address2", "like", "%" . $term . "%");
+            $query->orWhere("city", "like", "%" . $term . "%");
+            $query->orWhere("zipcode", "like", "%" . $term . "%");
+            $query->orWhere("phone", "like", "%" . $term . "%");
+            $query->orWhere("email", "like", "%" . $term . "%");
+            $query->orWhere("type", "like", "%" . $term . "%");
+        })
+            ->latest()
+            ->paginate(10);
+        return response()->json($data, 200);
+    });
 
     Route::get('/v1.0/client/customer/info', function (Request $request) {
 
@@ -324,6 +362,56 @@ Route::middleware(['auth:api'])->group(function () {
 
         return response()->json($data, 201);
     });
+    Route::delete('/v1.0/client/addresses/{id}', function (Request $request, $id) {
+        Address::where([
+            "user_id" => $request->user()->id,
+            "id" => $id
+        ])
+            ->delete();
+
+
+        return response()->json(["ok" => true], 200);
+    });
+    Route::put('/v1.0/client/addresses/{id}', function (AddressRequest $request, $id) {
+        $updatableData = $request->validated();
+        Address::where([
+            "user_id" => $request->user()->id,
+            "id" => $id
+        ])
+            ->update(
+                collect($updatableData)->only([
+                    "billing_address",
+                    "billing_address2",
+                    "city",
+                    "zipcode",
+                    "user_id",
+                    "fname",
+                    "lname",
+                    "cname",
+                    "country",
+                    "state",
+                    "phone",
+                    "is_default",
+                ])
+                    ->toArray()
+
+            );
+
+        if ($updatableData["is_default"]) {
+            Address::where(
+                "id",
+                "!=",
+                $id
+            )
+                ->update([
+                    "is_default" => 0
+                ]);
+        }
+        return response()->json(["ok" => true], 200);
+    });
+
+
+
 
     Route::get('/v1.0/client/addresses', function (Request $request) {
 
