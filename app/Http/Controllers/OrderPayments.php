@@ -9,12 +9,16 @@ use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class OrderPayments extends Controller
 {
+    /* 
+    Stripe Payment Start
+     */
     function stripepayments(Request $request)
     {
 
         $orderid  = $request->order_id;
         $order = Order::where("id", $orderid)->first();
         $coupon = $order->coupon;
+
 
         // return response()->json($order);
 
@@ -35,11 +39,7 @@ class OrderPayments extends Controller
             "data" => true,
             "Product_info" => [],
             "coupon_data" => [
-                'discounts' => [
-                    [
-                        'coupon' => '4ZxfCouo',
-                    ],
-                ],
+                'discounts' => [],
             ],
             "shipping_data" => ['shipping_options' => [['shipping_rate_data' => ['display_name' => 'Shipping Cost', 'type' => 'fixed_amount', 'fixed_amount' => ['amount' => 5 * 100, 'currency' => 'eur']]]],],
             "vat" => [],
@@ -47,7 +47,7 @@ class OrderPayments extends Controller
             "payment_method" => ['payment_method_types' => ['card', 'klarna'],],
         ];
 
-        $coupon_discount = 0;
+        $coupon_discount_price = 0;
         $i = 0;
         foreach ($order->order_details as $key => $order_detail) {
             $product_price = 0;
@@ -59,13 +59,24 @@ class OrderPayments extends Controller
                 // echo "else block product price " . $product_price . "<br>";
             }
             if ($order_detail->coupon_discount_type == "percentage") {
-                $coupon_discount += (($order_detail->coupon_discount_amount * $product_price) / 100);
+                $coupon_discount_price += (($order_detail->coupon_discount_amount * $product_price) / 100);
             } else {
-                $coupon_discount +=   $order_detail->coupon_discount_amount;
+                $coupon_discount_price +=   $order_detail->coupon_discount_amount;
             }
+            dd($order->order_details);
+            if (!empty($coupon)) {
 
 
+                $couponstripe = $stripe->coupons->create([
+                    "name" => $coupon->name,
+                    "amount_off" => $coupon_discount_price * 100,
+                    "currency" => "gbp",
+                    "duration" => "once",
+                    /* "max_redemptions" => 1, */
+                ]);
 
+                array_push($array["coupon_data"]["discounts"], ["coupon" => $couponstripe->id ?? "coupon"]);
+            }
 
             /*   echo $order_detail->product->name . " " . $order_detail->product->variations[0]->price . " " . $order_detail->qty . "<br>"; */
             $array["Product_info"][$i] = [
@@ -82,12 +93,14 @@ class OrderPayments extends Controller
             ];
             $i++;
         }
-        /*         echo "<pre>";
-        print_r($coupon);
-        echo $coupon->name . "<br>";
+        /*  echo "<pre>";
+        print_r($couponstripe);
+        print_r($array); */
+
+        /*  echo $coupon->name . "<br>";
         echo $coupon->discount_type . "<br>";
-        echo $coupon->discount_amount . "<br>";
-        return; */
+        echo $coupon->discount_amount . "<br>"; */
+
         $url = null;
         if ($array["data"]) {
             /*         
@@ -110,6 +123,7 @@ class OrderPayments extends Controller
                     'line_items' => $array["Product_info"],
                     "metadata" => $array["order_id"]["metadata"],
                     "payment_method_types" => $array["payment_method"]["payment_method_types"],
+                    "discounts" => $array["coupon_data"]["discounts"],
                 ]
             );
         }
@@ -121,6 +135,11 @@ class OrderPayments extends Controller
             echo "<script>window.location.href='127.0.0.1'</script>";
         }
     }
+
+    /* 
+    /////////////////////////////////////////////////////////////////////////
+    Stripe Payment end
+    */
     function paypalpayment()
     {
         $provider = new PayPalClient([]);
