@@ -111,15 +111,22 @@ trait CouponService
     }
     public function searchCouponService($term,$request)
     {
-        try{
-            $data['data'] =   Coupon::
-        where("name","like","%".$term."%")
-        ->orWhere("code","like","%".$term."%")
-        ->orWhere("discount","like","%".$term."%")
-        ->get();
-        return response()->json($data, 200);
-        } catch(Exception $e){
-        return $this->sendError($e,500);
+        try {
+
+            $data['data'] =   Coupon::with("category")
+           
+            ->where(function($query) use ($term){
+        $query->where("coupons.name", "like", "%" . $term . "%");
+        $query->orWhere("coupons.code", "like", "%" . $term . "%");
+
+    })
+
+->orderByDesc("coupons.id")
+                ->paginate(10);
+
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
         }
 
     }

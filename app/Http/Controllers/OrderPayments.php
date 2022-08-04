@@ -82,15 +82,15 @@ class OrderPayments extends Controller
             ];
             $i++;
         }
-        /*         echo "<pre>";
+                echo "<pre>";
         print_r($coupon);
         echo $coupon->name . "<br>";
         echo $coupon->discount_type . "<br>";
         echo $coupon->discount_amount . "<br>";
-        return; */
+        return;
         $url = null;
         if ($array["data"]) {
-            /*         
+            /*
  shipping data availabe object and coupon data availabe object
  $session = $stripe->checkout->sessions->create(
                 [

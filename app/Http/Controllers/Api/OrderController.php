@@ -174,6 +174,8 @@ class OrderController extends Controller
        return DB::transaction(function () use (&$request) {
 
             $coupon = null;
+
+          
             if (!empty($request["order_coupon"]["id"])) {
                 $coupon =  Coupon::where([
                     "id" => $request["order_coupon"]["id"],
