@@ -58,6 +58,11 @@ use App\Models\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+////////////////////////////////////
+use App\Mail\orderconfirmationmail;
+use App\Mail\orderdeliveredmail;
+use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +91,24 @@ Route::middleware('auth:api')->get('/v1.0/user', function (Request $request) {
 Route::post('/v1.0/login', [AuthController::class, "login"]);
 Route::post('/v1.0/register', [AuthController::class, "register"]);
 Route::post('/v1.0/register2', [AuthController::class, "register2"]);
+
+//emil api
+//Routes for  for Welcome Mail
+Route::post("/v1.0/email", function (Request $request) {
+    $data = $request;
+    $email = $data["email"] ?? "test@test.com";
+    $mail = Mail::to($email)->send(new WelcomeMail());
+    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]);
+    /*     return new WelcomeMail(); */
+});
+//Routes for order confirmation mail
+Route::post("/v1.0/orderconfirmition", function (Request $request) {
+    $data = $request;
+    $mail = $data['email'] ?? "test@test.com";
+    Mail::to($mail)->send(new orderconfirmationmail);
+    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);
+    /*  return new orderconfirmationmail(); */
+});
 
 // protected routes
 
