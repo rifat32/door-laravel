@@ -44,7 +44,7 @@ class CreateOrdersTable extends Migration
             $table->string("coupon_discount_amount")->nullable();
 
 
-            $table->string("status")->default("pending");
+            $table->string("status")->default("Pending");
 
             $table->timestamps();
         });

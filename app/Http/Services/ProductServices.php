@@ -386,7 +386,7 @@ foreach($updatableVariations as $updatableVariation){
             'products.is_featured',
             "products.style_id",
             "products.slug",
-            
+
         )
         ->join('variations', 'products.id', '=', 'variations.product_id')
         ;
@@ -401,6 +401,8 @@ foreach($updatableVariations as $updatableVariation){
                 $products = $products->orderBy("variations.price");
             }
 
+        } else {
+            $products = $products->orderByDesc("products.id");
         }
 
         $products =    $products->paginate($perPage);

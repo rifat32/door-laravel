@@ -33,6 +33,10 @@ class Order extends Model
     {
         return $this->hasOne(Coupon::class,"id","coupon_id");
     }
+    public function payment()
+    {
+        return $this->hasOne(OrderPayment::class,"order_id","id");
+    }
 
 
 }

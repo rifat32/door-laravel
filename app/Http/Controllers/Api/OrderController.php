@@ -85,7 +85,8 @@ class OrderController extends Controller
 
 
             if ($request['create_account'] == 1) {
-                $request['name'] =   $request['fname'];
+                $request['first_name'] =   $request['fname'];
+                $request['last_name'] =   $request['fname'];
                 $request['password'] = Hash::make($request['password']);
                 $request['remember_token'] = Str::random(10);
                 $user =  User::create($request->toArray());
@@ -175,7 +176,7 @@ class OrderController extends Controller
 
             $coupon = null;
 
-          
+
             if (!empty($request["order_coupon"]["id"])) {
                 $coupon =  Coupon::where([
                     "id" => $request["order_coupon"]["id"],
@@ -309,7 +310,7 @@ class OrderController extends Controller
 
     public function showOrder($id, Request $request)
     {
-        $data["data"] = Order::with("order_details.options", "order_details.product", "order_details.product_variation", "order_details.variation", "order_details.color", "order_details.options.option", "order_details.options.option_value", "coupon")
+        $data["data"] = Order::with("order_details.options", "order_details.product", "order_details.product_variation", "order_details.variation", "order_details.color", "order_details.options.option", "order_details.options.option_value", "coupon","payment")
             ->where([
                 "id" => $id
             ])
@@ -355,6 +356,19 @@ class OrderController extends Controller
             ]);
         return response()->json($data, 200);
     }
+    public function cancelOrder($id, Request $request)
+    {
+        $data["data"] = Order::where([
+            "id" => $id,
+            "status"=>"pending"
+        ])
+
+            ->update([
+                "status" => "cancel"
+            ]);
+        return response()->json($data, 200);
+    }
+
     public function getCustomers(Request $request)
     {
         $data["data"] = Customer::paginate(10);

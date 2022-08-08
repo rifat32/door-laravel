@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("payer_email");
             $table->float("amount", 10, 2);
             $table->string("currency");
-            $table->integer("order_id");
+            $table->unsignedBigInteger("order_id");
             $table->string("payment_intent");
             $table->string("receipt_url");
             $table->string("status");

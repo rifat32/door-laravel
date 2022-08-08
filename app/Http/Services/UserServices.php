@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Utils\ErrorUtil;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Hash;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 
 trait UserServices
 {
+    use ErrorUtil;
     public function createUserService($request)
     {
 
@@ -20,6 +22,35 @@ trait UserServices
             "user" => $user
         ], 201);
     }
+    public function updateUserService($request)
+    {
+        try{
+            $updatableData = $request->validated();
+        $user =    User::where(["id" =>  $updatableData["id"]])
+            ->first();
+            $user->first_name = $updatableData["first_name"];
+            $user->last_name = $updatableData["last_name"];
+            $user->discount = $updatableData["discount"];
+            if(!empty($updatableData["password"])) {
+                $user->password = Hash::make($updatableData['password']);
+            }
+            $user->removeRole($user->roles->first());
+            $user->assignRole($updatableData['role_name']);
+            $data = $user;
+            return response()->json($data, 200);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+        $request['password'] = Hash::make($request['password']);
+        $request['remember_token'] = Str::random(10);
+        $user =  User::create($request->toArray());
+        $user->assignRole($request['role_name']);
+        return response()->json([
+            "user" => $user
+        ], 201);
+    }
+
+
     public function getUsersService($request)
     {
         $users = User::with("roles")

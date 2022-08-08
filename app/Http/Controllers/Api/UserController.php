@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Http\Request;
 use App\Http\Services\UserServices;
 
@@ -14,6 +15,11 @@ class UserController extends Controller
     {
         return $this->createUserService($request);
     }
+    public function updateUser(UserUpdateRequest $request)
+    {
+        return $this->updateUserService($request);
+    }
+
     public function getUsers(Request $request)
     {
         return $this->getUsersService($request);

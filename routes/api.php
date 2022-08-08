@@ -259,6 +259,7 @@ Route::middleware(['auth:api'])->group(function () {
 
     // user
     Route::post('/v1.0/users', [UserController::class, "createUser"]);
+    Route::put('/v1.0/users', [UserController::class, "updateUser"]);
     Route::get('/v1.0/users', [UserController::class, "getUsers"]);
     Route::delete('/v1.0/users/{id}', [UserController::class, "deleteUser"]);
     Route::get('/v1.0/users/search/{term}', [UserController::class, "searchUser"]);
@@ -321,6 +322,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/customers/{id}', [OrderController::class, "showCustomer"]);
 
     Route::post('/v1.0/orders/status/{id}', [OrderController::class, "changeStatus"]);
+    Route::post('/v1.0/orders/status/cancel/{id}', [OrderController::class, "cancelOrder"]);
     Route::get('/v1.0/customers', [OrderController::class, "getCustomers"]);
     Route::get('/v1.0/customers/search/{term}', function ($term, Request $request) {
 
