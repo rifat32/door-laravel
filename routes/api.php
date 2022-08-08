@@ -58,6 +58,11 @@ use App\Models\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+////////////////////////////////////
+use App\Mail\orderconfirmationmail;
+use App\Mail\orderdeliveredmail;
+use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,123 +92,140 @@ Route::post('/v1.0/login', [AuthController::class, "login"]);
 Route::post('/v1.0/register', [AuthController::class, "register"]);
 Route::post('/v1.0/register2', [AuthController::class, "register2"]);
 
+//emil api
+//Routes for  for Welcome Mail
+Route::post("/v1.0/email", function (Request $request) {
+    $data = $request;
+    $email = $data["email"] ?? "test@test.com";
+    $mail = Mail::to($email)->send(new WelcomeMail());
+    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]);
+    /*     return new WelcomeMail(); */
+});
+//Routes for order confirmation mail
+Route::post("/v1.0/orderconfirmition", function (Request $request) {
+    $data = $request;
+    $mail = $data['email'] ?? "test@test.com";
+    Mail::to($mail)->send(new orderconfirmationmail);
+    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);
+    /*  return new orderconfirmationmail(); */
+});
+
 // protected routes
 
 Route::middleware(['auth:api'])->group(function () {
-// Route::get('/v1.0/setup', [SetUpController::class, "setUp"]);
-Route::post('/v1.0/logout', [AuthController::class, "logout"]);
+    // Route::get('/v1.0/setup', [SetUpController::class, "setUp"]);
+    Route::post('/v1.0/logout', [AuthController::class, "logout"]);
 
 
 
-// Category
-Route::post('/v1.0/categories', [CategoryController::class, "createCategory"]);
-Route::put('/v1.0/categories', [CategoryController::class, "updateCategory"]);
-Route::get('/v1.0/categories', [CategoryController::class, "getCategory"]);
-Route::get('/v1.0/categories/all', [CategoryController::class, "getAllCategory"]);
-Route::get('/v1.0/categories/{id}', [CategoryController::class, "getCategoryById"]);
-Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "searchCategory"]);
+    // Category
+    Route::post('/v1.0/categories', [CategoryController::class, "createCategory"]);
+    Route::put('/v1.0/categories', [CategoryController::class, "updateCategory"]);
+    Route::get('/v1.0/categories', [CategoryController::class, "getCategory"]);
+    Route::get('/v1.0/categories/all', [CategoryController::class, "getAllCategory"]);
+    Route::get('/v1.0/categories/{id}', [CategoryController::class, "getCategoryById"]);
+    Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "searchCategory"]);
 
-Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
+    Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
 
-// Style
-Route::post('/v1.0/styles', [StyleController::class, "createStyle"]);
-Route::put('/v1.0/styles', [StyleController::class, "updateStyle"]);
-Route::get('/v1.0/styles', [StyleController::class, "getStyle"]);
-Route::get('/v1.0/styles/all', [StyleController::class, "getAllStyle"]);
-Route::get('/v1.0/styles/{id}', [StyleController::class, "getStyleById"]);
-Route::get('/v1.0/styles/search/{term}', [StyleController::class, "searchStyle"]);
-Route::delete('/v1.0/styles/{id}', [StyleController::class, "deleteStyle"]);
-
-
-Route::post('/v1.0/image/upload/single/{location}',function(ImageRequest $request,$location){
-
-                     $new_file_name = time() . '_' . $request->image->getClientOriginalName();
-
-                     $request->image->move(public_path($location), $new_file_name);
-                     $imageName = $location . "/" . $new_file_name;
-                     return response()->json(["image" => $imageName],201);
-
-});
-
-// Variation Templates
-Route::post('/v1.0/variation-templates', [VariationTemplateController::class, "createVariationTemplate"]);
-Route::put('/v1.0/variation-templates', [VariationTemplateController::class, "updateVariationTemplate"]);
-Route::get('/v1.0/variation-templates', [VariationTemplateController::class, "getVariationTemplate"]);
-Route::get('/v1.0/variation-templates/all', [VariationTemplateController::class, "getAllVariationTemplate"]);
-Route::get('/v1.0/variation-templates/{id}', [
-    VariationTemplateController::class, "getVariationTemplateById"
-]);
-Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateController::class, "searchVariationTemplate"]);
-Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::class, "deleteVariationTemplate"]);
+    // Style
+    Route::post('/v1.0/styles', [StyleController::class, "createStyle"]);
+    Route::put('/v1.0/styles', [StyleController::class, "updateStyle"]);
+    Route::get('/v1.0/styles', [StyleController::class, "getStyle"]);
+    Route::get('/v1.0/styles/all', [StyleController::class, "getAllStyle"]);
+    Route::get('/v1.0/styles/{id}', [StyleController::class, "getStyleById"]);
+    Route::get('/v1.0/styles/search/{term}', [StyleController::class, "searchStyle"]);
+    Route::delete('/v1.0/styles/{id}', [StyleController::class, "deleteStyle"]);
 
 
-// Option Templates
-Route::post('/v1.0/menus', [MenuController::class, "createMenu"]);
-Route::put('/v1.0/menus', [MenuController::class, "updateMenu"]);
-Route::get('/v1.0/menus', [MenuController::class, "getMenu"]);
-Route::get('/v1.0/menus/all', [MenuController::class, "getAllMenu"]);
-Route::get('/v1.0/menus/{id}', [
-    MenuController::class, "getMenuById"
-]);
- Route::get('/v1.0/menus/search/{term}', [MenuController::class, "searchMenu"]);
-Route::delete('/v1.0/menus/{id}', [MenuController::class, "deleteMenu"]);
+    Route::post('/v1.0/image/upload/single/{location}', function (ImageRequest $request, $location) {
+
+        $new_file_name = time() . '_' . $request->image->getClientOriginalName();
+
+        $request->image->move(public_path($location), $new_file_name);
+        $imageName = $location . "/" . $new_file_name;
+        return response()->json(["image" => $imageName], 201);
+    });
+
+    // Variation Templates
+    Route::post('/v1.0/variation-templates', [VariationTemplateController::class, "createVariationTemplate"]);
+    Route::put('/v1.0/variation-templates', [VariationTemplateController::class, "updateVariationTemplate"]);
+    Route::get('/v1.0/variation-templates', [VariationTemplateController::class, "getVariationTemplate"]);
+    Route::get('/v1.0/variation-templates/all', [VariationTemplateController::class, "getAllVariationTemplate"]);
+    Route::get('/v1.0/variation-templates/{id}', [
+        VariationTemplateController::class, "getVariationTemplateById"
+    ]);
+    Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateController::class, "searchVariationTemplate"]);
+    Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::class, "deleteVariationTemplate"]);
 
 
-
-
-
-// Option Templates
-Route::post('/v1.0/options', [OptionController::class, "createOptionTemplate"]);
-Route::put('/v1.0/options', [OptionController::class, "updateOptionTemplate"]);
-Route::get('/v1.0/options', [OptionController::class, "getOptionTemplate"]);
-Route::get('/v1.0/options/all', [OptionController::class, "getAllOptionTemplate"]);
-Route::get('/v1.0/options/{id}', [
-    OptionController::class, "getOptionTemplateById"
-]);
-Route::get('/v1.0/options/search/{term}', [OptionController::class, "searchOptionTemplate"]);
-Route::delete('/v1.0/options/{id}', [OptionController::class, "deleteOptionTemplate"]);
-
-
-
-// Color Templates
-Route::post('/v1.0/colors', [ColorController::class, "createColor"]);
-Route::put('/v1.0/colors', [ColorController::class, "updateColor"]);
-Route::get('/v1.0/colors', [ColorController::class, "getColor"]);
-Route::get('/v1.0/colors/all', [ColorController::class, "getAllColor"]);
-Route::get('/v1.0/colors/{id}', [
-    ColorController::class, "getColorById"
-]);
-Route::delete('/v1.0/colors/{id}', [
-    ColorController::class, "deleteColor"
-]);
-Route::get('/v1.0/colors/search/{term}', [ColorController::class, "searchColor"]);
+    // Option Templates
+    Route::post('/v1.0/menus', [MenuController::class, "createMenu"]);
+    Route::put('/v1.0/menus', [MenuController::class, "updateMenu"]);
+    Route::get('/v1.0/menus', [MenuController::class, "getMenu"]);
+    Route::get('/v1.0/menus/all', [MenuController::class, "getAllMenu"]);
+    Route::get('/v1.0/menus/{id}', [
+        MenuController::class, "getMenuById"
+    ]);
+    Route::get('/v1.0/menus/search/{term}', [MenuController::class, "searchMenu"]);
+    Route::delete('/v1.0/menus/{id}', [MenuController::class, "deleteMenu"]);
 
 
 
 
 
-
-// Product
-Route::post('/v1.0/products', [ProductController::class, "createProduct"]);
-Route::put('/v1.0/products', [ProductController::class, "updateProduct"]);
-Route::put('/v1.0/products/bulkedit/price', [ProductController::class, "updateBulkPrice"]);
-Route::put('/v1.0/products/bulkedit/delete', [ProductController::class, "bulkDelete"]);
-Route::get('/v1.0/products', [ProductController::class, "getProduct"]);
-Route::get('/v1.0/products/pagination/{perPage}', [ProductController::class, "getProductPagination"]);
-Route::get('/v1.0/products/{id}', [ProductController::class, "getProductById"]);
-Route::get('/v1.0/products/search/{term}', [ProductController::class, "searchProduct"]);
-Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
-
+    // Option Templates
+    Route::post('/v1.0/options', [OptionController::class, "createOptionTemplate"]);
+    Route::put('/v1.0/options', [OptionController::class, "updateOptionTemplate"]);
+    Route::get('/v1.0/options', [OptionController::class, "getOptionTemplate"]);
+    Route::get('/v1.0/options/all', [OptionController::class, "getAllOptionTemplate"]);
+    Route::get('/v1.0/options/{id}', [
+        OptionController::class, "getOptionTemplateById"
+    ]);
+    Route::get('/v1.0/options/search/{term}', [OptionController::class, "searchOptionTemplate"]);
+    Route::delete('/v1.0/options/{id}', [OptionController::class, "deleteOptionTemplate"]);
 
 
-// Category
-Route::post('/v1.0/coupons', [CouponController::class, "createCoupon"]);
-Route::put('/v1.0/coupons', [CouponController::class, "updateCoupon"]);
-Route::get('/v1.0/coupons', [CouponController::class, "getCoupon"]);
-Route::get('/v1.0/coupons/all', [CouponController::class, "getAllCoupon"]);
-Route::get('/v1.0/coupons/{id}', [CouponController::class, "getCouponById"]);
-Route::get('/v1.0/coupons/search/{term}', [CouponController::class, "searchCoupon"]);
-Route::delete('/v1.0/coupons/{id}', [CouponController::class, "deleteCoupon"]);
+
+    // Color Templates
+    Route::post('/v1.0/colors', [ColorController::class, "createColor"]);
+    Route::put('/v1.0/colors', [ColorController::class, "updateColor"]);
+    Route::get('/v1.0/colors', [ColorController::class, "getColor"]);
+    Route::get('/v1.0/colors/all', [ColorController::class, "getAllColor"]);
+    Route::get('/v1.0/colors/{id}', [
+        ColorController::class, "getColorById"
+    ]);
+    Route::delete('/v1.0/colors/{id}', [
+        ColorController::class, "deleteColor"
+    ]);
+    Route::get('/v1.0/colors/search/{term}', [ColorController::class, "searchColor"]);
+
+
+
+
+
+
+    // Product
+    Route::post('/v1.0/products', [ProductController::class, "createProduct"]);
+    Route::put('/v1.0/products', [ProductController::class, "updateProduct"]);
+    Route::put('/v1.0/products/bulkedit/price', [ProductController::class, "updateBulkPrice"]);
+    Route::put('/v1.0/products/bulkedit/delete', [ProductController::class, "bulkDelete"]);
+    Route::get('/v1.0/products', [ProductController::class, "getProduct"]);
+    Route::get('/v1.0/products/pagination/{perPage}', [ProductController::class, "getProductPagination"]);
+    Route::get('/v1.0/products/{id}', [ProductController::class, "getProductById"]);
+    Route::get('/v1.0/products/search/{term}', [ProductController::class, "searchProduct"]);
+    Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
+
+
+
+    // Category
+    Route::post('/v1.0/coupons', [CouponController::class, "createCoupon"]);
+    Route::put('/v1.0/coupons', [CouponController::class, "updateCoupon"]);
+    Route::get('/v1.0/coupons', [CouponController::class, "getCoupon"]);
+    Route::get('/v1.0/coupons/all', [CouponController::class, "getAllCoupon"]);
+    Route::get('/v1.0/coupons/{id}', [CouponController::class, "getCouponById"]);
+    Route::get('/v1.0/coupons/search/{term}', [CouponController::class, "searchCoupon"]);
+    Route::delete('/v1.0/coupons/{id}', [CouponController::class, "deleteCoupon"]);
 
 
 
@@ -248,16 +270,15 @@ Route::delete('/v1.0/coupons/{id}', [CouponController::class, "deleteCoupon"]);
 
     Route::get('/v1.0/accounts', [CharOfAccountController::class, "getAccounts"]);
 
-    Route::get('/v1.0/orders', function(Request $request){
+    Route::get('/v1.0/orders', function (Request $request) {
 
         $data["data"] = Order::latest()->paginate(10);
-        return response()->json($data,200);
-
+        return response()->json($data, 200);
     });
 
-    Route::get('/v1.0/orders/search/{term}', function($term,Request $request){
+    Route::get('/v1.0/orders/search/{term}', function ($term, Request $request) {
 
-        $data["data"] = Order::where(function($query) use ($term){
+        $data["data"] = Order::where(function ($query) use ($term) {
             $query->where("fname", "like", "%" . $term . "%");
             $query->orWhere("lname", "like", "%" . $term . "%");
             $query->orWhere("cname", "like", "%" . $term . "%");
@@ -268,47 +289,42 @@ Route::delete('/v1.0/coupons/{id}', [CouponController::class, "deleteCoupon"]);
             $query->orWhere("phone", "like", "%" . $term . "%");
             $query->orWhere("email", "like", "%" . $term . "%");
             $query->orWhere("additional_info", "like", "%" . $term . "%");
-
         })
-    ->latest()
-    ->paginate(10);
-        return response()->json($data,200);
-
+            ->latest()
+            ->paginate(10);
+        return response()->json($data, 200);
     });
 
-    Route::get('/v1.0/orders/client/customers', function(Request $request){
-      $customerId =  Customer::where(["email" => $request->user()->email])->first()->id;
-      if($customerId) {
-        $data["data"] = Order::where([
-            "customer_id" => Customer::where(["email" => $request->user()->email])->first()->id
-        ])->paginate(10);
-        return response()->json($data,200);
-      } else {
-        return response()->json([
-            "message" => "No Orders"
-        ],404);
-      }
-
-
+    Route::get('/v1.0/orders/client/customers', function (Request $request) {
+        $customerId =  Customer::where(["email" => $request->user()->email])->first()->id;
+        if ($customerId) {
+            $data["data"] = Order::where([
+                "customer_id" => Customer::where(["email" => $request->user()->email])->first()->id
+            ])->orderByDesc("id")->paginate(10);
+            return response()->json($data, 200);
+        } else {
+            return response()->json([
+                "message" => "No Orders"
+            ], 404);
+        }
     });
-    Route::get('/v1.0/orders/customers/{customerId}', function($customerId,Request $request){
+    Route::get('/v1.0/orders/customers/{customerId}', function ($customerId, Request $request) {
 
         $data["data"] = Order::where([
             "customer_id" => $customerId
         ])->paginate(10);
-        return response()->json($data,200);
-
+        return response()->json($data, 200);
     });
 
-    Route::get('/v1.0/orders/{id}', [OrderController::class,"showOrder"]);
+    Route::get('/v1.0/orders/{id}', [OrderController::class, "showOrder"]);
 
-    Route::get('/v1.0/customers/{id}', [OrderController::class,"showCustomer"]);
+    Route::get('/v1.0/customers/{id}', [OrderController::class, "showCustomer"]);
 
-    Route::post('/v1.0/orders/status/{id}', [OrderController::class,"changeStatus"]);
-    Route::get('/v1.0/customers', [OrderController::class,"getCustomers"]);
-    Route::get('/v1.0/customers/search/{term}', function($term,Request $request){
+    Route::post('/v1.0/orders/status/{id}', [OrderController::class, "changeStatus"]);
+    Route::get('/v1.0/customers', [OrderController::class, "getCustomers"]);
+    Route::get('/v1.0/customers/search/{term}', function ($term, Request $request) {
 
-        $data["data"] = Customer::where(function($query) use ($term){
+        $data["data"] = Customer::where(function ($query) use ($term) {
             $query->where("fname", "like", "%" . $term . "%");
             $query->orWhere("lname", "like", "%" . $term . "%");
             $query->orWhere("cname", "like", "%" . $term . "%");
@@ -319,146 +335,138 @@ Route::delete('/v1.0/coupons/{id}', [CouponController::class, "deleteCoupon"]);
             $query->orWhere("phone", "like", "%" . $term . "%");
             $query->orWhere("email", "like", "%" . $term . "%");
             $query->orWhere("type", "like", "%" . $term . "%");
-
-
-
         })
-    ->latest()
-    ->paginate(10);
-        return response()->json($data,200);
-
+            ->latest()
+            ->paginate(10);
+        return response()->json($data, 200);
     });
 
-    Route::get('/v1.0/client/customer/info', function(Request $request){
+    Route::get('/v1.0/client/customer/info', function (Request $request) {
 
-        $customer = Customer::
-        where([
-             "email" => $request->user()->email,
+        $customer = Customer::where([
+            "email" => $request->user()->email,
         ])
-        ->first();
+            ->first();
 
-         return response()->json([
-             "customer" => $customer
-         ], 200);
-     });
+        return response()->json([
+            "customer" => $customer
+        ], 200);
+    });
 
 
-     Route::post('/v1.0/client/orders/loggedin', [OrderController::class,"create2"]);
+    Route::post('/v1.0/client/orders/loggedin', [OrderController::class, "create2"]);
 
-     Route::post('/v1.0/client/addresses', function (AddressRequest $request) {
+    Route::post('/v1.0/client/addresses', function (AddressRequest $request) {
 
         $insertableData = $request->validated();
         $insertableData["user_id"] = $request->user()->id;
 
-        if(Address::where([
-            "user_id" => $request->user()->id
-        ])
-        ->count() == 0) {
+        if (
+            Address::where([
+                "user_id" => $request->user()->id
+            ])
+            ->count() == 0
+        ) {
             $insertableData["is_default"] = 1;
         }
-       $inserted_address = Address::create($insertableData);
-       if($inserted_address->is_default) {
-        Address::where(
-            "id" ,"!=" , $inserted_address->id
-           )
-           ->update([
-    "is_default" => 0
-           ]);
-       }
+        $inserted_address = Address::create($insertableData);
+        if ($inserted_address->is_default) {
+            Address::where(
+                "id",
+                "!=",
+                $inserted_address->id
+            )
+                ->update([
+                    "is_default" => 0
+                ]);
+        }
 
         $data['data'] = $inserted_address;
 
         return response()->json($data, 201);
-     });
-     Route::delete('/v1.0/client/addresses/{id}', function (Request $request,$id) {
-Address::where([
-    "user_id"=>$request->user()->id,
-    "id"=>$id
-])
-->delete();
+    });
+    Route::delete('/v1.0/client/addresses/{id}', function (Request $request, $id) {
+        Address::where([
+            "user_id" => $request->user()->id,
+            "id" => $id
+        ])
+            ->delete();
 
 
-        return response()->json(["ok"=>true], 200);
-     });
-     Route::put('/v1.0/client/addresses/{id}', function (AddressRequest $request,$id) {
+        return response()->json(["ok" => true], 200);
+    });
+    Route::put('/v1.0/client/addresses/{id}', function (AddressRequest $request, $id) {
         $updatableData = $request->validated();
         Address::where([
-            "user_id"=>$request->user()->id,
-            "id"=>$id
+            "user_id" => $request->user()->id,
+            "id" => $id
         ])
-        ->update(
-            collect($updatableData)->only([
-                "billing_address",
-        "billing_address2",
-        "city",
-        "zipcode",
-        "user_id",
-        "fname",
-        "lname",
-        "cname",
-        "country",
-        "state",
-        "phone",
-        "is_default",
-            ])
-                ->toArray()
+            ->update(
+                collect($updatableData)->only([
+                    "billing_address",
+                    "billing_address2",
+                    "city",
+                    "zipcode",
+                    "user_id",
+                    "fname",
+                    "lname",
+                    "cname",
+                    "country",
+                    "state",
+                    "phone",
+                    "is_default",
+                ])
+                    ->toArray()
 
             );
 
-            if($updatableData["is_default"]) {
-                Address::where(
-                    "id" ,"!=" , $id
-                   )
-                   ->update([
-            "is_default" => 0
-                   ]);
-               }
-                return response()->json(["ok"=>true], 200);
-             });
+        if ($updatableData["is_default"]) {
+            Address::where(
+                "id",
+                "!=",
+                $id
+            )
+                ->update([
+                    "is_default" => 0
+                ]);
+        }
+        return response()->json(["ok" => true], 200);
+    });
 
 
 
 
-     Route::get('/v1.0/client/addresses', function (Request $request) {
+    Route::get('/v1.0/client/addresses', function (Request $request) {
 
         $data['data'] = Address::where([
             "user_id" => $request->user()->id
         ])
-        ->get();
+            ->get();
 
 
         return response()->json($data, 201);
-     });
-     Route::post('/v1.0/client/account-details', function (AccountDetailsRequest $request) {
+    });
+    Route::post('/v1.0/client/account-details', function (AccountDetailsRequest $request) {
 
-     $request_user = $request->user();
-//    $user = User::where([
-//     "email" => $request_user->email
-//    ])
-//    ->first();
-$insertableData = $request->validated();
+        $request_user = $request->user();
+        //    $user = User::where([
+        //     "email" => $request_user->email
+        //    ])
+        //    ->first();
+        $insertableData = $request->validated();
 
-if(!Hash::check($insertableData["current_password"],$request_user->password)) {
-    return response()->json(["message"=>"current password not matching"], 403);
-}
-$request->user()->update([
-    "password" => Hash::make($insertableData['password'])
-]);
-
-
-
-
-        return response()->json(["ok"=>$request_user->password], 201);
-     });
+        if (!Hash::check($insertableData["current_password"], $request_user->password)) {
+            return response()->json(["message" => "current password not matching"], 403);
+        }
+        $request->user()->update([
+            "password" => Hash::make($insertableData['password'])
+        ]);
 
 
 
 
-
-
-
-
-
+        return response()->json(["ok" => $request_user->password], 201);
+    });
 });
 
 
@@ -563,7 +571,7 @@ $request->user()->update([
 
 // end of protected route
 
-Route::post('/v1.0/client/orders', [OrderController::class,"create"]);
+Route::post('/v1.0/client/orders', [OrderController::class, "create"]);
 
 
 
@@ -584,56 +592,62 @@ Route::get('/v1.0/client/products/relatedproduct/get', [ProductController::class
 Route::get('/v1.0/client/products/featured/all', [ProductController::class, "getFeatutedProductClient"]);
 
 
-Route::get('/v1.0/client/check-height', function(Request $request){
-    $product =  ProductVariation::
-
-where(
-        "name",">=", $request->height
+Route::get('/v1.0/client/check-height', function (Request $request) {
+    $product =  ProductVariation::where(
+        "name",
+        ">=",
+        $request->height
     )
-    ->where(
-        "product_id","=", $request->product_id,
+        ->where(
+            "product_id",
+            "=",
+            $request->product_id,
 
-    )
+        )
 
-    ->where(
-        "color_id","=", $request->color_id,
-    )
+        ->where(
+            "color_id",
+            "=",
+            $request->color_id,
+        )
 
-    ->orderBy("name")
-    ->first();
+        ->orderBy("name")
+        ->first();
     return response()->json([
         "product" => $product
     ], 200);
 });
 
-Route::get('/v1.0/client/check-width', function(Request $request){
+Route::get('/v1.0/client/check-width', function (Request $request) {
     $product =  Variation::where(
-        "name",">=", $request->width
+        "name",
+        ">=",
+        $request->width
     )
-    ->where(
-        "product_variation_id","=", $request->product_variation_id
-    )
-    ->orderBy("name")
-    ->first();
+        ->where(
+            "product_variation_id",
+            "=",
+            $request->product_variation_id
+        )
+        ->orderBy("name")
+        ->first();
 
     return response()->json([
         "product" => $product
     ], 200);
 });
 
-Route::get('/v1.0/client/check-coupon', function(Request $request){
+Route::get('/v1.0/client/check-coupon', function (Request $request) {
 
-   $coupon = Coupon::with("cproducts")
-   -> where([
-        "code" => $request->coupon,
-   ])
+    $coupon = Coupon::with("cproducts")
+        ->where([
+            "code" => $request->coupon,
+        ])
 
 
-   ->first();
+        ->first();
 
     return response()->json([
         "coupon" => $coupon
     ], 200);
 });
-
-

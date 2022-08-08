@@ -1,5 +1,9 @@
 <?php
 
+use App\Mail\orderconfirmationmail;
+use App\Mail\orderdeliveredmail;
+use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SetUpController;
 use App\Models\OrderPayment;
 use Illuminate\Http\Request;
@@ -64,3 +68,25 @@ Route::get("/payment", [OrderPayments::class, "stripepayments"]);
 Route::get("/paypalpayment", [OrderPayments::class, "paypalpayment"]);
 Route::get("/payaplsuccess", [OrderPayments::class, "payaplsuccess"]);
 Route::get("/paypalcancel", [OrderPayments::class, "paypalcancel"]);
+//route for order delivery mail
+Route::post("/orderdeleveredmail", function (Request $request) {
+    return new orderdeliveredmail;
+});
+
+//Routes for order confirmation mail
+Route::post("/orderconfirmition", function (Request $request) {
+    $data = $request->json()->all();
+    $mail = $data['email'] ?? "test@test.com";
+    Mail::to($mail)->send(new orderconfirmationmail);
+    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);
+    /*  return new orderconfirmationmail(); */
+});
+
+//Routes for  for Welcome Mail
+Route::post("/email", function (Request $request) {
+    $data = $request->json()->all();
+    $email = $data["email"] ?? "test@test.com";
+    $mail = Mail::to($email)->send(new WelcomeMail());
+    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]);
+    /*     return new WelcomeMail(); */
+});
