@@ -328,7 +328,7 @@
                                                         <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                             <tr style="border-collapse:collapse">
                                                                 <td class="es-infoblock" align="left" style="padding:0;Margin:0;line-height:14px;font-size:12px;color:#A0A7AC">
-                                                                    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:14px;color:#A0A7AC;font-size:12px">Put your preheader text here</p>
+                                                                    <p style="display:none; Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:14px;color:#A0A7AC;font-size:12px">Order confirmation From Wood Croft Doors and Cabinets</p>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -336,7 +336,7 @@
                                                 </tr>
                                             </table>
                                             <!--[if mso]></td><td style="width:20px"></td><td style="width:280px" valign="top"><![endif]-->
-                                            <table cellspacing="0" cellpadding="0" align="right" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                                            <!--                                             <table cellspacing="0" cellpadding="0" align="right" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                 <tr style="border-collapse:collapse">
                                                     <td align="left" style="padding:0;Margin:0;width:280px">
                                                         <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
@@ -348,7 +348,7 @@
                                                         </table>
                                                     </td>
                                                 </tr>
-                                            </table>
+                                            </table> -->
                                             <!--[if mso]></td></tr></table><![endif]-->
                                         </td>
                                     </tr>
@@ -367,7 +367,7 @@
                                                     <td valign="top" align="center" style="padding:0;Margin:0;width:580px">
                                                         <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                             <tr style="border-collapse:collapse">
-                                                                <td align="center" style="padding:0;Margin:0;font-size:0"><a target="_blank" href="https://viewstripo.email/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px"><img class="adapt-img" src="https://any-rank.com/email_template_images/69401502088531077.png" alt width="105" height="101" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
+                                                                <td align="center" style="padding:0;Margin:0;font-size:0"><a target="_blank" href="https://door-next.vercel.app/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px"><img class="adapt-img" src="https://door-next.vercel.app/assets/images/logo.jpeg" alt width="105" height="101" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
                                                             </tr>
                                                         </table>
                                                     </td>
@@ -395,7 +395,7 @@
                                                                 </td>
                                                             </tr>
                                                             <tr style="border-collapse:collapse">
-                                                                <td align="center" style="Margin:0;padding-left:10px;padding-right:10px;padding-top:15px;padding-bottom:15px"><span class="es-button-border" style="border-style:solid;border-color:#2cb543;background:#191919;border-width:0px;display:inline-block;border-radius:20px;width:auto"><a href="https://viewstripo.email/" class="es-button es-button-1" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#ffffff;font-size:18px;border-style:solid;border-color:#191919;border-width:10px 35px;display:inline-block;background:#191919;border-radius:20px;font-family:'lucida sans unicode', 'lucida grande', sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center">View your order details</a></span></td>
+                                                                <td align="center" style="Margin:0;padding-left:10px;padding-right:10px;padding-top:15px;padding-bottom:15px"><span class="es-button-border" style="border-style:solid;border-color:#2cb543;background:#191919;border-width:0px;display:inline-block;border-radius:20px;width:auto"><a href="https://door-next.vercel.app/" class="es-button es-button-1" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#ffffff;font-size:18px;border-style:solid;border-color:#191919;border-width:10px 35px;display:inline-block;background:#191919;border-radius:20px;font-family:'lucida sans unicode', 'lucida grande', sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center">View your order details</a></span></td>
                                                             </tr>
                                                         </table>
                                                     </td>
@@ -428,7 +428,7 @@
                                                     <td class="es-m-p20b" align="left" style="padding:0;Margin:0;width:270px">
                                                         <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                             <tr style="border-collapse:collapse">
-                                                                <td align="center" style="padding:0;Margin:0;font-size:0"><a target="_blank" href="https://viewstripo.email/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px"><img class="adapt-img" src="https://any-rank.com/email_template_images/29841502094430830.png" alt width="50" height="70" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
+                                                                <td align="center" style="padding:0;Margin:0;font-size:0"><a target="_blank" href="https://door-next.vercel.app/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px"><img class="adapt-img" src="https://any-rank.com/email_template_images/29841502094430830.png" alt width="50" height="70" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
                                                             </tr>
                                                         </table>
                                                     </td>
@@ -468,7 +468,7 @@
                                                     <td class="es-m-p20b" align="left" style="padding:0;Margin:0;width:270px">
                                                         <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                             <tr style="border-collapse:collapse">
-                                                                <td align="center" style="padding:0;Margin:0;font-size:0"><a target="_blank" href="https://viewstripo.email/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px"><img class="adapt-img" src="https://any-rank.com/email_template_images/29841502094430830.png" alt width="50" height="70" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
+                                                                <td align="center" style="padding:0;Margin:0;font-size:0"><a target="_blank" href="https://door-next.vercel.app/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px"><img class="adapt-img" src="https://any-rank.com/email_template_images/29841502094430830.png" alt width="50" height="70" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
                                                             </tr>
                                                         </table>
                                                     </td>
@@ -630,7 +630,7 @@
                                                             </tr>
                                                             <tr style="border-collapse:collapse">
                                                                 <td align="center" style="padding:0;Margin:0">
-                                                                    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#242424;font-size:14px">Call <a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px;line-height:21px" href="tel:123456789">123456789</a> or <a target="_blank" href="https://viewstripo.email/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px">visit us online</a></p>
+                                                                    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#242424;font-size:14px">Call <a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px;line-height:21px" href="tel:123456789">123456789</a> or <a target="_blank" href="https://door-next.vercel.app/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px">visit us online</a></p>
                                                                     <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#242424;font-size:14px">for expert assistance.</p>
                                                                 </td>
                                                             </tr>
@@ -651,7 +651,7 @@
                                                             <tr style="border-collapse:collapse">
                                                                 <td align="center" style="padding:0;Margin:0">
                                                                     <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#242424;font-size:14px">Your satisfaction is 100% guaranteed.</p>
-                                                                    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#242424;font-size:14px">See our <a target="_blank" href="https://viewstripo.email/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px">Returns and Exchanges policy.</a></p>
+                                                                    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#242424;font-size:14px">See our <a target="_blank" href="https://door-next.vercel.app/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px">Returns and Exchanges policy.</a></p>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -689,7 +689,7 @@
                                                             </tr>
                                                             <tr style="border-collapse:collapse">
                                                                 <td align="center" style="padding:0;Margin:0">
-                                                                    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:20px;color:#888888;font-size:13px"><strong><a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#AAAAAA;font-size:13px;line-height:20px" href="https://viewstripo.email">Browse all products</a>&nbsp;</strong>•<strong><a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#AAAAAA;font-size:13px;line-height:20px" href="https://viewstripo.email">Locate store</a></strong></p>
+                                                                    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:20px;color:#888888;font-size:13px"><strong><a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#AAAAAA;font-size:13px;line-height:20px" href="https://door-next.vercel.app/">Browse all products</a>&nbsp;</strong>•<strong><a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#AAAAAA;font-size:13px;line-height:20px" href="https://door-next.vercel.app/">Locate store</a></strong></p>
                                                                 </td>
                                                             </tr>
                                                             <tr style="border-collapse:collapse">
@@ -702,7 +702,7 @@
                                                             </tr>
                                                             <tr style="border-collapse:collapse">
                                                                 <td align="center" style="padding:0;Margin:0">
-                                                                    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:20px;color:#888888;font-size:13px"><strong><a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#AAAAAA;font-size:13px;line-height:20px" class="unsubscribe" href="">Unsubscribe</a> • <a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#AAAAAA;font-size:13px;line-height:20px" href="https://viewstripo.email">Update Preferences</a> • <a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#AAAAAA;font-size:13px;line-height:20px" href="https://viewstripo.email">Customer Support</a></strong></p>
+                                                                    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:20px;color:#888888;font-size:13px"><strong><a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#AAAAAA;font-size:13px;line-height:20px" class="unsubscribe" href="">Unsubscribe</a> • <a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#AAAAAA;font-size:13px;line-height:20px" href="https://door-next.vercel.app/">Update Preferences</a> • <a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#AAAAAA;font-size:13px;line-height:20px" href="https://door-next.vercel.app/">Customer Support</a></strong></p>
                                                                 </td>
                                                             </tr>
                                                             <tr style="border-collapse:collapse">

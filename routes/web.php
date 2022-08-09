@@ -39,7 +39,10 @@ Route::post('webhook', function (Request $request) {
         /* echo $checkout; */
         foreach ($checkout as $char) {
             $order_id = $char->metadata->order_id . "\n";
+            $status = $char->payment_status;
         }
+        $status = $status ?? "null";
+
         try {
             OrderPayment::create([
                 "payement_id" => $request->data["object"]["id"],
@@ -49,7 +52,7 @@ Route::post('webhook', function (Request $request) {
                 "order_id" => $order_id,
                 "receipt_url" => $request->data["object"]["receipt_url"],
                 "payment_intent" => $request->data["object"]["payment_intent"],
-                "status" =>  $request->data["object"]["paid"],
+                "status" =>  /* $request->data["object"]["paid"] */ $status,
             ]);
         } catch (\Exception $e) {
             $e->getMessage();
