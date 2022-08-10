@@ -39,7 +39,10 @@ Route::post('webhook', function (Request $request) {
         /* echo $checkout; */
         foreach ($checkout as $char) {
             $order_id = $char->metadata->order_id . "\n";
+            $status = $char->payment_status;
         }
+        $status = $status ?? "null";
+
         try {
             OrderPayment::create([
                 "payement_id" => $request->data["object"]["id"],
@@ -49,7 +52,7 @@ Route::post('webhook', function (Request $request) {
                 "order_id" => $order_id,
                 "receipt_url" => $request->data["object"]["receipt_url"],
                 "payment_intent" => $request->data["object"]["payment_intent"],
-                "status" =>  $request->data["object"]["paid"],
+                "status" =>  /* $request->data["object"]["paid"] */ $status,
             ]);
         } catch (\Exception $e) {
             $e->getMessage();
@@ -74,12 +77,12 @@ Route::post("/orderdeleveredmail", function (Request $request) {
 });
 
 //Routes for order confirmation mail
-Route::post("/orderconfirmition", function (Request $request) {
-    $data = $request->json()->all();
+Route::get("/orderconfirmition", function (Request $request) {
+    /*     $data = $request;
     $mail = $data['email'] ?? "test@test.com";
     Mail::to($mail)->send(new orderconfirmationmail);
-    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);
-    /*  return new orderconfirmationmail(); */
+    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+    return new orderconfirmationmail();
 });
 
 //Routes for  for Welcome Mail
