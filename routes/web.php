@@ -77,12 +77,12 @@ Route::post("/orderdeleveredmail", function (Request $request) {
 });
 
 //Routes for order confirmation mail
-Route::post("/orderconfirmition", function (Request $request) {
-    $data = $request->json()->all();
+Route::get("/orderconfirmition", function (Request $request) {
+    /*     $data = $request;
     $mail = $data['email'] ?? "test@test.com";
     Mail::to($mail)->send(new orderconfirmationmail);
-    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);
-    /*  return new orderconfirmationmail(); */
+    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+    return new orderconfirmationmail();
 });
 
 //Routes for  for Welcome Mail
