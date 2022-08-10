@@ -335,7 +335,29 @@ foreach($updatableVariations as $updatableVariation){
 
             ->leftJoin('categories as c', 'products.category_id', '=', 'c.id')
             ->leftJoin('styles as s', 'products.style_id', '=', 's.id')
-            ->leftJoin('product_colors as co', 'products.id', '=', 'co.product_id');
+            ->leftJoin('product_colors as co', 'products.id', '=', 'co.product_id')
+
+            ->leftJoin('colors', 'co.color_id', '=', 'colors.id');
+$term = $request->term;
+            if($term) {
+         $query =   $query->where(function($query) use ($term){
+                    $query->where("products.name", "like", "%" . $term . "%");
+                    $query->orWhere("products.type", "like", "%" . $term . "%");
+                    $query->orWhere("products.sku", "like", "%" . $term . "%");
+                    $query->orWhere("c.name", "like", "%" . $term . "%");
+                    $query->orWhere("s.name", "like", "%" . $term . "%");
+                    $query->orWhere("colors.name", "like", "%" . $term . "%");
+                });
+            }
+
+
+
+
+
+
+
+
+
             // ->leftJoin('product_variations', 'variations.product_variation_id', '=', 'product_variations.id');
 
             if(!empty($request->category)){
@@ -660,7 +682,7 @@ foreach($updatableVariations as $updatableVariation){
     )
 
                 ->orderByDesc("products.id")
-                ->paginate(10);
+                ->paginate(12);
 
             return response()->json($data, 200);
         } catch (Exception $e) {
