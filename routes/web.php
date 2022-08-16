@@ -72,24 +72,25 @@ Route::get("/paypalpayment", [OrderPayments::class, "paypalpayment"]);
 Route::get("/payaplsuccess", [OrderPayments::class, "payaplsuccess"]);
 Route::get("/paypalcancel", [OrderPayments::class, "paypalcancel"]);
 //route for order delivery mail
-Route::post("/orderdeleveredmail", function (Request $request) {
+Route::get("/orderdeleveredmail", function (Request $request) {
     return new orderdeliveredmail;
 });
 
 //Routes for order confirmation mail
 Route::get("/orderconfirmition", function (Request $request) {
-    /*     $data = $request;
+    $id = $request['id'];
+    /* $data = $request;
     $mail = $data['email'] ?? "test@test.com";
-    Mail::to($mail)->send(new orderconfirmationmail);
+    Mail::to($mail)->send(new orderconfirmationmail($id));
     return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
-    return new orderconfirmationmail();
+    return new orderconfirmationmail($id);
 });
 
 //Routes for  for Welcome Mail
-Route::post("/email", function (Request $request) {
-    $data = $request->json()->all();
+Route::get("/email", function (Request $request) {
+    /*     $data = $request->json()->all();
     $email = $data["email"] ?? "test@test.com";
     $mail = Mail::to($email)->send(new WelcomeMail());
-    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]);
-    /*     return new WelcomeMail(); */
+    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]); */
+    return new WelcomeMail();
 });

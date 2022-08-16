@@ -28,6 +28,6 @@ class WelcomeMail extends Mailable
      */
     public function build()
     {
-        return $this->subject("Customer account confirmation")->markdown('emails.testmail');
+        return $this->subject("Customer account confirmation")->markdown('emails.welcomenewcustomer');
     }
 }

@@ -127,10 +127,10 @@
         <![endif]-->
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
-                        <td align="center" valign="top" style="padding: 36px 24px;">
-                            <!--  <a href="https://door-next.vercel.app/" target="_blank" style="display: inline-block;">
-                                <img src="https://door-next.vercel.app/assets/images/logo.jpeg" alt="Logo" border="0" height="200" width="195" style="display: block; width: 195px; max-width: 200px; min-width: 48px;">
-                            </a> -->
+                        <td align="center" valign="top" style="padding: 10px 50px;">
+                            <a href="https://door-next.vercel.app/" target="_blank" style="display: inline-block;">
+                                <img src="https://door-next.vercel.app/assets/images/logo.jpeg" alt="Logo" border="0" height="200" width="300" style="display: block; width: 195px; max-width: 200px; min-width: 48px;">
+                            </a>
                         </td>
                     </tr>
                 </table>
@@ -193,7 +193,7 @@
                                     <td align="center" bgcolor="#ffffff" style="padding: 12px;">
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tr>
-                                                <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
+                                                <td align="center" bgcolor="#C2B59C" style="border-radius: 6px;">
                                                     <a href="https://door-next.vercel.app/shop" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Visit our store</a>
                                                 </td>
                                             </tr>
