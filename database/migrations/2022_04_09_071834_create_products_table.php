@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->enum('type', ['single', 'variable']);
+            $table->enum('type', ['single', 'variable',  'panel']);
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->unsignedBigInteger('style_id')->nullable();
@@ -31,6 +31,7 @@ class CreateProductsTable extends Migration
             $table->integer("length_upper_limit")->nullable();
             $table->boolean("length_is_required")->default(0);
             $table->string('slug')->unique();
+            $table->string('panels')->nullable();
             $table->timestamps();
         });
     }

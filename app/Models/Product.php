@@ -22,7 +22,8 @@ class Product extends Model
         "length_lower_limit",
         "length_upper_limit",
         "length_is_required",
-        "slug"
+        "slug",
+        "panels"
     ];
     protected $casts = [
         'category_id' => 'integer',

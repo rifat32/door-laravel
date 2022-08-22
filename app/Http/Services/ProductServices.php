@@ -63,7 +63,13 @@ trait ProductServices
 
                 if ($insertableData["type"] == "single") {
                     $this->createSingleVariationUtil($insertableData, $inserted_product);
-                } else {
+                }
+                else if($insertableData["type"] == "panel") {
+                    $insertableData["price"] = 0;
+                    $this->createSingleVariationUtil($insertableData, $inserted_product);
+                }
+
+                else {
 
                     $this->createVariationProductUtil($insertableData, $inserted_product);
 

@@ -35,7 +35,9 @@ class ProductRequest extends FormRequest
             "images"   =>"nullable|array",
             "description" => "required",
             "price" => "required_if:type,single",
-            "qty" => "required_if:type,single",
+            "qty" => "required_if:type,single,panel",
+            "panels" => "nullable",
+
 
             "length_lower_limit" => "nullable|numeric",
             "length_upper_limit" => "nullable|numeric",
