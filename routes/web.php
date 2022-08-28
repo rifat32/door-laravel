@@ -30,7 +30,7 @@ Route::get('/setup', [SetUpController::class, "setUp"]);
 
 Route::post('webhook', function (Request $request) {
     $stripe = new StripeClient(
-        'sk_test_51Kdy9JE00LZ83RrlSJYCuLu7imUQTeGTUbTgxfAx1lpsVhiPcxcYcegCSGyUW9UY0PdzukNxesWQyCTbK9EFHOWk000bHfgH9O'
+        'sk_test_51JUtILKKsz00TiWASOtYqpG6WOTlBKLh8bp5dfQUsnuT8PPQu1Nu1FzqzEvlbbrHvas62E3xS4GBJpfcxYVn4eJc00MJ1hMQa6'
     );
     if ($request->type === "charge.succeeded") {
         $payementintent = $request->data["object"]["payment_intent"];
@@ -73,7 +73,8 @@ Route::get("/payaplsuccess", [OrderPayments::class, "payaplsuccess"]);
 Route::get("/paypalcancel", [OrderPayments::class, "paypalcancel"]);
 //route for order delivery mail
 Route::get("/orderdeleveredmail", function (Request $request) {
-    return new orderdeliveredmail;
+    $order_id = $request["order_id"];
+    return new orderdeliveredmail($order_id);
 });
 
 //Routes for order confirmation mail
