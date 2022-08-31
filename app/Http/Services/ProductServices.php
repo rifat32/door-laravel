@@ -373,13 +373,21 @@ $term = $request->term;
                 ]);
             }
             if(!empty($request->category_name)){
-              $category =  Category::
-                where("name","=",$request->category_name)
-                ->first();
-                $query
-                ->where([
-               "c.id" => $category->id
-                ]);
+                if(!empty($request->category)){
+                    $query
+                    ->where([
+                   "c.id" => $request->category
+                    ]);
+                }else {
+                    $category =  Category::
+                    where("name","=",$request->category_name)
+                    ->first();
+                    $query
+                    ->where([
+                   "c.id" => $category->id
+                    ]);
+                }
+
             }
             if(!empty($request->style)){
                 $query
