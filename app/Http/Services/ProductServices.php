@@ -151,9 +151,20 @@ trait ProductServices
 
             if ($updatableData["type"] == "single") {
                 $this->updateSingleVariationUtil($updatableData, $updated_product);
-            } else {
+            }
+            else if($updatableData["type"] == "panel") {
+
+                $this->updateSingleVariationUtil($updatableData, $updated_product);
+            }
+
+            else {
                 $this->updateVariationProductUtil($updatableData, $updated_product);
             }
+
+
+
+
+
 
 
 
@@ -373,13 +384,21 @@ $term = $request->term;
                 ]);
             }
             if(!empty($request->category_name)){
-              $category =  Category::
-                where("name","=",$request->category_name)
-                ->first();
-                $query
-                ->where([
-               "c.id" => $category->id
-                ]);
+                if(!empty($request->category)){
+                    $query
+                    ->where([
+                   "c.id" => $request->category
+                    ]);
+                }else {
+                    $category =  Category::
+                    where("name","=",$request->category_name)
+                    ->first();
+                    $query
+                    ->where([
+                   "c.id" => $category->id
+                    ]);
+                }
+
             }
             if(!empty($request->style)){
                 $query

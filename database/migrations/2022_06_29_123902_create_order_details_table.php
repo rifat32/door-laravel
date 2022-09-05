@@ -40,7 +40,9 @@ class CreateOrderDetailsTable extends Migration
             $table->string("custom_height")->nullable();
             $table->string("custom_width")->nullable();
             $table->string("selected_length")->nullable();
-
+            $table->string("selected_panel_length")->nullable();
+            $table->string("selected_panel_depth")->nullable();
+            $table->string("selected_panel_thickness")->nullable();
 
             $table->timestamps();
         });
