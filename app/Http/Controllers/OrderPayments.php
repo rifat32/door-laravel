@@ -9,7 +9,7 @@ use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class OrderPayments extends Controller
 {
-    /* 
+    /*
     Stripe Payment Start
      */
     function stripepayments(Request $request)
@@ -51,13 +51,21 @@ class OrderPayments extends Controller
         $i = 0;
         foreach ($order->order_details as $key => $order_detail) {
             $product_price = 0;
-            if ($order_detail->product->type == "variable") {
-                $product_price = $order_detail->variation->price;
-                // echo "if block product price " . $product_price . "<br>";
-            } else {
-                $product_price = $order_detail->product->variations[0]->price;
-                // echo "else block product price " . $product_price . "<br>";
-            }
+            $product_price = $order_detail->price;
+            // if ($order_detail->product->type == "variable") {
+            //     // $product_price = $order_detail->variation->price;
+            //     // echo "if block product price " . $product_price . "<br>";
+            //     $product_price = $order_detail->price;
+            // }
+            // else if($order_detail->product->type == "panel") {
+            //     $product_price = $order_detail->price;
+
+            // }
+            // else {
+            //     // $product_price = $order_detail->product->variations[0]->price;
+            //     // echo "else block product price " . $product_price . "<br>";
+            //     $product_price = $order_detail->price;
+            // }
             if ($order_detail->coupon_discount_type == "percentage") {
                 $coupon_discount_price += (($order_detail->coupon_discount_amount * $product_price) / 100);
             } else {
@@ -136,7 +144,7 @@ class OrderPayments extends Controller
         }
     }
 
-    /* 
+    /*
     /////////////////////////////////////////////////////////////////////////
     Stripe Payment end
     */

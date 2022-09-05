@@ -33,7 +33,7 @@ class ProductUpdateRequest extends FormRequest
             "images"   =>"nullable|array",
             "description" => "required",
             "price" => "required_if:type,single",
-            "qty" => "required_if:type,single",
+            "qty" => "required_if:type,single,panel",
             "length_lower_limit" => "nullable",
             "length_upper_limit" => "nullable",
             "length_is_required" => "nullable",

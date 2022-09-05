@@ -13,6 +13,7 @@ use App\Models\OrderDetail;
 use App\Models\OrderDetailOption;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -117,6 +118,53 @@ class OrderController extends Controller
 
                 $cart["order_id"] = $order->id;
                 $cart["product_id"] = $cart["id"];
+
+
+                if ($cart["type"] == "variable") {
+                     $cart["price"] = Variation::where([
+                        "id" => $cart["selectedWidth"]
+                     ])
+                     ->first()
+                     ->price;
+
+                }
+                else if($cart["type"] == "panel") {
+                    // $product_price = $order_detail->price;
+
+
+
+                    $cart["price"] = collect(json_decode(Product::where([
+                        "id" => $cart["id"]
+                     ])
+                     ->first()
+                     ->panels,true))
+                     ->first(function ($value, $key)use($cart) {
+                        return $value["thickness"] == $cart["selected_panel_thickness"];
+                    })
+                    ["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
+
+
+
+                }
+                else {
+                    $cart["price"]  = Product::where([
+                        "id" => $cart["id"]
+                     ])
+                     ->first()
+                     ->variations[0]
+                     ->price;
+
+                }
+
+
+
+
+
+
+
+
+
+
 
 
                 if ($coupon) {
@@ -252,6 +300,49 @@ class OrderController extends Controller
 
                 $cart["order_id"] = $order->id;
                 $cart["product_id"] = $cart["id"];
+
+
+
+                if ($cart["type"] == "variable") {
+                    $cart["price"] = Variation::where([
+                       "id" => $cart["selectedWidth"]
+                    ])
+                    ->first()
+                    ->price;
+
+               }
+               else if($cart["type"] == "panel") {
+                   // $product_price = $order_detail->price;
+
+
+
+                   $cart["price"] = collect(json_decode(Product::where([
+                       "id" => $cart["id"]
+                    ])
+                    ->first()
+                    ->panels,true))
+                    ->first(function ($value, $key)use($cart) {
+                       return $value["thickness"] == $cart["selected_panel_thickness"];
+                   })
+                   ["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
+
+
+
+               }
+               else {
+                   $cart["price"]  = Product::where([
+                       "id" => $cart["id"]
+                    ])
+                    ->first()
+                    ->variations[0]
+                    ->price;
+
+               }
+
+
+
+
+
 
 
                 if ($coupon) {

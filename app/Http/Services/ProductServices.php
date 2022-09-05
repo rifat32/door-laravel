@@ -151,9 +151,20 @@ trait ProductServices
 
             if ($updatableData["type"] == "single") {
                 $this->updateSingleVariationUtil($updatableData, $updated_product);
-            } else {
+            }
+            else if($updatableData["type"] == "panel") {
+
+                $this->updateSingleVariationUtil($updatableData, $updated_product);
+            }
+
+            else {
                 $this->updateVariationProductUtil($updatableData, $updated_product);
             }
+
+
+
+
+
 
 
 
