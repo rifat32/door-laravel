@@ -41,6 +41,7 @@ use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\StyleController;
 use App\Http\Controllers\Api\TaxPaymentsController;
+use App\Http\Controllers\Api\ThicknessController;
 use App\Http\Controllers\Api\TradeLicenseController;
 use App\Http\Controllers\Api\VariationTemplateController;
 use App\Http\Controllers\MenuController;
@@ -127,6 +128,27 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "searchCategory"]);
 
     Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
+
+
+
+  // thickness
+  Route::post('/v1.0/thicknesses', [ThicknessController::class, "createThickness"]);
+  Route::put('/v1.0/thicknesses', [ThicknessController::class, "updateThickness"]);
+  Route::get('/v1.0/thicknesses', [ThicknessController::class, "getThickness"]);
+  Route::get('/v1.0/thicknesses/all', [ThicknessController::class, "getAllThickness"]);
+  Route::get('/v1.0/thicknesses/{id}', [ThicknessController::class, "getThicknessById"]);
+  Route::get('/v1.0/thicknesses/search/{term}', [ThicknessController::class, "searchThickness"]);
+
+  Route::delete('/v1.0/thicknesses/{id}', [ThicknessController::class, "deleteThickness"]);
+
+
+
+
+
+
+
+
+
 
     // Style
     Route::post('/v1.0/styles', [StyleController::class, "createStyle"]);

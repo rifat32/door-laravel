@@ -105,7 +105,8 @@ trait ProductServices
                     "is_featured",
                     "length_lower_limit",
                     "length_upper_limit",
-                    "length_is_required"
+                    "length_is_required",
+                    "panels"
                 ])
                     ->toArray()
 

@@ -34,6 +34,9 @@ class ProductUpdateRequest extends FormRequest
             "description" => "required",
             "price" => "required_if:type,single",
             "qty" => "required_if:type,single,panel",
+            "panels" => "nullable",
+
+
             "length_lower_limit" => "nullable",
             "length_upper_limit" => "nullable",
             "length_is_required" => "nullable",
