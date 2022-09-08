@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\CitizenController;
 use App\Http\Controllers\Api\CitizenTaxController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\ComplainController;
+use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\DoctorController;
@@ -39,6 +40,8 @@ use App\Http\Controllers\Api\WardController;
 use App\Http\Controllers\Api\NonHoldingCitizenController;
 use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ShippingController;
+use App\Http\Controllers\Api\StateController;
 use App\Http\Controllers\Api\StyleController;
 use App\Http\Controllers\Api\TaxPaymentsController;
 use App\Http\Controllers\Api\ThicknessController;
@@ -128,6 +131,53 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "searchCategory"]);
 
     Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
+
+
+
+    // Category
+    Route::post('/v1.0/shippings', [ShippingController::class, "createShipping"]);
+    Route::put('/v1.0/shippings', [ShippingController::class, "updateShipping"]);
+    Route::get('/v1.0/shippings', [ShippingController::class, "getShipping"]);
+    Route::get('/v1.0/shippings/all', [ShippingController::class, "getAllShipping"]);
+    Route::get('/v1.0/shippings/{id}', [ShippingController::class, "getShippingById"]);
+    Route::get('/v1.0/shippings/search/{term}', [ShippingController::class, "searchShipping"]);
+
+    Route::delete('/v1.0/shippings/{id}', [ShippingController::class, "deleteShipping"]);
+
+
+
+
+    // City
+    Route::post('/v1.0/countries', [CountryController::class, "createCountry"]);
+    Route::put('/v1.0/countries', [CountryController::class, "updateCountry"]);
+    Route::get('/v1.0/countries', [CountryController::class, "getCountry"]);
+    Route::get('/v1.0/countries/all', [CountryController::class, "getAllCountry"]);
+    Route::get('/v1.0/countries/{id}', [CountryController::class, "getCountryById"]);
+    Route::get('/v1.0/countries/search/{term}', [CountryController::class, "searchCountry"]);
+
+    Route::delete('/v1.0/countries/{id}', [CountryController::class, "deleteCountry"]);
+
+  // State
+
+  Route::get('/v1.0/states/get/country-id/{countryId}', [StateController::class, "getStateById"]);
+//   Route::post('/v1.0/states', [CountryController::class, "createCountry"]);
+//   Route::put('/v1.0/states', [CountryController::class, "updateCountry"]);
+//   Route::get('/v1.0/states', [CountryController::class, "getCountry"]);
+//   Route::get('/v1.0/states/all', [CountryController::class, "getAllCountry"]);
+//   Route::get('/v1.0/states/get/country-id/{countryId}', [CountryController::class, "getAllCountry"]);
+
+//   Route::get('/v1.0/states/{id}', [CountryController::class, "getCountryById"]);
+//   Route::get('/v1.0/states/search/{term}', [CountryController::class, "searchCountry"]);
+
+//   Route::delete('/v1.0/states/{id}', [CountryController::class, "deleteCountry"]);
+
+
+
+
+
+
+
+
 
 
 
