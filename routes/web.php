@@ -75,17 +75,17 @@ Route::get("/paypalcancel", [OrderPayments::class, "paypalcancel"]);
 //route for order delivery mail
 Route::get("/orderdeleveredmail", function (Request $request) {
     $order_id = $request["order_id"];
-    /*    $mail = $data['email'] ?? "test@test.com";
-    Mail::to($mail)->send(new orderdeliveredmail($order_id)); */
+    $mail = $data['email'] ?? "sami.maxzionit@gmail.com";
+    Mail::to($mail)->send(new orderdeliveredmail($order_id));
     return new orderdeliveredmail($order_id);
 });
 
 //Routes for order confirmation mail
 Route::get("/orderconfirmition", function (Request $request) {
     $id = $request['order_id'];
-    /* $data = $request;
-    $mail = $data['email'] ?? "test@test.com";
-    Mail::to($mail)->send(new orderconfirmationmail($id)); */
+    $data = $request;
+    $mail = $data['email'] ?? "sami.maxzionit@gmail.com";
+    Mail::to($mail)->send(new orderconfirmationmail($id));
     /* return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
     return new orderconfirmationmail($id);
 });
@@ -93,7 +93,7 @@ Route::get("/orderconfirmition", function (Request $request) {
 //Routes for  for Welcome Mail
 Route::get("/email", function (Request $request) {
     $data = $request->json()->all();
-    $email = $data["email"] ?? "iftyhashmi@gmail.com";
+    $email = $data["email"] ?? "sami.maxzionit@gmail.com";
     $mail = Mail::to($email)->send(new WelcomeMail());
     /*  return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]); */
     return new WelcomeMail();

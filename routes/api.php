@@ -99,19 +99,18 @@ Route::post('/v1.0/register2', [AuthController::class, "register2"]);
 //emil api
 //Routes for  for Welcome Mail
 Route::post("/v1.0/email", function (Request $request) {
-    $data = $request;
-    $email = $data["email"] ?? "test@test.com";
+    $email = $request->email;
     $mail = Mail::to($email)->send(new WelcomeMail());
     return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]);
     /*     return new WelcomeMail(); */
 });
 //Routes for order confirmation mail
 Route::post("/v1.0/orderconfirmition", function (Request $request) {
-    $data = $request;
-    $mail = $data['email'] ?? "test@test.com";
-    Mail::to($mail)->send(new orderconfirmationmail);
+    $mail = $request->email;
+    $order_id=$request->order_id;
+    Mail::to($mail)->send(new orderconfirmationmail($order_id));
     return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);
-    /*  return new orderconfirmationmail(); */
+    /*  return new orderconfirmationmail($order_id); */
 });
 
 // protected routes

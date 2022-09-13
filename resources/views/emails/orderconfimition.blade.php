@@ -498,22 +498,22 @@ $domainname="https://shop.woodcroftdoorsandcabinets.co.uk/";
                                                         @if($order['order_details'][0]['selected_length']!=null)
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Length: {{$order['order_details'][0]['selected_length']}} MM</p>
                                                         @endif
-                                                        @if($order['order_details'][0]['is_hinge_holes']!=null)
+                                                        @if($order['order_details'][0]['is_hinge_holes']!=0)
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Hinge Holes Orientation:@if(in_array($order['order_details'][0]['orientation_id'],array_keys($hingeholesarray))) {{$hingeholesarray[$order['order_details'][0]['orientation_id']]}} @endif </p>
                                                         @endif
-                                                        @if($order['order_details'][0]['is_hinge_holes']!=null)
+                                                        @if($order['order_details'][0]['is_hinge_holes']!=0)
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Hinge Holes From Top: {{$order['order_details'][0]['hinge_holes_from_top']}} MM</p>
                                                         @endif
-                                                        @if($order['order_details'][0]['is_hinge_holes']!=null)
+                                                        @if($order['order_details'][0]['is_hinge_holes']!=0)
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Hinge Holes From Bottom: {{$order['order_details'][0]['hinge_holes_from_bottom']}} MM</p>
                                                         @endif
-                                                        @if($order['order_details'][0]['is_extra_holes']!=null)
+                                                        @if($order['order_details'][0]['is_extra_holes']!=0)
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Extra Hole Direction:@if(in_array($order['order_details'][0]['extra_holes_direction_id'],array_keys($extraholearray)))
                                                             {{$extraholearray[$order['order_details'][0]['extra_holes_direction_id']]}}
                                                             @endif
                                                         </p>
                                                         @endif
-                                                        @if($order['order_details'][0]['is_extra_holes']!=null)
+                                                        @if($order['order_details'][0]['is_extra_holes']!=0)
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Extra Hole Value: {{$order['order_details'][0]['extra_holes_value']}} MM</p>
                                                         @endif
 
