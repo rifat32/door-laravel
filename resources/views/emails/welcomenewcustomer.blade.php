@@ -1,3 +1,7 @@
+@php
+$domain="https://shop.woodcroftdoorsandcabinets.co.uk/";
+$email="contact@woodcroftdoorsandcabinets.co.uk";
+@endphp
 <!DOCTYPE html>
 <html>
 
@@ -128,8 +132,8 @@
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td align="center" valign="top" style="padding: 10px 50px;">
-                            <a href="https://door-next.vercel.app/" target="_blank" style="display: inline-block;">
-                                <img src="https://door-next.vercel.app/assets/images/logo.jpeg" alt="Logo" border="0" height="200" width="300" style="display: block; width: 195px; max-width: 200px; min-width: 48px;">
+                            <a href="{{$domain}}" target="_blank" style="display: inline-block;">
+                                <img src="https://woodcroftdoorsandcabinets.co.uk/door-laravel/img/logo-welcome-email.jpeg" alt="Logo" border="0" height="200" width="300" style="display: block; width: 195px; max-width: 200px; min-width: 48px;">
                             </a>
                         </td>
                     </tr>
@@ -194,7 +198,7 @@
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td align="center" bgcolor="#C2B59C" style="border-radius: 6px;">
-                                                    <a href="https://door-next.vercel.app/shop" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Visit our store</a>
+                                                    <a href="{{$domain}}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Visit our store</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -208,7 +212,7 @@
                     <!-- start copy -->
                     <tr>
                         <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                            <p style="margin: 0;">If you have any questions, reply to this email or contact us at <b>sales@example.co.uk</b></p>
+                            <p style="margin: 0;">If you have any questions, reply to this email or contact us at <b>{{$email}}</b></p>
                         </td>
                     </tr>
                     <!-- end copy -->

@@ -1,10 +1,10 @@
 <!-- @foreach($orders as $order)
 <pre>
-{{print_r($order)}}
+
 </pre>
 @endforeach -->
 @php
-$domainname="https://door-next.vercel.app/";
+$domainname="https://shop.woodcroftdoorsandcabinets.co.uk/";
 @endphp
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" style="width:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
@@ -375,7 +375,7 @@ $domainname="https://door-next.vercel.app/";
                                         <td valign="top" align="center" style="padding:0;Margin:0;width:580px">
                                             <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                 <tr style="border-collapse:collapse">
-                                                    <td align="center" style="padding:0;Margin:0;font-size:0"><a target="_blank" href="{{$domainname}}" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px"><img class="adapt-img" src="https://door-next.vercel.app/assets/images/logo.jpeg" alt width="300" height="101" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
+                                                    <td align="center" style="padding:0;Margin:0;font-size:0"><a target="_blank" href="{{$domainname}}" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#3CA7F1;font-size:14px"><img class="adapt-img" src="{{asset('/product/woodcroft-doors-and-cabinets-logo-landscape-white-transparent.png')}}" alt width="300" height="101" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -435,13 +435,12 @@ $domainname="https://door-next.vercel.app/";
                         $couponname=null;
                         $hingeholesarray=[1=>"Left Hanging Door",2=>"Right Hanging Door",3=>"Drill Both Sides",4=>"Top Hanging Door",5=>"Bottom Hanging Door"];
                         $extraholearray=[1=>"From Top",2=>"From Bottom"];
-                        $domainname="https://door-next.vercel.app/";
                         $socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://facebook.com","youtube"=>"https://youtube.com","linkedin"=>"https://linkedin.com"];
                         @endphp
                         @foreach($orders as $order)
                         @php
                         $subtotal+=$order['product_quantity']*$order['product_price'];
-                        if($order['color']!=null):
+                        if($order['color']!=null&&$order['color']['color_image']!=null):
                         $imagesrc=asset($order['color']['color_image']);
                         else:
                         $imagesrc=$order['image'];
@@ -474,6 +473,15 @@ $domainname="https://door-next.vercel.app/";
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px"><span style="font-size:16px"><strong style="line-height:150%">{{$order['product_name']}}</strong></span></p>
                                                         @if($order['color']!=null)
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Colour: {{$order['color']['colorname']}}</p>
+                                                        @endif
+                                                        @if($order['type']=="panel"&&!empty($order['order_details'][0]['selected_panel_thickness']))
+                                                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Panel Thickness: {{$order['order_details'][0]['selected_panel_thickness']}} MM</p>
+                                                        @endif
+                                                        @if($order['type']=="panel"&&!empty($order['order_details'][0]['selected_panel_length']))
+                                                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Panel Length: {{$order['order_details'][0]['selected_panel_length']}} MM</p>
+                                                        @endif
+                                                        @if($order['type']=="panel"&&!empty($order['order_details'][0]['selected_panel_depth']))
+                                                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Panel Depth: {{$order['order_details'][0]['selected_panel_depth']}} MM</p>
                                                         @endif
                                                         @if($order['order_details'][0]['selectedHeight']!=0 && $order['order_details'][0]['is_custom_size']==null)
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Height: {{$order['order_details'][0]['selectedHeight']}} MM</p>
