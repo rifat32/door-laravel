@@ -636,6 +636,29 @@ trait ProductServices
         }
     }
 
+    public function deleteProductVariationServices($request)
+    {
+
+        try {
+            ProductVariation::where(["id" => $request["id"]])->delete();
+            return response()->json(["ok" => true], 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
+    }
+    public function deleteVariationServices($request)
+    {
+
+        try {
+            Variation::where(["id" => $request["id"]])->delete();
+            return response()->json(["ok" => true], 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
+    }
+
+
+
 
     public function searchProductService($term, $request)
     {

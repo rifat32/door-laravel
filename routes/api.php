@@ -287,6 +287,10 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/products/{id}', [ProductController::class, "getProductById"]);
     Route::get('/v1.0/products/search/{term}', [ProductController::class, "searchProduct"]);
     Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
+    Route::delete('/v1.0/products/variation/{id}', [ProductController::class, "deleteVariation"]);
+
+    Route::delete('/v1.0/products/product-variation/{id}', [ProductController::class, "deleteProductVariation"]);
+
 
 
 

@@ -27,7 +27,7 @@ trait ShippingService
 
         try{
             $updatableData = $request->validated();
-            $data['data'] = tap(Shipping::where(["id" =>  $request["id"]]))->update(
+            $data['data'] = tap(Shipping::with("state","country")->where(["id" =>  $request["id"]]))->update(
                 $updatableData
             )->first();
             return response()->json($data, 200);

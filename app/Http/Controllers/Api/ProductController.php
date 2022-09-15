@@ -67,6 +67,16 @@ class ProductController extends Controller
     {
         return $this->deleteProductServices($request);
     }
+    public function deleteProductVariation(Request $request)
+    {
+        return $this->deleteProductVariationServices($request);
+    }
+    public function deleteVariation(Request $request)
+    {
+        return $this->deleteVariationServices($request);
+    }
+
+
 
 
     public function searchProduct(Request $request,$term)
