@@ -119,7 +119,7 @@ trait ProductUtil
                     'color_id' => $varation["color_id"]
 
                 ];
-                $productVariation =     $updated_product->product_variations()->create($product_variation_data);
+                $productVariation =   $updated_product->product_variations()->create($product_variation_data);
             }
 
 
