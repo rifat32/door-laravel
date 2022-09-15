@@ -29,12 +29,13 @@ Route::get('/setup', [SetUpController::class, "setUp"]);
 
 
 Route::post('webhook', function (Request $request) {
+    $stripeprivatekey = env('STRIPE_PRIVATE_KEY', '');
     $stripe = new StripeClient(
-        'sk_test_51JUtILKKsz00TiWASOtYqpG6WOTlBKLh8bp5dfQUsnuT8PPQu1Nu1FzqzEvlbbrHvas62E3xS4GBJpfcxYVn4eJc00MJ1hMQa6'
+        $stripeprivatekey
     );
     if ($request->type === "charge.succeeded") {
-        $payementintent = $request->data["object"]["payment_intent"];
-        $checkout = $stripe->checkout->sessions->all(["payment_intent" => $payementintent]);
+        $paymentintent = $request->data["object"]["payment_intent"];
+        $checkout = $stripe->checkout->sessions->all(["payment_intent" => $paymentintent]);
 
         /* echo $checkout; */
         foreach ($checkout as $char) {
@@ -74,24 +75,26 @@ Route::get("/paypalcancel", [OrderPayments::class, "paypalcancel"]);
 //route for order delivery mail
 Route::get("/orderdeleveredmail", function (Request $request) {
     $order_id = $request["order_id"];
+    $mail = $data['email'] ?? "sami.maxzionit@gmail.com";
+    Mail::to($mail)->send(new orderdeliveredmail($order_id));
     return new orderdeliveredmail($order_id);
 });
 
 //Routes for order confirmation mail
 Route::get("/orderconfirmition", function (Request $request) {
-    $id = $request['id'];
-    /* $data = $request;
-    $mail = $data['email'] ?? "test@test.com";
-    Mail::to($mail)->send(new orderconfirmationmail($id));
-    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+    $id = $request['order_id'];
+    /*  $data = $request;
+    $mail = $data['email'] ?? "sami.maxzionit@gmail.com";
+    Mail::to($mail)->send(new orderconfirmationmail($id)); */
+    /* return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
     return new orderconfirmationmail($id);
 });
 
 //Routes for  for Welcome Mail
 Route::get("/email", function (Request $request) {
-    /*     $data = $request->json()->all();
-    $email = $data["email"] ?? "test@test.com";
+    $data = $request->json()->all();
+    $email = $data["email"] ?? "sami.maxzionit@gmail.com";
     $mail = Mail::to($email)->send(new WelcomeMail());
-    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]); */
+    /*  return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]); */
     return new WelcomeMail();
 });

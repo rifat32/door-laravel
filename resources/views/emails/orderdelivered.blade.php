@@ -1,5 +1,12 @@
 @php
-$socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://facebook.com","youtube"=>"https://youtube.com","linkedin"=>"https://linkedin.com","instagram"=>"https://instagram.com/"];
+$socialmedialinks=[
+"twitter"=>"https://www.twitter.com",
+"facebook"=>"https://facebook.com",
+"youtube"=>"https://youtube.com",
+"linkedin"=>"https://linkedin.com",
+"instagram"=>"https://instagram.com/"
+];
+$domain="https://shop.woodcroftdoorsandcabinets.co.uk/";
 @endphp
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -165,7 +172,7 @@ $socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://fac
                                                                 <tr>
                                                                     <td style="padding-right: 0px;padding-left: 0px;" align="center">
 
-                                                                        <img align="center" border="0" src="img/logo.png" alt="Logo" title="Logo" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: 70px; width:300px; float: none;" class="v-src-width v-src-max-width" />
+                                                                        <img align="center" border="0" src="{{asset('img/logo.png')}}" alt="Logo" title="Logo" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: 70px; width:300px; float: none;" class="v-src-width v-src-max-width" />
 
                                                                     </td>
                                                                 </tr>
@@ -185,7 +192,7 @@ $socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://fac
                                                                 <tr>
                                                                     <td style="padding-right: 0px;padding-left: 0px;" align="center">
 
-                                                                        <img align="center" border="0" src="img/image-8.png" alt="border" title="border" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 650px;" width="650" class="v-src-width v-src-max-width" />
+                                                                        <img align="center" border="0" src="{{asset('/img/image-8.png')}}" alt="border" title="border" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 650px;" width="650" class="v-src-width v-src-max-width" />
 
                                                                     </td>
                                                                 </tr>
@@ -230,7 +237,7 @@ $socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://fac
                                                                 <tr>
                                                                     <td style="padding-right: 0px;padding-left: 0px;" align="center">
 
-                                                                        <img align="center" border="0" src="img/image-6.png" alt="Hero Image" title="Hero Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 77%;max-width: 500.5px;" width="500.5" class="v-src-width v-src-max-width" />
+                                                                        <img align="center" border="0" src="{{asset('/img/image-6.png')}}" alt="Hero Image" title="Hero Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 77%;max-width: 500.5px;" width="500.5" class="v-src-width v-src-max-width" />
 
                                                                     </td>
                                                                 </tr>
@@ -301,7 +308,7 @@ $socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://fac
                                                 </tbody>
                                             </table>
 
-                                            <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                            <table style=" font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
                                                 <tbody>
                                                     <tr>
                                                         <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 30px;font-family:arial,helvetica,sans-serif;" align="left">
@@ -322,7 +329,7 @@ $socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://fac
 
                                                             <div align="center">
                                                                 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:arial,helvetica,sans-serif;"><tr><td style="font-family:arial,helvetica,sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://unlayer.com" style="height:63px; v-text-anchor:middle; width:290px;" arcsize="6.5%" stroke="f" fillcolor="#722b1d"><w:anchorlock/><center style="color:#ffffff;font-family:arial,helvetica,sans-serif;"><![endif]-->
-                                                                <a href="https://unlayer.com" target="_blank" class="v-size-width" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #C2B59C; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:46%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;border-top-color: #000000; border-top-style: solid; border-top-width: 0px; border-left-color: #000000; border-left-style: solid; border-left-width: 0px; border-right-color: #000000; border-right-style: solid; border-right-width: 0px; border-bottom-color: #000000; border-bottom-style: solid; border-bottom-width: 0px;">
+                                                                <a href="{{$domain}}" target="_blank" class="v-size-width" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #C2B59C; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:46%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;border-top-color: #000000; border-top-style: solid; border-top-width: 0px; border-left-color: #000000; border-left-style: solid; border-left-width: 0px; border-right-color: #000000; border-right-style: solid; border-right-width: 0px; border-bottom-color: #000000; border-bottom-style: solid; border-bottom-width: 0px;">
                                                                     <span style="display:block;padding:20px;line-height:120%;"><span style="font-size: 20px; line-height: 24px; font-family: 'Open Sans', sans-serif;">Click Here</span></span>
                                                                 </a>
                                                                 <!--[if mso]></center></v:roundrect></td></tr></table><![endif]-->
@@ -427,7 +434,7 @@ $socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://fac
                                                                             <tr style="vertical-align: top">
                                                                                 <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
                                                                                     <a href="{{$socialmedialinks['linkedin']}}" title="LinkedIn" target="_blank">
-                                                                                        <img src="img/image-2.png" alt="LinkedIn" title="LinkedIn" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+                                                                                        <img src="{{asset('/img/image-2.png')}}" alt="LinkedIn" title="LinkedIn" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
                                                                                     </a>
                                                                                 </td>
                                                                             </tr>
@@ -441,7 +448,7 @@ $socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://fac
                                                                             <tr style="vertical-align: top">
                                                                                 <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
                                                                                     <a href="{{$socialmedialinks['instagram']}}" title="Instagram" target="_blank">
-                                                                                        <img src="img/image-1.png" alt="Instagram" title="Instagram" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+                                                                                        <img src="{{asset('img/image-1.png')}}" alt="Instagram" title="Instagram" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
                                                                                     </a>
                                                                                 </td>
                                                                             </tr>
@@ -455,7 +462,7 @@ $socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://fac
                                                                             <tr style="vertical-align: top">
                                                                                 <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
                                                                                     <a href="{{$socialmedialinks['facebook']}}" title="Facebook" target="_blank">
-                                                                                        <img src="img/image-3.png" alt="Facebook" title="Facebook" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+                                                                                        <img src="{{asset('img/image-3.png')}}" alt="Facebook" title="Facebook" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
                                                                                     </a>
                                                                                 </td>
                                                                             </tr>
@@ -469,7 +476,7 @@ $socialmedialinks=["twitter"=>"https://www.twitter.com","facebook"=>"https://fac
                                                                             <tr style="vertical-align: top">
                                                                                 <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
                                                                                     <a href="{{$socialmedialinks['youtube']}}" title="YouTube" target="_blank">
-                                                                                        <img src="img/image-4.png" alt="YouTube" title="YouTube" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+                                                                                        <img src="{{asset('img/image-4.png')}}" alt="YouTube" title="YouTube" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
                                                                                     </a>
                                                                                 </td>
                                                                             </tr>

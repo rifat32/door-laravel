@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\orderconfirmationmail;
 use Illuminate\Http\Request;
 use Stripe\StripeClient;
 use App\Models\Order;
+use Illuminate\Support\Facades\Mail;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class OrderPayments extends Controller
@@ -18,11 +20,18 @@ class OrderPayments extends Controller
         $orderid  = $request->order_id;
         $order = Order::where("id", $orderid)->first();
         $coupon = $order->coupon;
+        ///email sending : i am doint this cause i need the order id.
+        $mail = $order->email;
+        Mail::to($mail)->send(new orderconfirmationmail($orderid));
+        /*  echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+
+        //end email sending;
 
 
         // return response()->json($order);
+        $stripeprivatekey = env('STRIPE_PRIVATE_KEY', '');
 
-        $stripe = new StripeClient('sk_test_51Kdy9JE00LZ83RrlSJYCuLu7imUQTeGTUbTgxfAx1lpsVhiPcxcYcegCSGyUW9UY0PdzukNxesWQyCTbK9EFHOWk000bHfgH9O');
+        $stripe = new StripeClient($stripeprivatekey);
 
         // $array=[
         // [] - Product Info
@@ -125,8 +134,8 @@ class OrderPayments extends Controller
             ); */
             $session = $stripe->checkout->sessions->create(
                 [
-                    "success_url" => "https://door-next.vercel.app/other/order-completed",
-                    "cancel_url" => "https://door-next.vercel.app/other/not-found",
+                    "success_url" => "https://shop.woodcroftdoorsandcabinets.co.uk/other/order-completed",
+                    "cancel_url" => "https://shop.woodcroftdoorsandcabinets.co.uk/other/not-found",
                     'mode' => 'payment',
                     'line_items' => $array["Product_info"],
                     "metadata" => $array["order_id"]["metadata"],

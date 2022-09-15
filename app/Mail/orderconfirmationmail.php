@@ -35,7 +35,19 @@ class orderconfirmationmail extends Mailable
      */
     public function build()
     {
+        /////////////////////////
+        $ordervaritiondata = Order::with("order_details.options", "order_details.product", "order_details.product_variation", "order_details.variation", "order_details.color", "order_details.options.option", "order_details.options.option_value", "coupon", "payment")
+            ->where([
+                "id" => $this->order_id
+            ])
+
+            ->first();
+        $ordervaritiondata = $ordervaritiondata->toarray();
+        /////////////////////////
         $order = Order::where("id", $this->order_id)->first();
+        if (empty($order)) {
+            die("Invalid Order id");
+        }
         $coupon = $order->coupon;
         $couponname = !empty($coupon) ? $coupon->name : null;
         $color = null;
@@ -68,10 +80,13 @@ class orderconfirmationmail extends Mailable
                 $product_price = $order_detail->variation->price;
                 $type = "variable";
                 // echo "if block product price " . $product_price . "<br>";
-            } else {
+            } elseif ($order_detail->product->type && $order_detail->product->type == "single") {
                 $product_price = $order_detail->product->variations[0]->price;
                 // echo "else block product price " . $product_price . "<br>";
                 $type = "single";
+            } elseif ($order_detail->product->type && $order_detail->product->type == "panel") {
+                $product_price = $order_detail->price;
+                $type = "panel";
             }
             if (!empty($coupon)) {
                 if ($order_detail->coupon_discount_type == "percentage") {
@@ -81,7 +96,7 @@ class orderconfirmationmail extends Mailable
                 }
             }
 
-            $orderarray[$i] = ["product_name" => $order_detail->product->name, "product_quantity" => $order_detail->qty, "product_price" => $product_price, "type" => $type, "image" => asset($order_detail->product->image), "color" => $color, "option" => $optionarray, "order_details" => [$order_detail->toArray()]];
+            $orderarray[$i] = ["product_name" => $order_detail->product->name, "product_quantity" => $order_detail->qty, "product_price" => $product_price, "type" => $type, "image" => asset($order_detail->product->image), "color" => $color, "option" => $optionarray, "height" => $ordervaritiondata['order_details'][$i]['product_variation'], "width" => $ordervaritiondata['order_details'][$i]['variation'], "order_details" => [$order_detail->toArray()]];
 
             $i++;
         }
