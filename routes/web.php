@@ -83,9 +83,9 @@ Route::get("/orderdeleveredmail", function (Request $request) {
 //Routes for order confirmation mail
 Route::get("/orderconfirmition", function (Request $request) {
     $id = $request['order_id'];
-    $data = $request;
+    /*  $data = $request;
     $mail = $data['email'] ?? "sami.maxzionit@gmail.com";
-    Mail::to($mail)->send(new orderconfirmationmail($id));
+    Mail::to($mail)->send(new orderconfirmationmail($id)); */
     /* return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
     return new orderconfirmationmail($id);
 });

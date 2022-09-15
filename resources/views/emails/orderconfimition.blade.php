@@ -483,11 +483,11 @@ $domainname="https://shop.woodcroftdoorsandcabinets.co.uk/";
                                                         @if($order['type']=="panel"&&!empty($order['order_details'][0]['selected_panel_depth']))
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Panel Depth: {{$order['order_details'][0]['selected_panel_depth']}} MM</p>
                                                         @endif
-                                                        @if($order['order_details'][0]['selectedHeight']!=0 && $order['order_details'][0]['is_custom_size']==null)
-                                                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Height: {{$order['order_details'][0]['selectedHeight']}} MM</p>
+                                                        @if(!empty($order["height"])&&$order['order_details'][0]['selectedHeight']!=0 && empty($order['order_details'][0]['is_custom_size']))
+                                                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Height: {{$order['height']['name']}} MM</p>
                                                         @endif
-                                                        @if($order['order_details'][0]['selectedWidth']!=0 && $order['order_details'][0]['is_custom_size']==null)
-                                                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Width: {{$order['order_details'][0]['selectedWidth']}} MM</p>
+                                                        @if(!empty($order['width'])&&$order['order_details'][0]['selectedWidth']!=0 && empty($order['order_details'][0]['is_custom_size']))
+                                                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Width: {{$order['width']['name']}} MM</p>
                                                         @endif
                                                         @if($order['order_details'][0]['custom_height']!=null && $order['order_details'][0]['is_custom_size']==1)
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px">Custom Height: {{$order['order_details'][0]['custom_height']}} MM</p>

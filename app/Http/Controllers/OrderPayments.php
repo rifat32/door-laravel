@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\orderconfirmationmail;
 use Illuminate\Http\Request;
 use Stripe\StripeClient;
 use App\Models\Order;
+use Illuminate\Support\Facades\Mail;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class OrderPayments extends Controller
@@ -18,6 +20,12 @@ class OrderPayments extends Controller
         $orderid  = $request->order_id;
         $order = Order::where("id", $orderid)->first();
         $coupon = $order->coupon;
+        ///email sending : i am doint this cause i need the order id.
+        $mail = $order->email;
+        Mail::to($mail)->send(new orderconfirmationmail($orderid));
+        /*  echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+
+        //end email sending;
 
 
         // return response()->json($order);

@@ -106,10 +106,11 @@ Route::post("/v1.0/email", function (Request $request) {
 });
 //Routes for order confirmation mail
 Route::post("/v1.0/orderconfirmition", function (Request $request) {
+    /*    $order = Order::where("email", $request->email)->orderByDesc("id")->first();
     $mail = $request->email;
-    $order_id=$request->order_id;
-    Mail::to($mail)->send(new orderconfirmationmail($order_id));
-    return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);
+    $order_id = $order->id;
+    Mail::to($mail)->send(new orderconfirmationmail($order_id)); */
+    return json_encode(["type" => "null"]);
     /*  return new orderconfirmationmail($order_id); */
 });
 
@@ -156,21 +157,19 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::delete('/v1.0/countries/{id}', [CountryController::class, "deleteCountry"]);
 
-  // State
+    // State
 
-  Route::get('/v1.0/states/get/country-id/{countryId}', [StateController::class, "getStateById"]);
-//   Route::post('/v1.0/states', [CountryController::class, "createCountry"]);
-//   Route::put('/v1.0/states', [CountryController::class, "updateCountry"]);
-//   Route::get('/v1.0/states', [CountryController::class, "getCountry"]);
-//   Route::get('/v1.0/states/all', [CountryController::class, "getAllCountry"]);
-//   Route::get('/v1.0/states/get/country-id/{countryId}', [CountryController::class, "getAllCountry"]);
+    Route::get('/v1.0/states/get/country-id/{countryId}', [StateController::class, "getStateById"]);
+    //   Route::post('/v1.0/states', [CountryController::class, "createCountry"]);
+    //   Route::put('/v1.0/states', [CountryController::class, "updateCountry"]);
+    //   Route::get('/v1.0/states', [CountryController::class, "getCountry"]);
+    //   Route::get('/v1.0/states/all', [CountryController::class, "getAllCountry"]);
+    //   Route::get('/v1.0/states/get/country-id/{countryId}', [CountryController::class, "getAllCountry"]);
 
-//   Route::get('/v1.0/states/{id}', [CountryController::class, "getCountryById"]);
-//   Route::get('/v1.0/states/search/{term}', [CountryController::class, "searchCountry"]);
+    //   Route::get('/v1.0/states/{id}', [CountryController::class, "getCountryById"]);
+    //   Route::get('/v1.0/states/search/{term}', [CountryController::class, "searchCountry"]);
 
-//   Route::delete('/v1.0/states/{id}', [CountryController::class, "deleteCountry"]);
-
-
+    //   Route::delete('/v1.0/states/{id}', [CountryController::class, "deleteCountry"]);
 
 
 
@@ -180,15 +179,17 @@ Route::middleware(['auth:api'])->group(function () {
 
 
 
-  // thickness
-  Route::post('/v1.0/thicknesses', [ThicknessController::class, "createThickness"]);
-  Route::put('/v1.0/thicknesses', [ThicknessController::class, "updateThickness"]);
-  Route::get('/v1.0/thicknesses', [ThicknessController::class, "getThickness"]);
-  Route::get('/v1.0/thicknesses/all', [ThicknessController::class, "getAllThickness"]);
-  Route::get('/v1.0/thicknesses/{id}', [ThicknessController::class, "getThicknessById"]);
-  Route::get('/v1.0/thicknesses/search/{term}', [ThicknessController::class, "searchThickness"]);
 
-  Route::delete('/v1.0/thicknesses/{id}', [ThicknessController::class, "deleteThickness"]);
+
+    // thickness
+    Route::post('/v1.0/thicknesses', [ThicknessController::class, "createThickness"]);
+    Route::put('/v1.0/thicknesses', [ThicknessController::class, "updateThickness"]);
+    Route::get('/v1.0/thicknesses', [ThicknessController::class, "getThickness"]);
+    Route::get('/v1.0/thicknesses/all', [ThicknessController::class, "getAllThickness"]);
+    Route::get('/v1.0/thicknesses/{id}', [ThicknessController::class, "getThicknessById"]);
+    Route::get('/v1.0/thicknesses/search/{term}', [ThicknessController::class, "searchThickness"]);
+
+    Route::delete('/v1.0/thicknesses/{id}', [ThicknessController::class, "deleteThickness"]);
 
 
 
