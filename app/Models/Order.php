@@ -22,7 +22,9 @@ class Order extends Model
         "payment_option",
         "status",
         "coupon_id",
-        "customer_id"
+        "customer_id",
+        "country_id",
+        "state_id",
     ];
     public function order_details()
     {

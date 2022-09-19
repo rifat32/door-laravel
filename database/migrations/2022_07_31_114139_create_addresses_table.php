@@ -24,8 +24,8 @@ class CreateAddressesTable extends Migration
              $table->string("fname");
              $table->string("lname");
              $table->string("cname");
-             $table->string("country");
-             $table->string("state");
+             $table->string("country_id");
+             $table->string("state_id");
              $table->string("phone");
              $table->boolean("is_default");
 

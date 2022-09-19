@@ -31,8 +31,8 @@ class AddressRequest extends FormRequest
             "fname" => "required|string",
             "lname" => "required|string",
             "cname" => "required|string",
-            "country" => "required|string",
-            "state" => "required|string",
+            "country_id" => "required|numeric",
+            "state_id" => "required|numeric",
             "phone" => "required|string",
             "is_default" => "required|boolean",
         ];

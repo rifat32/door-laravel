@@ -151,15 +151,14 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/v1.0/countries', [CountryController::class, "createCountry"]);
     Route::put('/v1.0/countries', [CountryController::class, "updateCountry"]);
     Route::get('/v1.0/countries', [CountryController::class, "getCountry"]);
-    Route::get('/v1.0/countries/all', [CountryController::class, "getAllCountry"]);
-    Route::get('/v1.0/countries/{id}', [CountryController::class, "getCountryById"]);
+
+    Route::get('/v1.0/countries/by-id/{id}', [CountryController::class, "getCountryById"]);
     Route::get('/v1.0/countries/search/{term}', [CountryController::class, "searchCountry"]);
 
     Route::delete('/v1.0/countries/{id}', [CountryController::class, "deleteCountry"]);
 
     // State
 
-    Route::get('/v1.0/states/get/country-id/{countryId}', [StateController::class, "getStateById"]);
     //   Route::post('/v1.0/states', [CountryController::class, "createCountry"]);
     //   Route::put('/v1.0/states', [CountryController::class, "updateCountry"]);
     //   Route::get('/v1.0/states', [CountryController::class, "getCountry"]);
@@ -489,8 +488,8 @@ Route::middleware(['auth:api'])->group(function () {
                     "fname",
                     "lname",
                     "cname",
-                    "country",
-                    "state",
+                    "country_id",
+                    "state_id",
                     "phone",
                     "is_default",
                 ])
@@ -516,7 +515,7 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::get('/v1.0/client/addresses', function (Request $request) {
 
-        $data['data'] = Address::where([
+        $data['data'] = Address::with("country","state")->where([
             "user_id" => $request->user()->id
         ])
             ->get();
@@ -648,7 +647,8 @@ Route::middleware(['auth:api'])->group(function () {
 
 
 // end of protected route
-
+Route::get('/v1.0/countries/all', [CountryController::class, "getAllCountry"]);
+Route::get('/v1.0/states/get/country-id/{countryId}', [StateController::class, "getStateById"]);
 Route::post('/v1.0/client/orders', [OrderController::class, "create"]);
 
 

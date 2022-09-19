@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderDetailOption;
 use App\Models\Product;
+use App\Models\ProductColor;
 use App\Models\User;
 use App\Models\Variation;
 use Illuminate\Http\Request;
@@ -407,6 +408,15 @@ class OrderController extends Controller
             ])
 
             ->first();
+foreach($data["data"]->order_details as $key => $order_details) {
+    $data["data"]->order_details[$key]->color_image = ProductColor::where([
+        "color_id" => $order_details->color->id,
+        "product_id" => $order_details->product->id,
+    ])
+    ->first()->color_image;
+}
+
+
         return response()->json($data, 200);
     }
     public function showCustomer($id, Request $request)

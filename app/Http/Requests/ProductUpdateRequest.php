@@ -37,9 +37,13 @@ class ProductUpdateRequest extends FormRequest
             "panels" => "nullable",
 
 
-            "length_lower_limit" => "nullable",
-            "length_upper_limit" => "nullable",
             "length_is_required" => "nullable",
+            "length_lower_limit" => "required_if:length_is_required,1|nullable|numeric",
+            "length_upper_limit" => "required_if:length_is_required,1|nullable|numeric",
+
+
+            
+
             "sku" => "required",
             "is_featured"   =>"required|boolean",
             "status" => "required",

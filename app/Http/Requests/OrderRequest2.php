@@ -36,8 +36,8 @@ class OrderRequest2 extends FormRequest
             "additional_info"=> "nullable|string",
             "cart" => "required|array",
             "order_coupon" => "nullable",
-            "country" => "required|string",
-            "state" => "required|string",
+            "country_id" => "required",
+            "state_id" => "required",
         ];
     }
 }

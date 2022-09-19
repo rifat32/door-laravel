@@ -17,10 +17,18 @@ class Address extends Model
         "fname",
         "lname",
         "cname",
-        "country",
-        "state",
+        "country_id",
+        "state_id",
         "phone",
         "is_default",
 
     ];
+    public function country()
+    {
+        return $this->hasOne(Country::class, 'id', 'country_id');
+    }
+    public function state()
+    {
+        return $this->hasOne(State::class, 'id', 'state_id');
+    }
 }

@@ -42,8 +42,8 @@ class OrderRequest extends FormRequest
 
 
 
-            "country" => "required|string",
-            "state" => "required|string",
+            "country_id" => "required",
+            "state_id" => "required",
 
         ];
     }
