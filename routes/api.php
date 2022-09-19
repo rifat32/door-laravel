@@ -79,7 +79,6 @@ use Illuminate\Support\Facades\Mail;
 |
 */
 
-
 Route::middleware('auth:api')->get('/v1.0/user', function (Request $request) {
     $user = $request->user();
     $data["user"] = $user;
@@ -120,8 +119,6 @@ Route::middleware(['auth:api'])->group(function () {
     // Route::get('/v1.0/setup', [SetUpController::class, "setUp"]);
     Route::post('/v1.0/logout', [AuthController::class, "logout"]);
 
-
-
     // Category
     Route::post('/v1.0/categories', [CategoryController::class, "createCategory"]);
     Route::put('/v1.0/categories', [CategoryController::class, "updateCategory"]);
@@ -129,10 +126,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/categories/all', [CategoryController::class, "getAllCategory"]);
     Route::get('/v1.0/categories/{id}', [CategoryController::class, "getCategoryById"]);
     Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "searchCategory"]);
-
     Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
-
-
 
     // Category
     Route::post('/v1.0/shippings', [ShippingController::class, "createShipping"]);
@@ -141,11 +135,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/shippings/all', [ShippingController::class, "getAllShipping"]);
     Route::get('/v1.0/shippings/{id}', [ShippingController::class, "getShippingById"]);
     Route::get('/v1.0/shippings/search/{term}', [ShippingController::class, "searchShipping"]);
-
     Route::delete('/v1.0/shippings/{id}', [ShippingController::class, "deleteShipping"]);
-
-
-
 
     // City
     Route::post('/v1.0/countries', [CountryController::class, "createCountry"]);
@@ -154,11 +144,9 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::get('/v1.0/countries/by-id/{id}', [CountryController::class, "getCountryById"]);
     Route::get('/v1.0/countries/search/{term}', [CountryController::class, "searchCountry"]);
-
     Route::delete('/v1.0/countries/{id}', [CountryController::class, "deleteCountry"]);
 
     // State
-
     //   Route::post('/v1.0/states', [CountryController::class, "createCountry"]);
     //   Route::put('/v1.0/states', [CountryController::class, "updateCountry"]);
     //   Route::get('/v1.0/states', [CountryController::class, "getCountry"]);
@@ -170,16 +158,6 @@ Route::middleware(['auth:api'])->group(function () {
 
     //   Route::delete('/v1.0/states/{id}', [CountryController::class, "deleteCountry"]);
 
-
-
-
-
-
-
-
-
-
-
     // thickness
     Route::post('/v1.0/thicknesses', [ThicknessController::class, "createThickness"]);
     Route::put('/v1.0/thicknesses', [ThicknessController::class, "updateThickness"]);
@@ -187,17 +165,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/thicknesses/all', [ThicknessController::class, "getAllThickness"]);
     Route::get('/v1.0/thicknesses/{id}', [ThicknessController::class, "getThicknessById"]);
     Route::get('/v1.0/thicknesses/search/{term}', [ThicknessController::class, "searchThickness"]);
-
     Route::delete('/v1.0/thicknesses/{id}', [ThicknessController::class, "deleteThickness"]);
-
-
-
-
-
-
-
-
-
 
     // Style
     Route::post('/v1.0/styles', [StyleController::class, "createStyle"]);
@@ -207,7 +175,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/styles/{id}', [StyleController::class, "getStyleById"]);
     Route::get('/v1.0/styles/search/{term}', [StyleController::class, "searchStyle"]);
     Route::delete('/v1.0/styles/{id}', [StyleController::class, "deleteStyle"]);
-
 
     Route::post('/v1.0/image/upload/single/{location}', function (ImageRequest $request, $location) {
 
@@ -229,7 +196,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/variation-templates/search/{term}', [VariationTemplateController::class, "searchVariationTemplate"]);
     Route::delete('/v1.0/variation-templates/{id}', [VariationTemplateController::class, "deleteVariationTemplate"]);
 
-
     // Option Templates
     Route::post('/v1.0/menus', [MenuController::class, "createMenu"]);
     Route::put('/v1.0/menus', [MenuController::class, "updateMenu"]);
@@ -241,10 +207,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/menus/search/{term}', [MenuController::class, "searchMenu"]);
     Route::delete('/v1.0/menus/{id}', [MenuController::class, "deleteMenu"]);
 
-
-
-
-
     // Option Templates
     Route::post('/v1.0/options', [OptionController::class, "createOptionTemplate"]);
     Route::put('/v1.0/options', [OptionController::class, "updateOptionTemplate"]);
@@ -255,8 +217,6 @@ Route::middleware(['auth:api'])->group(function () {
     ]);
     Route::get('/v1.0/options/search/{term}', [OptionController::class, "searchOptionTemplate"]);
     Route::delete('/v1.0/options/{id}', [OptionController::class, "deleteOptionTemplate"]);
-
-
 
     // Color Templates
     Route::post('/v1.0/colors', [ColorController::class, "createColor"]);
@@ -271,11 +231,6 @@ Route::middleware(['auth:api'])->group(function () {
     ]);
     Route::get('/v1.0/colors/search/{term}', [ColorController::class, "searchColor"]);
 
-
-
-
-
-
     // Product
     Route::post('/v1.0/products', [ProductController::class, "createProduct"]);
     Route::put('/v1.0/products', [ProductController::class, "updateProduct"]);
@@ -287,11 +242,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/products/search/{term}', [ProductController::class, "searchProduct"]);
     Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
     Route::delete('/v1.0/products/variation/{id}', [ProductController::class, "deleteVariation"]);
-
     Route::delete('/v1.0/products/product-variation/{id}', [ProductController::class, "deleteProductVariation"]);
-
-
-
 
     // Category
     Route::post('/v1.0/coupons', [CouponController::class, "createCoupon"]);
@@ -301,37 +252,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/coupons/{id}', [CouponController::class, "getCouponById"]);
     Route::get('/v1.0/coupons/search/{term}', [CouponController::class, "searchCoupon"]);
     Route::delete('/v1.0/coupons/{id}', [CouponController::class, "deleteCoupon"]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // user
     Route::post('/v1.0/users', [UserController::class, "createUser"]);
     Route::put('/v1.0/users', [UserController::class, "updateUser"]);
@@ -510,9 +430,6 @@ Route::middleware(['auth:api'])->group(function () {
         return response()->json(["ok" => true], 200);
     });
 
-
-
-
     Route::get('/v1.0/client/addresses', function (Request $request) {
 
         $data['data'] = Address::with("country","state")->where([
@@ -538,9 +455,6 @@ Route::middleware(['auth:api'])->group(function () {
         $request->user()->update([
             "password" => Hash::make($insertableData['password'])
         ]);
-
-
-
 
         return response()->json(["ok" => $request_user->password], 201);
     });
