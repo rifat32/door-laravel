@@ -409,11 +409,20 @@ class OrderController extends Controller
 
             ->first();
 foreach($data["data"]->order_details as $key => $order_details) {
-    $data["data"]->order_details[$key]->color_image = ProductColor::where([
+    $color = NULL;
+    if(!empty($order_details->color)):
+    $color = ProductColor::where([
         "color_id" => $order_details->color->id,
         "product_id" => $order_details->product->id,
     ])
-    ->first()->color_image;
+    ->first();
+    endif;
+    if($color){
+        $data["data"]->order_details[$key]->color_image = $color->color_image;
+    }
+
+
+
 }
 
 
