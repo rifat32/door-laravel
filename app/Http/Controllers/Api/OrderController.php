@@ -24,7 +24,7 @@ class OrderController extends Controller
 {
     public function create(OrderRequest $request)
     {
-       return DB::transaction(function () use (&$request) {
+        return DB::transaction(function () use (&$request) {
 
             $coupon = null;
             $insertableData = $request->validated();
@@ -122,39 +122,31 @@ class OrderController extends Controller
 
 
                 if ($cart["type"] == "variable") {
-                     $cart["price"] = Variation::where([
+                    $cart["price"] = Variation::where([
                         "id" => $cart["selectedWidth"]
-                     ])
-                     ->first()
-                     ->price;
-
-                }
-                else if($cart["type"] == "panel") {
+                    ])
+                        ->first()
+                        ->price;
+                } else if ($cart["type"] == "panel") {
                     // $product_price = $order_detail->price;
 
 
 
                     $cart["price"] = collect(json_decode(Product::where([
                         "id" => $cart["id"]
-                     ])
-                     ->first()
-                     ->panels,true))
-                     ->first(function ($value, $key)use($cart) {
-                        return $value["thickness"] == $cart["selected_panel_thickness"];
-                    })
-                    ["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
-
-
-
-                }
-                else {
+                    ])
+                        ->first()
+                        ->panels, true))
+                        ->first(function ($value, $key) use ($cart) {
+                            return $value["thickness"] == $cart["selected_panel_thickness"];
+                        })["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
+                } else {
                     $cart["price"]  = Product::where([
                         "id" => $cart["id"]
-                     ])
-                     ->first()
-                     ->variations[0]
-                     ->price;
-
+                    ])
+                        ->first()
+                        ->variations[0]
+                        ->price;
                 }
 
 
@@ -200,7 +192,7 @@ class OrderController extends Controller
 
                 $order_details =  OrderDetail::create($cart);
 
-                foreach (json_decode($cart["options"],true) as $option) {
+                foreach (json_decode($cart["options"], true) as $option) {
                     if (!empty($option["selectedValue"])) {
                         OrderDetailOption::create([
                             "option_id" => $option["option_id"],
@@ -212,16 +204,13 @@ class OrderController extends Controller
             }
             return response()->json([
                 "success" => true,
-                "order"=>$order
+                "order" => $order
             ]);
         });
-
-
-
     }
     public function create2(OrderRequest2 $request)
     {
-       return DB::transaction(function () use (&$request) {
+        return DB::transaction(function () use (&$request) {
 
             $coupon = null;
 
@@ -306,39 +295,31 @@ class OrderController extends Controller
 
                 if ($cart["type"] == "variable") {
                     $cart["price"] = Variation::where([
-                       "id" => $cart["selectedWidth"]
+                        "id" => $cart["selectedWidth"]
                     ])
-                    ->first()
-                    ->price;
-
-               }
-               else if($cart["type"] == "panel") {
-                   // $product_price = $order_detail->price;
+                        ->first()
+                        ->price;
+                } else if ($cart["type"] == "panel") {
+                    // $product_price = $order_detail->price;
 
 
 
-                   $cart["price"] = collect(json_decode(Product::where([
-                       "id" => $cart["id"]
+                    $cart["price"] = collect(json_decode(Product::where([
+                        "id" => $cart["id"]
                     ])
-                    ->first()
-                    ->panels,true))
-                    ->first(function ($value, $key)use($cart) {
-                       return $value["thickness"] == $cart["selected_panel_thickness"];
-                   })
-                   ["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
-
-
-
-               }
-               else {
-                   $cart["price"]  = Product::where([
-                       "id" => $cart["id"]
+                        ->first()
+                        ->panels, true))
+                        ->first(function ($value, $key) use ($cart) {
+                            return $value["thickness"] == $cart["selected_panel_thickness"];
+                        })["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
+                } else {
+                    $cart["price"]  = Product::where([
+                        "id" => $cart["id"]
                     ])
-                    ->first()
-                    ->variations[0]
-                    ->price;
-
-               }
+                        ->first()
+                        ->variations[0]
+                        ->price;
+                }
 
 
 
@@ -378,7 +359,7 @@ class OrderController extends Controller
 
                 $order_details =  OrderDetail::create($cart);
 
-                foreach (json_decode($cart["options"],true) as $option) {
+                foreach (json_decode($cart["options"], true) as $option) {
                     if (!empty($option["selectedValue"])) {
                         OrderDetailOption::create([
                             "option_id" => $option["option_id"],
@@ -390,19 +371,16 @@ class OrderController extends Controller
             }
             return response()->json([
                 "success" => true,
-                "order"=>$order
+                "order" => $order
             ]);
         });
-
-
-
     }
 
 
 
     public function showOrder($id, Request $request)
     {
-        $data["data"] = Order::with("order_details.options", "order_details.product", "order_details.product_variation", "order_details.variation", "order_details.color", "order_details.options.option", "order_details.options.option_value", "coupon","payment")
+        $data["data"] = Order::with("order_details.options", "order_details.product", "order_details.product_variation", "order_details.variation", "order_details.color", "order_details.options.option", "order_details.options.option_value", "coupon", "payment")
             ->where([
                 "id" => $id
             ])
@@ -431,8 +409,8 @@ foreach($data["data"]->order_details as $key => $order_details) {
     public function showCustomer($id, Request $request)
     {
         $data["data"] = Customer::where([
-                "id" => $id
-            ])
+            "id" => $id
+        ])
 
             ->first();
         $data["data"]["last_order"] =   Order::where([
@@ -444,8 +422,8 @@ foreach($data["data"]->order_details as $key => $order_details) {
         $data["data"]["total_spent"] = 0;
 
         foreach (Order::where([
-                "customer_id" => $id
-            ])
+            "customer_id" => $id
+        ])
             ->get() as $order) {
             foreach ($order->order_details as $order_detail) {
                 $data["data"]["total_spent"] +=   $order_detail->price * $order_detail->qty;
@@ -470,7 +448,7 @@ foreach($data["data"]->order_details as $key => $order_details) {
     {
         $data["data"] = Order::where([
             "id" => $id,
-            "status"=>"pending"
+            "status" => "pending"
         ])
 
             ->update([
