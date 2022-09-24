@@ -20,7 +20,7 @@ class CreateShippingsTable extends Migration
             $table->string("rate_name");
             $table->double("price");
             $table->string("based_on")->default("price");
-            $table->double("minimum")->nullable();
+            $table->double("minimum")->default(0);
             $table->double("maximum")->nullable();
             $table->timestamps();
         });

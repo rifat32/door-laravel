@@ -15,6 +15,9 @@ trait ShippingService
 
         try{
             $insertableData = $request->validated();
+            if(!$insertableData["minimum"]) {
+                $insertableData["minimum"] = 0;
+            }
             $data['data'] =   Shipping::create($insertableData);
             return response()->json($data, 201);
         } catch(Exception $e){
@@ -27,6 +30,9 @@ trait ShippingService
 
         try{
             $updatableData = $request->validated();
+            if(!$updatableData["minimum"]) {
+                $updatableData["minimum"] = 0;
+            }
             $data['data'] = tap(Shipping::with("state","country")->where(["id" =>  $request["id"]]))->update(
                 $updatableData
             )->first();
@@ -109,6 +115,14 @@ trait ShippingService
         return $this->sendError($e,500);
         }
 
+    }
+
+
+    public function calculateShippingService($country_id,$state_id,$request) {
+        $price = 100;
+return response()->json([
+    "price" => $price
+]);
     }
 
 

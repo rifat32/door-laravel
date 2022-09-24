@@ -137,6 +137,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/shippings/search/{term}', [ShippingController::class, "searchShipping"]);
     Route::delete('/v1.0/shippings/{id}', [ShippingController::class, "deleteShipping"]);
 
+
     // City
     Route::post('/v1.0/countries', [CountryController::class, "createCountry"]);
     Route::put('/v1.0/countries', [CountryController::class, "updateCountry"]);
@@ -561,6 +562,7 @@ Route::middleware(['auth:api'])->group(function () {
 
 
 // end of protected route
+Route::get('/v1.0/shipping/calculate/price/{country_id}/{state_id}', [ShippingController::class, "calculateShipping"]);
 Route::get('/v1.0/countries/all', [CountryController::class, "getAllCountry"]);
 Route::get('/v1.0/states/get/country-id/{countryId}', [StateController::class, "getStateById"]);
 Route::post('/v1.0/client/orders', [OrderController::class, "create"]);

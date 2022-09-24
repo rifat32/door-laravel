@@ -56,7 +56,7 @@ class OrderDetail extends Model
     }
     public function color()
     {
-        return $this->hasOne(Color::class,"name","selectedProductColor");
+        return $this->hasOne(Color::class,"code","selectedProductColor");
     }
 
 

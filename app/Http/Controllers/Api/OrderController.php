@@ -130,16 +130,23 @@ class OrderController extends Controller
                 } else if ($cart["type"] == "panel") {
                     // $product_price = $order_detail->price;
 
+$panel =  collect(json_decode(Product::where([
+    "id" => $cart["id"]
+])
+    ->first()
+    ->panels, true))
+    ->first(function ($value, $key) use ($cart) {
+        return $value["thickness"] == $cart["selected_panel_thickness"];
+    });
+
+    $panel_price = $panel["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
 
 
-                    $cart["price"] = collect(json_decode(Product::where([
-                        "id" => $cart["id"]
-                    ])
-                        ->first()
-                        ->panels, true))
-                        ->first(function ($value, $key) use ($cart) {
-                            return $value["thickness"] == $cart["selected_panel_thickness"];
-                        })["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
+
+
+
+
+                    $cart["price"] = (($panel_price> $panel["default_minimum_price"])?$panel_price:$panel["default_minimum_price"]);
                 } else {
                     $cart["price"]  = Product::where([
                         "id" => $cart["id"]
@@ -300,19 +307,25 @@ class OrderController extends Controller
                         ->first()
                         ->price;
                 } else if ($cart["type"] == "panel") {
-                    // $product_price = $order_detail->price;
+
+$panel =  collect(json_decode(Product::where([
+    "id" => $cart["id"]
+])
+    ->first()
+    ->panels, true))
+    ->first(function ($value, $key) use ($cart) {
+        return $value["thickness"] == $cart["selected_panel_thickness"];
+    });
+
+    $panel_price = $panel["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
 
 
 
-                    $cart["price"] = collect(json_decode(Product::where([
-                        "id" => $cart["id"]
-                    ])
-                        ->first()
-                        ->panels, true))
-                        ->first(function ($value, $key) use ($cart) {
-                            return $value["thickness"] == $cart["selected_panel_thickness"];
-                        })["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
-                } else {
+
+
+
+                    $cart["price"] = (($panel_price> $panel["default_minimum_price"])?$panel_price:$panel["default_minimum_price"]);
+                                    }else {
                     $cart["price"]  = Product::where([
                         "id" => $cart["id"]
                     ])
