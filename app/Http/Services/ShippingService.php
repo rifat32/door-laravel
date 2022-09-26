@@ -6,6 +6,7 @@ use App\Http\Utils\ErrorUtil;
 use App\Models\LabReportTemplate;
 use App\Models\Shipping;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 trait ShippingService
 {
@@ -118,11 +119,51 @@ trait ShippingService
     }
 
 
-    public function calculateShippingService($country_id,$state_id,$request) {
-        $price = 100;
+    public function calculateShippingService($subTotal,$country_id,$state_id,$request) {
+        try{
+            if(!$state_id) {
+                $state_id = NULL;
+            }
+
+            $shipping = Shipping::where([
+                "country_id" => $country_id,
+                "state_id" => $state_id,
+            ])
+            ->where("minimum","<=",$subTotal)
+            ->where("maximum","<=",$subTotal)
+            ->orderBy(DB::raw("shippings.price+0"))
+            ->first();
+
+            if(!$shipping) {
+                $shipping = Shipping::where([
+                    "country_id" => $country_id,
+                    "state_id" => $state_id,
+                ])
+                ->where("minimum","<=",$subTotal)
+                ->where("maximum",NULL)
+                ->orderBy(DB::raw("shippings.price+0"))
+                ->first();
+            }
+            if($shipping){
+                $price = $shipping->price;
+            } else {
+                $price = 0;
+            }
+
+
+
+
+
+
+
+
 return response()->json([
     "price" => $price
 ]);
+        } catch(Exception $e){
+        return $this->sendError($e,500);
+        }
+
     }
 
 
