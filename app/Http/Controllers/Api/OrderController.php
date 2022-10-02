@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\OrderRequest2;
+use App\Http\Utils\CalculateShipping;
+use App\Http\Utils\ErrorUtil;
+use App\Mail\orderconfirmationmail;
 use App\Models\Address;
 use App\Models\Coupon;
 use App\Models\Customer;
@@ -18,10 +21,12 @@ use App\Models\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
+    use ErrorUtil, CalculateShipping;
     public function create(OrderRequest $request)
     {
         return DB::transaction(function () use (&$request) {
@@ -110,6 +115,7 @@ class OrderController extends Controller
 
 
             $order = Order::create($request->toArray());
+            $sub_total = 0;
             foreach ($request['cart'] as $cart) {
 
                 $product = Product::where([
@@ -155,7 +161,7 @@ $panel =  collect(json_decode(Product::where([
                         ->variations[0]
                         ->price;
                 }
-
+                $sub_total += $cart["price"];
 
 
 
@@ -209,6 +215,13 @@ $panel =  collect(json_decode(Product::where([
                     }
                 }
             }
+            $order->shipping =  $this->calculateShippingUtil($sub_total, $request->country_id, $request->state_id);
+            $order->save();
+                  ///email sending : i am doint this cause i need the order id.
+        // $mail = $order->email;
+        // Mail::to($mail)->send(new orderconfirmationmail($order->id));
+        /*  echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+        //end email sending;
             return response()->json([
                 "success" => true,
                 "order" => $order
@@ -288,6 +301,8 @@ $panel =  collect(json_decode(Product::where([
 
 
             $order = Order::create($request->toArray());
+
+            $sub_total = 0;
             foreach ($request['cart'] as $cart) {
 
                 $product = Product::where([
@@ -306,6 +321,7 @@ $panel =  collect(json_decode(Product::where([
                     ])
                         ->first()
                         ->price;
+
                 } else if ($cart["type"] == "panel") {
 
 $panel =  collect(json_decode(Product::where([
@@ -325,6 +341,7 @@ $panel =  collect(json_decode(Product::where([
 
 
                     $cart["price"] = (($panel_price> $panel["default_minimum_price"])?$panel_price:$panel["default_minimum_price"]);
+
                                     }else {
                     $cart["price"]  = Product::where([
                         "id" => $cart["id"]
@@ -335,7 +352,7 @@ $panel =  collect(json_decode(Product::where([
                 }
 
 
-
+                $sub_total += $cart["price"];
 
 
 
@@ -382,6 +399,13 @@ $panel =  collect(json_decode(Product::where([
                     }
                 }
             }
+            $order->shipping =  $this->calculateShippingUtil($sub_total, $request->country_id, $request->state_id);
+            $order->save();
+             ///email sending : i am doint this cause i need the order id.
+        // $mail = $order->email;
+        // Mail::to($mail)->send(new orderconfirmationmail($order->id));
+        /*  echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+        //end email sending;
             return response()->json([
                 "success" => true,
                 "order" => $order

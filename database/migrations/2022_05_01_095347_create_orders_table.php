@@ -44,6 +44,8 @@ class CreateOrdersTable extends Migration
             $table->string("coupon_id")->nullable();
             $table->string("coupon_discount_type")->nullable();
             $table->string("coupon_discount_amount")->nullable();
+            $table->string("shipping")->nullable();
+
             $table->string("status")->default("Pending");
 
 

@@ -128,7 +128,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/categories/search/{term}', [CategoryController::class, "searchCategory"]);
     Route::delete('/v1.0/categories/{id}', [CategoryController::class, "deleteCategory"]);
 
-    // Category
+    // shipping
     Route::post('/v1.0/shippings', [ShippingController::class, "createShipping"]);
     Route::put('/v1.0/shippings', [ShippingController::class, "updateShipping"]);
     Route::get('/v1.0/shippings', [ShippingController::class, "getShipping"]);
@@ -136,7 +136,14 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/v1.0/shippings/{id}', [ShippingController::class, "getShippingById"]);
     Route::get('/v1.0/shippings/search/{term}', [ShippingController::class, "searchShipping"]);
     Route::delete('/v1.0/shippings/{id}', [ShippingController::class, "deleteShipping"]);
-
+  // shipping name
+  Route::post('/v1.0/shipping-names', [ShippingController::class, "createShippingName"]);
+  Route::put('/v1.0/shipping-names', [ShippingController::class, "updateShippingName"]);
+  Route::get('/v1.0/shipping-names', [ShippingController::class, "getShippingName"]);
+  Route::get('/v1.0/shipping-names/all', [ShippingController::class, "getAllShippingName"]);
+  Route::get('/v1.0/shipping-names/{id}', [ShippingController::class, "getShippingNameById"]);
+  Route::get('/v1.0/shipping-names/search/{term}', [ShippingController::class, "searchShippingName"]);
+  Route::delete('/v1.0/shipping-names/{id}', [ShippingController::class, "deleteShippingName"]);
 
     // City
     Route::post('/v1.0/countries', [CountryController::class, "createCountry"]);
@@ -562,7 +569,8 @@ Route::middleware(['auth:api'])->group(function () {
 
 
 // end of protected route
-Route::get('/v1.0/shipping/calculate/price/{subTotal}/{country_id}/{state_id}', [ShippingController::class, "calculateShipping"]);
+Route::get('/v1.0/shipping-names/get/all', [ShippingController::class, "getAllShippingName"]);
+Route::get('/v1.0/shipping/calculate/price/{subTotal}/{shipping_name}/{country_id}/{state_id}', [ShippingController::class, "calculateShipping"]);
 Route::get('/v1.0/countries/all', [CountryController::class, "getAllCountry"]);
 Route::get('/v1.0/states/get/country-id/{countryId}', [StateController::class, "getStateById"]);
 Route::post('/v1.0/client/orders', [OrderController::class, "create"]);

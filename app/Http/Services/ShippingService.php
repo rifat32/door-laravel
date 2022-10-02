@@ -2,15 +2,17 @@
 
 namespace App\Http\Services;
 
+use App\Http\Utils\CalculateShipping;
 use App\Http\Utils\ErrorUtil;
 use App\Models\LabReportTemplate;
 use App\Models\Shipping;
+use App\Models\ShippingName;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
 trait ShippingService
 {
-    use ErrorUtil;
+    use ErrorUtil, CalculateShipping;
     public function createShippingService($request)
     {
 
@@ -55,7 +57,7 @@ trait ShippingService
     {
 
         try {
-            $data['data'] =   Shipping::all();
+            $data['data'] =   Shipping::with("state", "country")->all();
             return response()->json($data, 200);
         } catch (Exception $e) {
             return $this->sendError($e, 500);
@@ -66,7 +68,7 @@ trait ShippingService
     {
 
         try {
-            $data['data'] =   Shipping::where(["id" => $id])->first();
+            $data['data'] =   Shipping::with("state", "country")->where(["id" => $id])->first();
             return response()->json($data, 200);
         } catch (Exception $e) {
             return $this->sendError($e, 500);
@@ -76,7 +78,7 @@ trait ShippingService
     {
         try {
 
-            $data['data'] =   Shipping::where(function ($query) use ($term) {
+            $data['data'] =   Shipping::with("state", "country")->where(function ($query) use ($term) {
                 $query->where("name", "like", "%" . $term . "%");
             })
 
@@ -91,7 +93,7 @@ trait ShippingService
     public function searchExactShippingService($term, $request)
     {
         try {
-            $data['data'] =   Shipping::where("name", "=", $term)
+            $data['data'] =   Shipping::with("state", "country")->where("name", "=", $term)
                 ->first();
             return response()->json($data, 200);
         } catch (Exception $e) {
@@ -111,115 +113,112 @@ trait ShippingService
     }
 
 
-    public function calculateShippingService($subTotal, $country_id, $state_id, $request)
+    public function calculateShippingService($subTotal,$shipping_name, $country_id, $state_id, $request)
     {
         try {
-            if (!$state_id) {
-                $state_id = NULL;
-                goto a;
-            }
-
-            $shipping = Shipping::where([
-                "country_id" => $country_id,
-                "state_id" => $state_id,
-            ])
-                ->where("minimum", "<=", $subTotal)
-                ->where("maximum", ">=", $subTotal)
-                ->orderBy(DB::raw("shippings.price+0"))
-                ->first();
-            if (!$shipping) {
-                $shipping = Shipping::where([
-                    "country_id" => $country_id,
-                    "state_id" => $state_id,
-                ])
-                    ->where("minimum", "<=", $subTotal)
-                    ->where("maximum", NULL)
-                    ->orderBy(DB::raw("shippings.price+0"))
-                    ->first();
-            }
-            if (!$shipping) {
-                $shipping = Shipping::where([
-                    "country_id" => $country_id,
-                    "state_id" => $state_id,
-                ])
-                    ->where("minimum", "=", 0)
-                    ->where("maximum", ">=", $subTotal)
-                    ->orderBy(DB::raw("shippings.price+0"))
-                    ->first();
-            }
-            if (!$shipping) {
-                $shipping = Shipping::where([
-                    "country_id" => $country_id,
-                    "state_id" => $state_id,
-                ])
-                    ->where("minimum", "=", 0)
-                    ->where("maximum", NULL)
-                    ->orderBy(DB::raw("shippings.price+0"))
-                    ->first();
-            }
-            a:
-            // if state is all then this query will run
-            if (!$shipping) {
-                $shipping = Shipping::where([
-                    "country_id" => $country_id,
-                    "state_id" => null,
-                ])
-                    ->where("minimum", "<=", $subTotal)
-                    ->where("maximum", ">=", $subTotal)
-                    ->orderBy(DB::raw("shippings.price+0"))
-                    ->first();
-            }
-            if (!$shipping) {
-                $shipping = Shipping::where([
-                    "country_id" => $country_id,
-                    "state_id" => null,
-                ])
-                    ->where("minimum", "<=", $subTotal)
-                    ->where("maximum", NULL)
-                    ->orderBy(DB::raw("shippings.price+0"))
-                    ->first();
-            }
-            if (!$shipping) {
-                $shipping = Shipping::where([
-                    "country_id" => $country_id,
-                    "state_id" => null,
-                ])
-                    ->where("minimum", "=", 0)
-                    ->where("maximum", ">=", $subTotal)
-                    ->orderBy(DB::raw("shippings.price+0"))
-                    ->first();
-            }
-
-
-            if (!$shipping) {
-                $shipping = Shipping::where([
-                    "country_id" => $country_id,
-                    "state_id" => null,
-                ])
-                    ->where("minimum", "=", 0)
-                    ->where("maximum", NULL)
-                    ->orderBy(DB::raw("shippings.price+0"))
-                    ->first();
-            }
-
-            if ($shipping) {
-                $price = $shipping->price;
-            } else {
-                $price = 0;
-            }
-
-
-
-
-
-
-
-
             return response()->json([
-                "price" => $price
+                "price" => $this->calculateShippingUtil($subTotal,$shipping_name, $country_id, $state_id)
             ]);
+
+        } catch (Exception $e) {
+
+            return $this->sendError($e, 500);
+        }
+    }
+
+    public function createShippingNameService($request)
+    {
+
+        try {
+            $insertableData = $request->validated();
+
+            $data['data'] =   ShippingName::create($insertableData);
+            return response()->json($data, 201);
         } catch (Exception $e) {
             return $this->sendError($e, 500);
         }
     }
+    public function updateShippingNameService($request)
+    {
+
+        try {
+            $updatableData = $request->validated();
+
+            $data['data'] = tap(ShippingName::where(["id" =>  $request["id"]]))->update(
+                $updatableData
+            )->first();
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
+    }
+    public function getShippingsNameService($request)
+    {
+
+        try {
+            $data['data'] =   ShippingName::paginate(10);
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
+    }
+    public function getAllShippingsNameService($request)
+    {
+
+        try {
+            $data['data'] =   ShippingName::all();
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
+    }
+
+    public function getShippingNameByIdService($id, $request)
+    {
+
+        try {
+            $data['data'] =   ShippingName::where(["id" => $id])->first();
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
+    }
+    public function searchShippingNameService($term, $request)
+    {
+        try {
+
+            $data['data'] =   ShippingName::where(function ($query) use ($term) {
+                $query->where("name", "like", "%" . $term . "%");
+            })
+
+                ->latest()
+                ->paginate(10);
+
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
+    }
+    public function searchExactShippingNameService($term, $request)
+    {
+        try {
+            $data['data'] =   ShippingName::where("name", "=", $term)
+                ->first();
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
+    }
+
+
+    public function deleteShippingNameService($id, $request)
+    {
+        try {
+            ShippingName::where(["id" => $id])->delete();
+            return response()->json(["ok" => true], 200);
+        } catch (Exception $e) {
+            return $this->sendError($e, 500);
+        }
+    }
+
 }

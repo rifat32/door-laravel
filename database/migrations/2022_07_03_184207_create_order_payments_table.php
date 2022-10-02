@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string("payment_intent");
             $table->string("receipt_url");
             $table->string("status");
+            $table->string("payment_gateway_name");
             $table->timestamps();
         });
     }
