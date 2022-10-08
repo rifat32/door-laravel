@@ -18,11 +18,14 @@ use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\User;
 use App\Models\Variation;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+
+use function PHPUnit\Framework\isEmpty;
 
 class OrderController extends Controller
 {
@@ -116,6 +119,7 @@ class OrderController extends Controller
 
             $order = Order::create($request->toArray());
             $sub_total = 0;
+            $error_message = "";
             foreach ($request['cart'] as $cart) {
 
                 $product = Product::where([
@@ -145,6 +149,30 @@ $panel =  collect(json_decode(Product::where([
         return $value["thickness"] == $cart["selected_panel_thickness"];
     });
 
+if(($panel["len_maximum"]+0) < ($cart["selected_panel_length"]+0)){
+    $error_message = "Maximum Length Allowed " .  $panel["len_maximum"];
+break;
+}
+if(($panel["len_minimum"]+0) > ($cart["selected_panel_length"]+0)){
+    $error_message = "Minimum Length Allowed " .  $panel["len_minimum"];
+    break;
+}
+if(($panel["depth_maximum"]+0) < ($cart["selected_panel_depth"]+0)){
+    $error_message = "Maximum Depth Allowed " .  $panel["depth_maximum"];
+    break;
+}
+if(($panel["depth_minimum"]+0) > ($cart["selected_panel_depth"]+0)){
+    $error_message = "Minimum Depth Allowed " .  $panel["depth_minimum"];
+break;
+}
+
+
+
+
+
+
+
+
     $panel_price = $panel["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
 
 
@@ -153,6 +181,11 @@ $panel =  collect(json_decode(Product::where([
 
 
                     $cart["price"] = (($panel_price> $panel["default_minimum_price"])?$panel_price:$panel["default_minimum_price"]);
+
+
+
+
+
                 } else {
                     $cart["price"]  = Product::where([
                         "id" => $cart["id"]
@@ -215,7 +248,23 @@ $panel =  collect(json_decode(Product::where([
                     }
                 }
             }
-            $order->shipping =  $this->calculateShippingUtil($sub_total, $request->country_id, $request->state_id);
+            if($error_message) {
+                return response()->json([
+                    "success" => false,
+                    "message" => $error_message
+                ],422);
+            }
+            return response()->json([
+                "success" => false,
+                "message" => $error_message
+            ],422);
+
+            $shipping = $this->calculateShippingUtil($sub_total,
+            $request->shipping_name,
+            $request->country_id, $request->state_id);
+
+            $order->shipping =  $shipping["price"];
+            $order->shipping_name =  $shipping["shipping_name"];
             $order->save();
                   ///email sending : i am doint this cause i need the order id.
         // $mail = $order->email;
@@ -303,6 +352,7 @@ $panel =  collect(json_decode(Product::where([
             $order = Order::create($request->toArray());
 
             $sub_total = 0;
+            $error_message = "";
             foreach ($request['cart'] as $cart) {
 
                 $product = Product::where([
@@ -332,7 +382,30 @@ $panel =  collect(json_decode(Product::where([
     ->first(function ($value, $key) use ($cart) {
         return $value["thickness"] == $cart["selected_panel_thickness"];
     });
-
+    if(!is_numeric($cart["selected_panel_length"]) || isEmpty($cart["selected_panel_length"])){
+        $error_message = "Please Select A Length";
+    break;
+    }
+    if(($panel["len_maximum"]+0) < ($cart["selected_panel_length"]+0)){
+        $error_message = "Maximum Length Allowed " .  $panel["len_maximum"];
+    break;
+    }
+    if(($panel["len_minimum"]+0) > ($cart["selected_panel_length"]+0)){
+        $error_message = "Minimum Length Allowed " .  $panel["len_minimum"];
+        break;
+    }
+    if(!is_numeric($cart["selected_panel_depth"]) || isEmpty($cart["selected_panel_depth"])){
+        $error_message = "Please Select A Depth";
+    break;
+    }
+    if(($panel["depth_maximum"]+0) < ($cart["selected_panel_depth"]+0)){
+        $error_message = "Maximum Depth Allowed " .  $panel["depth_maximum"];
+        break;
+    }
+    if(($panel["depth_minimum"]+0) > ($cart["selected_panel_depth"]+0)){
+        $error_message = "Minimum Depth Allowed " .  $panel["depth_minimum"];
+    break;
+    }
     $panel_price = $panel["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
 
 
@@ -399,7 +472,22 @@ $panel =  collect(json_decode(Product::where([
                     }
                 }
             }
-            $order->shipping =  $this->calculateShippingUtil($sub_total, $request->country_id, $request->state_id);
+            if($error_message) {
+                return response()->json([
+                    "success" => false,
+                    "message" => $error_message
+                ],423);
+            }
+            return response()->json([
+                "success" => false,
+                "message" => $error_message
+            ],422);
+            $shipping = $this->calculateShippingUtil($sub_total,
+            $request->shipping_name,
+            $request->country_id, $request->state_id);
+
+            $order->shipping =  $shipping["price"];
+            $order->shipping_name =  $shipping["shipping_name"];
             $order->save();
              ///email sending : i am doint this cause i need the order id.
         // $mail = $order->email;

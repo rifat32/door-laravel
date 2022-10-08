@@ -117,8 +117,8 @@ trait ShippingService
     {
         try {
             return response()->json([
-                "price" => $this->calculateShippingUtil($subTotal,$shipping_name, $country_id, $state_id)
-            ]);
+                "price" => $this->calculateShippingUtil($subTotal,$shipping_name, $country_id, $state_id)["price"]
+            ],200);
 
         } catch (Exception $e) {
 
