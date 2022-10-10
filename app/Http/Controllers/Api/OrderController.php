@@ -136,23 +136,23 @@ class OrderController extends Controller
                 } else if ($cart["type"] == "panel") {
                     // $product_price = $order_detail->price;
 
-$panel =  collect(json_decode(Product::where([
-    "id" => $cart["id"]
-])
-    ->first()
-    ->panels, true))
-    ->first(function ($value, $key) use ($cart) {
-        return $value["thickness"] == $cart["selected_panel_thickness"];
-    });
+                    $panel =  collect(json_decode(Product::where([
+                        "id" => $cart["id"]
+                    ])
+                        ->first()
+                        ->panels, true))
+                        ->first(function ($value, $key) use ($cart) {
+                            return $value["thickness"] == $cart["selected_panel_thickness"];
+                        });
 
-    $panel_price = $panel["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
-
-
+                    $panel_price = $panel["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
 
 
 
 
-                    $cart["price"] = (($panel_price> $panel["default_minimum_price"])?$panel_price:$panel["default_minimum_price"]);
+
+
+                    $cart["price"] = (($panel_price > $panel["default_minimum_price"]) ? $panel_price : $panel["default_minimum_price"]);
                 } else {
                     $cart["price"]  = Product::where([
                         "id" => $cart["id"]
@@ -162,6 +162,7 @@ $panel =  collect(json_decode(Product::where([
                         ->price;
                 }
                 $sub_total += $cart["price"];
+
 
 
 
@@ -215,13 +216,14 @@ $panel =  collect(json_decode(Product::where([
                     }
                 }
             }
-            $order->shipping =  $this->calculateShippingUtil($sub_total, $request->country_id, $request->state_id);
+            $shipping_name = $cart["shipping_name"] ?? "Standard";
+            $order->shipping =  $this->calculateShippingUtil($sub_total, $shipping_name, $request->country_id, $request->state_id);
             $order->save();
-                  ///email sending : i am doint this cause i need the order id.
-        // $mail = $order->email;
-        // Mail::to($mail)->send(new orderconfirmationmail($order->id));
-        /*  echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
-        //end email sending;
+            ///email sending : i am doint this cause i need the order id.
+            // $mail = $order->email;
+            // Mail::to($mail)->send(new orderconfirmationmail($order->id));
+            /*  echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+            //end email sending;
             return response()->json([
                 "success" => true,
                 "order" => $order
@@ -321,28 +323,26 @@ $panel =  collect(json_decode(Product::where([
                     ])
                         ->first()
                         ->price;
-
                 } else if ($cart["type"] == "panel") {
 
-$panel =  collect(json_decode(Product::where([
-    "id" => $cart["id"]
-])
-    ->first()
-    ->panels, true))
-    ->first(function ($value, $key) use ($cart) {
-        return $value["thickness"] == $cart["selected_panel_thickness"];
-    });
+                    $panel =  collect(json_decode(Product::where([
+                        "id" => $cart["id"]
+                    ])
+                        ->first()
+                        ->panels, true))
+                        ->first(function ($value, $key) use ($cart) {
+                            return $value["thickness"] == $cart["selected_panel_thickness"];
+                        });
 
-    $panel_price = $panel["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
-
-
+                    $panel_price = $panel["price"] * $cart["selected_panel_length"] * $cart["selected_panel_depth"];
 
 
 
 
-                    $cart["price"] = (($panel_price> $panel["default_minimum_price"])?$panel_price:$panel["default_minimum_price"]);
 
-                                    }else {
+
+                    $cart["price"] = (($panel_price > $panel["default_minimum_price"]) ? $panel_price : $panel["default_minimum_price"]);
+                } else {
                     $cart["price"]  = Product::where([
                         "id" => $cart["id"]
                     ])
@@ -399,13 +399,14 @@ $panel =  collect(json_decode(Product::where([
                     }
                 }
             }
-            $order->shipping =  $this->calculateShippingUtil($sub_total, $request->country_id, $request->state_id);
+            $shipping_name = $cart["shipping_name"] ?? "Standard";
+            $order->shipping =  $this->calculateShippingUtil($sub_total, $shipping_name, $request->country_id, $request->state_id);
             $order->save();
-             ///email sending : i am doint this cause i need the order id.
-        // $mail = $order->email;
-        // Mail::to($mail)->send(new orderconfirmationmail($order->id));
-        /*  echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
-        //end email sending;
+            ///email sending : i am doint this cause i need the order id.
+            // $mail = $order->email;
+            // Mail::to($mail)->send(new orderconfirmationmail($order->id));
+            /*  echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+            //end email sending;
             return response()->json([
                 "success" => true,
                 "order" => $order
@@ -423,22 +424,19 @@ $panel =  collect(json_decode(Product::where([
             ])
 
             ->first();
-foreach($data["data"]->order_details as $key => $order_details) {
-    $color = NULL;
-    if(!empty($order_details->color)):
-    $color = ProductColor::where([
-        "color_id" => $order_details->color->id,
-        "product_id" => $order_details->product->id,
-    ])
-    ->first();
-    endif;
-    if($color){
-        $data["data"]->order_details[$key]->color_image = $color->color_image;
-    }
-
-
-
-}
+        foreach ($data["data"]->order_details as $key => $order_details) {
+            $color = NULL;
+            if (!empty($order_details->color)) :
+                $color = ProductColor::where([
+                    "color_id" => $order_details->color->id,
+                    "product_id" => $order_details->product->id,
+                ])
+                    ->first();
+            endif;
+            if ($color) {
+                $data["data"]->order_details[$key]->color_image = $color->color_image;
+            }
+        }
 
 
         return response()->json($data, 200);

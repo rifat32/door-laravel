@@ -53,7 +53,7 @@ class orderconfirmationmail extends Mailable
         $color = null;
 
         $i = 0;
-        $orderarray = [];
+        $orderarray = [["shipping" => ["shipping_name" => null, "shipping_price" => null]]];
         $coupon_discount_price = 0;
         $optionarray = [];
 
@@ -102,6 +102,12 @@ class orderconfirmationmail extends Mailable
         }
         $orderarray[0]["coupon"] = ["name" => $couponname, "discount_amount" => $coupon_discount_price];
         $orderarray[0]["customerdetail"] = ["ordre_id" => $order->id, "fname" => $order->fname, "lname" => $order->lname, "email" => $order->email, "address1" => $order->billing_address, "address2" => $order->billing_address2, "city" => $order->city, "zipcode" => $order->zipcode, "country" => null, "state" => null, "orderdate" => $order->created_at->timestamp];
+        //shipping start
+        $shipping_price = $order->shipping;
+        $shipping_name = $shipping_price == 0 ? "Free Shipping" : "Standard";
+        $orderarray[0]["shipping"]["shipping_name"] = $shipping_name;
+        $orderarray[0]["shipping"]["shipping_price"] = $shipping_price;
+        //shipping end
         return $this->subject("Order confirmation")->markdown('emails.orderconfimition')->with("orders", $orderarray);
     }
 }

@@ -577,7 +577,7 @@ $domainname="https://shop.woodcroftdoorsandcabinets.co.uk/";
                                                             @endif
                                                             <tr style="border-collapse:collapse">
                                                                 <td style="padding:0;Margin:0"><strong>Shipping:</strong></td>
-                                                                <td style="padding:0;Margin:0;text-align:right">£0.00</td>
+                                                                <td style="padding:0;Margin:0;text-align:right">£{{number_format($order["shipping"]["shipping_price"],2)}}</td>
                                                             </tr>
                                                             <tr style="border-collapse:collapse">
                                                                 <td style="padding:0;Margin:0"><strong>Sales Tax:</strong></td>
@@ -585,7 +585,7 @@ $domainname="https://shop.woodcroftdoorsandcabinets.co.uk/";
                                                             </tr>
                                                             <tr style="border-collapse:collapse">
                                                                 <td style="padding:0;Margin:0"><span style="font-size:18px;line-height:36px"><strong>Order Total:</strong></span></td>
-                                                                <td style="padding:0;Margin:0;text-align:right"><span style="font-size:18px;line-height:36px"><strong>@php $total= ($subtotal-$orders[0]['coupon']['discount_amount']);echo "£".number_format($total,2); @endphp</strong></span></td>
+                                                                <td style="padding:0;Margin:0;text-align:right"><span style="font-size:18px;line-height:36px"><strong>@php $total= ($order["shipping"]["shipping_price"]+$subtotal-$orders[0]['coupon']['discount_amount']);echo "£".number_format($total,2); @endphp</strong></span></td>
                                                             </tr>
                                                         </table>
                                                     </td>
@@ -629,7 +629,7 @@ $domainname="https://shop.woodcroftdoorsandcabinets.co.uk/";
                                                     <td align="left" style="padding:0;Margin:0">
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#ffffff;font-size:14px"><strong>Order №:</strong> #{{$orders[0]["customerdetail"]['ordre_id']}} </p>
                                                         <!--  <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong>Member №:</strong> 213983</p> -->
-                                                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#ffffff;font-size:14px"><strong>Shipping Method:</strong> Standard</p>
+                                                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#ffffff;font-size:14px"><strong>Shipping Method:</strong> {{$orders[0]["shipping"]["shipping_name"]}}</p>
                                                         <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Arial, sans-serif;line-height:21px;color:#ffffff;font-size:14px"><strong>Order date:</strong> {{date("d/m/Y",$orders[0]["customerdetail"]["orderdate"])}}</p>
                                                     </td>
                                                 </tr>

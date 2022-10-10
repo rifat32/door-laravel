@@ -20,6 +20,8 @@ class OrderPayments extends Controller
         $orderid  = $request->order_id;
         $order = Order::where("id", $orderid)->first();
         $coupon = $order->coupon;
+        $shipping_name = "Standard";
+        $shipping_price = $order->shipping;
 
 
 
@@ -45,11 +47,14 @@ class OrderPayments extends Controller
             "coupon_data" => [
                 'discounts' => [],
             ],
-            "shipping_data" => ['shipping_options' => [['shipping_rate_data' => ['display_name' => 'Shipping Cost', 'type' => 'fixed_amount', 'fixed_amount' => ['amount' => 5 * 100, 'currency' => 'eur']]]],],
+            "shipping_data" => ['shipping_options' => [['shipping_rate_data' => ['display_name' => 'Shipping Cost', 'type' => 'fixed_amount', 'fixed_amount' => ['amount' => 0 * 100, 'currency' => 'gbp']]]],],
             "vat" => [],
             "order_id" => ['metadata' => ['order_id' => $orderid]],
             "payment_method" => ['payment_method_types' => ['card', 'klarna'],],
         ];
+        $array["shipping_data"]["shipping_options"][0]["shipping_rate_data"]["display_name"] = $shipping_price == 0 ? "Free Shipping" : $shipping_name;
+        $array["shipping_data"]["shipping_options"][0]["shipping_rate_data"]["fixed_amount"]["amount"] = ($shipping_price * 100);
+
 
         $coupon_discount_price = 0;
         $i = 0;
@@ -136,6 +141,8 @@ class OrderPayments extends Controller
                     "metadata" => $array["order_id"]["metadata"],
                     "payment_method_types" => $array["payment_method"]["payment_method_types"],
                     "discounts" => $array["coupon_data"]["discounts"],
+                    "shipping_options" => $array["shipping_data"]["shipping_options"],
+
                 ]
             );
         }
