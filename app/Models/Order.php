@@ -26,6 +26,7 @@ class Order extends Model
         "country_id",
         "state_id",
         "shipping",
+        "shipping_name"
     ];
     public function order_details()
     {
