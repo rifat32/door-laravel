@@ -56,8 +56,10 @@ Route::post('webhook', function (Request $request) {
                 "receipt_url" => $request->data["object"]["receipt_url"],
                 "payment_intent" => $request->data["object"]["payment_intent"],
                 "status" =>  /* $request->data["object"]["paid"] */ $status,
+                "payment_gateway_name" => "stripe",
             ]);
         } catch (\Exception $e) {
+            report($e);
             error_log($e->getMessage());
         }
     }
