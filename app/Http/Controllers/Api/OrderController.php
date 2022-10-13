@@ -250,10 +250,10 @@ class OrderController extends Controller
                     "message" => $error_message
                 ], 422);
             }
-            return response()->json([
+            /* return response()->json([
                 "success" => false,
                 "message" => $error_message
-            ], 422);
+            ], 422); */
 
             $shipping = $this->calculateShippingUtil(
                 $sub_total,
@@ -475,10 +475,10 @@ class OrderController extends Controller
                     "message" => $error_message
                 ], 423);
             }
-            return response()->json([
+            /*             return response()->json([
                 "success" => false,
                 "message" => $error_message
-            ], 422);
+            ], 422); */
             $shipping = $this->calculateShippingUtil(
                 $sub_total,
                 $request->shipping_name,
@@ -490,9 +490,9 @@ class OrderController extends Controller
             $order->shipping_name =  $shipping["shipping_name"];
             $order->save();
             ///email sending : i am doint this cause i need the order id.
-            // $mail = $order->email;
-            // Mail::to($mail)->send(new orderconfirmationmail($order->id));
-            /*  echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+            /* $mail = $order->email;
+            Mail::to($mail)->send(new orderconfirmationmail($order->id));
+             echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);  */
             //end email sending;
             return response()->json([
                 "success" => true,
