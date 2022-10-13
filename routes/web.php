@@ -3,6 +3,7 @@
 use App\Mail\orderconfirmationmail;
 use App\Mail\orderdeliveredmail;
 use App\Mail\WelcomeMail;
+use App\Mail\paymentconfirmationmail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SetUpController;
 use App\Models\OrderPayment;
@@ -55,9 +56,11 @@ Route::post('webhook', function (Request $request) {
                 "receipt_url" => $request->data["object"]["receipt_url"],
                 "payment_intent" => $request->data["object"]["payment_intent"],
                 "status" =>  /* $request->data["object"]["paid"] */ $status,
+                "payment_gateway_name" => "stripe",
             ]);
         } catch (\Exception $e) {
-            $e->getMessage();
+            report($e);
+            error_log($e->getMessage());
         }
     }
 });
@@ -98,4 +101,13 @@ Route::get("/email", function (Request $request) {
     $mail = Mail::to($email)->send(new WelcomeMail());
     /*  return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]); */
     return new WelcomeMail();
+});
+//Routes for  for Welcome Mail
+Route::get("/paymentmail", function (Request $request) {
+    $data = $request->json()->all();
+    $email = $data["email"] ?? "sami.maxzionit@gmail.com";
+    $order_id = $data["order_id"] ?? 10;
+    $mail = Mail::to($email)->send(new paymentconfirmationmail($order_id));
+    /*  return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]); */
+    return new paymentconfirmationmail($order_id);
 });

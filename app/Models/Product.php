@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Product extends Model
 {
-    use HasFactory, Sluggable;
+    use HasFactory, Sluggable, SoftDeletes;
     protected $table = "products";
     protected $fillable = [
         "name",
@@ -15,7 +17,7 @@ class Product extends Model
         "category_id",
         "style_id",
         "sku",
-         "image",
+        "image",
         "description",
         "status",
         "is_featured",
@@ -32,36 +34,36 @@ class Product extends Model
 
     public function product_variations()
     {
-        return $this->hasMany(ProductVariation::class,"product_id","id");
+        return $this->hasMany(ProductVariation::class, "product_id", "id");
     }
 
     public function variations()
     {
-        return $this->hasMany(Variation::class,"product_id","id");
+        return $this->hasMany(Variation::class, "product_id", "id");
     }
 
     public function category()
     {
-        return $this->belongsTo(Category::class,"category_id","id");
+        return $this->belongsTo(Category::class, "category_id", "id");
     }
     public function style()
     {
-        return $this->belongsTo(Style::class,"style_id","id");
+        return $this->belongsTo(Style::class, "style_id", "id");
     }
 
     public function images()
     {
-        return $this->hasMany(ProductImage::class,"product_id","id");
+        return $this->hasMany(ProductImage::class, "product_id", "id");
     }
 
     public function colors()
     {
-        return $this->hasMany(ProductColor::class,"product_id","id");
+        return $this->hasMany(ProductColor::class, "product_id", "id");
     }
 
     public function options()
     {
-        return $this->hasMany(ProductOption::class,"product_id","id");
+        return $this->hasMany(ProductOption::class, "product_id", "id");
     }
 
     public function sluggable(): array
@@ -72,6 +74,4 @@ class Product extends Model
             ]
         ];
     }
-
-
 }

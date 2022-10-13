@@ -31,6 +31,7 @@ class ShippingUpdateRequest extends FormRequest
         "based_on" => "nullable",
         "minimum" => "nullable|numeric",
         "maximum"=> "nullable|numeric",
+         "states"=> "array",
         ];
     }
 }

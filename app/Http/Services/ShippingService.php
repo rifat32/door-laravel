@@ -17,11 +17,22 @@ trait ShippingService
     {
 
         try {
+
             $insertableData = $request->validated();
-            if (!$insertableData["minimum"]) {
-                $insertableData["minimum"] = 0;
+            if(count($insertableData["states"])){
+                foreach($insertableData["states"] as $state) {
+                    if (!$insertableData["minimum"]) {
+                        $insertableData["minimum"] = 0;
+                    }
+                    $insertableData["state_id"] = $state["id"];
+                    Shipping::create($insertableData);
+                }
+            } else {
+                Shipping::create($insertableData);
             }
-            $data['data'] =   Shipping::create($insertableData);
+
+            $data['ok'] = true;
+
             return response()->json($data, 201);
         } catch (Exception $e) {
             return $this->sendError($e, 500);
