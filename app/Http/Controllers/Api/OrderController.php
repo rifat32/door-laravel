@@ -131,7 +131,7 @@ class OrderController extends Controller
                 $cart["product_id"] = $cart["id"];
 
 
-                if ($cart["type"] == "variable") {
+                if ($cart["type"] == "variable" || $cart["type"] == "cabinet") {
                     $cart["price"] = Variation::where([
                         "id" => $cart["selectedWidth"]
                     ])
@@ -201,6 +201,7 @@ class OrderController extends Controller
 
 
 
+
                 if ($coupon) {
                     if (!$coupon->category_id) {
                         $cart["coupon_discount_type"] = $coupon->discount_type;
@@ -252,11 +253,11 @@ class OrderController extends Controller
             /* return response()->json([
                 "success" => false,
                 "message" => $error_message
-            ], 422); */
+            ], 422);*/
 
             $shipping = $this->calculateShippingUtil(
                 $sub_total,
-                $request->shipping_name,
+                $request->rate_name,
                 $request->country_id,
                 $request->state_id
             );
@@ -265,9 +266,11 @@ class OrderController extends Controller
             $order->shipping_name =  $shipping["shipping_name"];
             $order->save();
             ///email sending : i am doint this cause i need the order id.
-            // $mail = $order->email;
-            // Mail::to($mail)->send(new orderconfirmationmail($order->id));
-            /*  echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); */
+
+            $mail = $order->email;
+            Mail::to($mail)->send(new orderconfirmationmail($order->id));
+
+            //echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); 
             //end email sending;
             return response()->json([
                 "success" => true,
@@ -363,7 +366,7 @@ class OrderController extends Controller
 
 
 
-                if ($cart["type"] == "variable") {
+                if ($cart["type"] == "variable" || $cart["type"] == "cabinet") {
                     $cart["price"] = Variation::where([
                         "id" => $cart["selectedWidth"]
                     ])
@@ -474,10 +477,10 @@ class OrderController extends Controller
                     "message" => $error_message
                 ], 423);
             }
-            /*             return response()->json([
+            /*            return response()->json([
                 "success" => false,
                 "message" => $error_message
-            ], 422); */
+            ], 422);*/
             $shipping = $this->calculateShippingUtil(
                 $sub_total,
                 $request->shipping_name,
@@ -489,9 +492,11 @@ class OrderController extends Controller
             $order->shipping_name =  $shipping["shipping_name"];
             $order->save();
             ///email sending : i am doint this cause i need the order id.
-            /* $mail = $order->email;
+
+            $mail = $order->email;
             Mail::to($mail)->send(new orderconfirmationmail($order->id));
-             echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);  */
+
+            // echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]); 
             //end email sending;
             return response()->json([
                 "success" => true,
