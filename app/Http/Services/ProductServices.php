@@ -418,8 +418,12 @@ trait ProductServices
             } else {
                 $products = $products->orderByDesc("products.id");
             }
+            if ($perPage != 0) {
+                $products =    $products->paginate($perPage);
+            } else {
+                $products =    $products->get();
+            }
 
-            $products =    $products->paginate($perPage);
 
 
 
