@@ -263,13 +263,13 @@ class OrderController extends Controller
             );
 
             $order->shipping =  $shipping["price"];
-            $order->tax =  (($shipping["price"]+$sub_total) * 20) / 100;
+            $order->tax =  (($shipping["price"] + $sub_total) * 20) / 100;
             $order->shipping_name =  $shipping["shipping_name"];
             $order->save();
             ///email sending : i am doint this cause i need the order id.
 
             $mail = $order->email;
-            // Mail::to($mail)->send(new orderconfirmationmail($order->id));
+            Mail::to($mail)->send(new orderconfirmationmail($order->id));
 
             //echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);
             //end email sending;
@@ -490,13 +490,13 @@ class OrderController extends Controller
             );
 
             $order->shipping =  $shipping["price"];
-            $order->tax =  (($shipping["price"]+$sub_total) * 20) / 100;
+            $order->tax =  (($shipping["price"] + $sub_total) * 20) / 100;
             $order->shipping_name =  $shipping["shipping_name"];
             $order->save();
             ///email sending : i am doint this cause i need the order id.
 
             $mail = $order->email;
-            // Mail::to($mail)->send(new orderconfirmationmail($order->id));
+            Mail::to($mail)->send(new orderconfirmationmail($order->id));
 
             // echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);
             //end email sending;
