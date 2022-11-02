@@ -127,16 +127,23 @@ class OrderController extends Controller
                 ])
                     ->first();
 
+
+
                 $cart["order_id"] = $order->id;
                 $cart["product_id"] = $cart["id"];
 
 
                 if ($cart["type"] == "variable" || $cart["type"] == "cabinet") {
-                    $cart["price"] = Variation::where([
+                    $variation =  Variation::where([
                         "id" => $cart["selectedWidth"]
                     ])
-                        ->first()
-                        ->price;
+                        ->first();
+                    $cart["price"] = $variation->price;
+                    $variation->qty -= $cart["qty"];
+                    if(($variation->qty * 1) < ($cart["qty"] * 1)) {
+                        throw new Exception("quantity not available");
+                    }
+                    $variation->save();
                 } else if ($cart["type"] == "panel") {
                     // $product_price = $order_detail->price;
 
@@ -181,13 +188,27 @@ class OrderController extends Controller
 
 
                     $cart["price"] = (($panel_price > $panel["default_minimum_price"]) ? $panel_price : $panel["default_minimum_price"]);
-                } else {
-                    $cart["price"]  = Product::where([
-                        "id" => $cart["id"]
+                    $variation =  Variation::where([
+                        "product_id" => $cart["id"]
                     ])
-                        ->first()
-                        ->variations[0]
-                        ->price;
+                        ->first();
+                    $cart["price"]  = $variation->price;
+                    $variation->qty -= $cart["qty"];
+                    if(($variation->qty * 1) < ($cart["qty"] * 1)) {
+                        throw new Exception("quantity not available");
+                                            }
+                    $variation->save();
+                } else {
+                    $variation =  Variation::where([
+                        "product_id" => $cart["id"]
+                    ])
+                        ->first();
+                    $cart["price"]  = $variation->price;
+                    $variation->qty -= $cart["qty"];
+                    if(($variation->qty * 1) < ($cart["qty"] * 1)) {
+                        throw new Exception("quantity not available");
+                                            }
+                    $variation->save();
                 }
                 $sub_total += $cart["price"];
 
@@ -368,11 +389,18 @@ class OrderController extends Controller
 
 
                 if ($cart["type"] == "variable" || $cart["type"] == "cabinet") {
-                    $cart["price"] = Variation::where([
+
+                    $variation =  Variation::where([
                         "id" => $cart["selectedWidth"]
                     ])
-                        ->first()
-                        ->price;
+                        ->first();
+                    $cart["price"] = $variation->price;
+                    if(($variation->qty * 1) < ($cart["qty"] * 1)) {
+throw new Exception("quantity not available");
+                    }
+                    $variation->qty -= $cart["qty"];
+
+                    $variation->save();
                 } else if ($cart["type"] == "panel") {
 
                     $panel =  collect(json_decode(Product::where([
@@ -415,13 +443,29 @@ class OrderController extends Controller
 
 
                     $cart["price"] = (($panel_price > $panel["default_minimum_price"]) ? $panel_price : $panel["default_minimum_price"]);
-                } else {
-                    $cart["price"]  = Product::where([
-                        "id" => $cart["id"]
+                    $variation =  Variation::where([
+                        "product_id" => $cart["id"]
                     ])
-                        ->first()
-                        ->variations[0]
-                        ->price;
+                        ->first();
+                    $cart["price"]  = $variation->price;
+                    if(($variation->qty * 1) < ($cart["qty"] * 1)) {
+                        throw new Exception("quantity not available");
+                                            }
+                    $variation->qty -= $cart["qty"];
+                    $variation->save();
+                } else {
+                    $variation =  Variation::where([
+                        "product_id" => $cart["id"]
+                    ])
+                        ->first();
+                        if(($variation->qty * 1) < ($cart["qty"] * 1)) {
+                            throw new Exception("quantity not available");
+                                                }
+                    $cart["price"]  = $variation->price;
+                    $variation->qty -= $cart["qty"];
+                    $variation->save();
+
+
                 }
 
 
@@ -563,13 +607,33 @@ class OrderController extends Controller
 
     public function changeStatus($id, Request $request)
     {
-        $data["data"] = Order::where([
+        $order =     Order::where([
             "id" => $id
         ])
+        ->first();
+        if($order->status == "Cancelled" || $order->status == "Refunded"){
+          return response()->json(["message"=>"Order already cancelled"],409);
+        }
+        $order->status = $request->status;
+        $order->save();
 
-            ->update([
-                "status" => $request->status
-            ]);
+            if($request->status == "Cancelled" || $request->status == "Refunded" ) {
+
+                foreach($order->order_details as $order_detail){
+                    if($order_detail->product->type == "variable") {
+                        $order_detail->variation->qty +=   $order_detail->qty ;
+                        $order_detail->variation->save();
+                    }
+                    else {
+            $order_detail->product->variations[0]->qty +=  $order_detail->qty;
+            $order_detail->product->variations[0]->save();
+                    }
+
+
+                }
+
+            }
+            $data["data"] = $order;
         return response()->json($data, 200);
     }
     public function cancelOrder($id, Request $request)
