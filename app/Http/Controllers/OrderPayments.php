@@ -129,7 +129,7 @@ class OrderPayments extends Controller
                 $productdescription .= $colordes;
             }
             if (!empty($orderdetailarray["is_hinge_holes"])) {
-                $hingeholesdes = "Hinge Holes Orientation: {$hingeholesarray[$orderdetailarray['orientation_id']]} Hinge Holes From Top: {$orderdetailarray['hinge_holes_from_top']} MM, Hinge Holes From Bottom: {$orderdetailarray['hinge_holes_from_bottom']} MM, ";
+                $hingeholesdes = "Hinge Holes Orientation: {$hingeholesarray[$orderdetailarray['orientation_id']]}, Hinge Holes From Top: {$orderdetailarray['hinge_holes_from_top']} MM, Hinge Holes From Bottom: {$orderdetailarray['hinge_holes_from_bottom']} MM, ";
                 $productdescription .= $hingeholesdes;
             }
             if (!empty($orderdetailarray["is_extra_holes"])) {
@@ -185,7 +185,7 @@ class OrderPayments extends Controller
                     'unit_amount' => $product_price * 100,
                 ],
                 'quantity' => $order_detail->qty,
-                "tax_rates" => ["txr_1LzxRFE00LZ83RrlzlE5mpOd"]
+                "tax_rates" => [env("STRIPE_TAX_CODE")]
             ];
             $i++;
         }
