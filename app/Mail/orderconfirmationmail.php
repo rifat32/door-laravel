@@ -53,7 +53,7 @@ class orderconfirmationmail extends Mailable
         $color = null;
 
         $i = 0;
-        $orderarray = [["shipping" => ["shipping_name" => null, "shipping_price" => null]]];
+        $orderarray = [];
         $coupon_discount_price = 0;
         $optionarray = [];
 
@@ -87,6 +87,9 @@ class orderconfirmationmail extends Mailable
             } elseif ($order_detail->product->type && $order_detail->product->type == "panel") {
                 $product_price = $order_detail->price;
                 $type = "panel";
+            } elseif ($order_detail->product->type && $order_detail->product->type == "cabinet") {
+                $product_price = $order_detail->variation->price;
+                $type = "cabinet";
             }
             if (!empty($coupon)) {
                 if ($order_detail->coupon_discount_type == "percentage") {
@@ -103,8 +106,9 @@ class orderconfirmationmail extends Mailable
         $orderarray[0]["coupon"] = ["name" => $couponname, "discount_amount" => $coupon_discount_price];
         $orderarray[0]["customerdetail"] = ["ordre_id" => $order->id, "fname" => $order->fname, "lname" => $order->lname, "email" => $order->email, "address1" => $order->billing_address, "address2" => $order->billing_address2, "city" => $order->city, "zipcode" => $order->zipcode, "country" => null, "state" => null, "orderdate" => $order->created_at->timestamp];
         //shipping start
+        $orderarray[0]["shipping"] =  ["shipping_name" => null, "shipping_price" => null];
         $shipping_price = $order->shipping;
-        $shipping_name = $shipping_price == 0 ? "Free Shipping" : "Standard";
+        $shipping_name = $shipping_price == 0 ? "Free Shipping" : $order->shipping_name;
         $orderarray[0]["shipping"]["shipping_name"] = $shipping_name;
         $orderarray[0]["shipping"]["shipping_price"] = $shipping_price;
         //shipping end
