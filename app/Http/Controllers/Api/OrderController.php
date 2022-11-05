@@ -140,7 +140,7 @@ class OrderController extends Controller
                         ->first();
                     $cart["price"] = $variation->price;
                     $variation->qty -= $cart["qty"];
-                    if(($variation->qty * 1) < ($cart["qty"] * 1)) {
+                    if (($variation->qty * 1) < ($cart["qty"] * 1)) {
                         throw new Exception("quantity not available");
                     }
                     $variation->save();
@@ -202,9 +202,9 @@ class OrderController extends Controller
                         ->first();
                     $cart["price"]  = $variation->price;
                     $variation->qty -= $cart["qty"];
-                    if(($variation->qty * 1) < ($cart["qty"] * 1)) {
+                    if (($variation->qty * 1) < ($cart["qty"] * 1)) {
                         throw new Exception("quantity not available");
-                                            }
+                    }
                     $variation->save();
                 } else {
                     $variation =  Variation::where([
@@ -213,9 +213,9 @@ class OrderController extends Controller
                         ->first();
                     $cart["price"]  = $variation->price;
                     $variation->qty -= $cart["qty"];
-                    if(($variation->qty * 1) < ($cart["qty"] * 1)) {
+                    if (($variation->qty * 1) < ($cart["qty"] * 1)) {
                         throw new Exception("quantity not available");
-                                            }
+                    }
                     $variation->save();
                 }
                 $sub_total += $cart["price"];
@@ -292,7 +292,7 @@ class OrderController extends Controller
 
             $order->shipping =  $shipping["price"];
             $order->tax =  (($shipping["price"] + $sub_total) * 20) / 100;
-            $order->shipping_name =  $shipping["shipping_name"];
+            $order->shipping_name =  $shipping["rate_name"];
             $order->save();
             ///email sending : i am doint this cause i need the order id.
             if(env("APP_ENV") == "production"){
@@ -406,8 +406,8 @@ class OrderController extends Controller
                     ])
                         ->first();
                     $cart["price"] = $variation->price;
-                    if(($variation->qty * 1) < ($cart["qty"] * 1)) {
-throw new Exception("quantity not available");
+                    if (($variation->qty * 1) < ($cart["qty"] * 1)) {
+                        throw new Exception("quantity not available");
                     }
                     $variation->qty -= $cart["qty"];
 
@@ -462,9 +462,9 @@ throw new Exception("quantity not available");
                     ])
                         ->first();
                     $cart["price"]  = $variation->price;
-                    if(($variation->qty * 1) < ($cart["qty"] * 1)) {
+                    if (($variation->qty * 1) < ($cart["qty"] * 1)) {
                         throw new Exception("quantity not available");
-                                            }
+                    }
                     $variation->qty -= $cart["qty"];
                     $variation->save();
                 } else {
@@ -472,14 +472,12 @@ throw new Exception("quantity not available");
                         "product_id" => $cart["id"]
                     ])
                         ->first();
-                        if(($variation->qty * 1) < ($cart["qty"] * 1)) {
-                            throw new Exception("quantity not available");
-                                                }
+                    if (($variation->qty * 1) < ($cart["qty"] * 1)) {
+                        throw new Exception("quantity not available");
+                    }
                     $cart["price"]  = $variation->price;
                     $variation->qty -= $cart["qty"];
                     $variation->save();
-
-
                 }
 
 
@@ -625,30 +623,26 @@ throw new Exception("quantity not available");
         $order =     Order::where([
             "id" => $id
         ])
-        ->first();
-        if($order->status == "Cancelled" || $order->status == "Refunded"){
-          return response()->json(["message"=>"Order already cancelled"],409);
+            ->first();
+        if ($order->status == "Cancelled" || $order->status == "Refunded") {
+            return response()->json(["message" => "Order already cancelled"], 409);
         }
         $order->status = $request->status;
         $order->save();
 
-            if($request->status == "Cancelled" || $request->status == "Refunded" ) {
+        if ($request->status == "Cancelled" || $request->status == "Refunded") {
 
-                foreach($order->order_details as $order_detail){
-                    if($order_detail->product->type == "variable") {
-                        $order_detail->variation->qty +=   $order_detail->qty ;
-                        $order_detail->variation->save();
-                    }
-                    else {
-            $order_detail->product->variations[0]->qty +=  $order_detail->qty;
-            $order_detail->product->variations[0]->save();
-                    }
-
-
+            foreach ($order->order_details as $order_detail) {
+                if ($order_detail->product->type == "variable") {
+                    $order_detail->variation->qty +=   $order_detail->qty;
+                    $order_detail->variation->save();
+                } else {
+                    $order_detail->product->variations[0]->qty +=  $order_detail->qty;
+                    $order_detail->product->variations[0]->save();
                 }
-
             }
-            $data["data"] = $order;
+        }
+        $data["data"] = $order;
         return response()->json($data, 200);
     }
     public function cancelOrder($id, Request $request)

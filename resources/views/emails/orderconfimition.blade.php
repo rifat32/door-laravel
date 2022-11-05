@@ -4,6 +4,7 @@
 </pre>
 @endforeach -->
 @php
+
 $domainname="https://shop.woodcroftdoorsandcabinets.co.uk/";
 @endphp
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -577,7 +578,7 @@ $domainname="https://shop.woodcroftdoorsandcabinets.co.uk/";
                                                             @endif
                                                             <tr style="border-collapse:collapse">
                                                                 <td style="padding:0;Margin:0"><strong>Shipping:</strong></td>
-                                                                <td style="padding:0;Margin:0;text-align:right">£{{number_format($order["shipping"]["shipping_price"],2)}}</td>
+                                                                <td style="padding:0;Margin:0;text-align:right">£{{number_format($orders[0]["shipping"]["shipping_price"],2)}}</td>
                                                             </tr>
                                                             <tr style="border-collapse:collapse">
                                                                 <td style="padding:0;Margin:0"><strong>Sales Tax:</strong></td>
@@ -585,7 +586,7 @@ $domainname="https://shop.woodcroftdoorsandcabinets.co.uk/";
                                                             </tr>
                                                             <tr style="border-collapse:collapse">
                                                                 <td style="padding:0;Margin:0"><span style="font-size:18px;line-height:36px"><strong>Order Total:</strong></span></td>
-                                                                <td style="padding:0;Margin:0;text-align:right"><span style="font-size:18px;line-height:36px"><strong>@php $total= ($order["shipping"]["shipping_price"]+$subtotal-$orders[0]['coupon']['discount_amount']);echo "£".number_format($total,2); @endphp</strong></span></td>
+                                                                <td style="padding:0;Margin:0;text-align:right"><span style="font-size:18px;line-height:36px"><strong>@php $total= ($orders[0]["shipping"]["shipping_price"]+$subtotal-$orders[0]['coupon']['discount_amount']);echo "£".number_format($total,2); @endphp</strong></span></td>
                                                             </tr>
                                                         </table>
                                                     </td>
