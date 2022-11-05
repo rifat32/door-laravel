@@ -58,7 +58,7 @@ trait ShippingService
 
 array_push($onlyStates,$state["id"]);
 
-                Shipping::updateOrCreate([
+                Shipping::where([
                     "country_id" => $shipping->country_id,
                     "rate_name"=> $shipping->rate_name,
                     "price"=> $shipping->price,
@@ -66,7 +66,9 @@ array_push($onlyStates,$state["id"]);
                     "minimum"=> $shipping->minimum,
                     "maximum"=> $shipping->maximum,
                     "state_id" => $state["id"]
-                ],[
+                  ])
+
+                  ->update([
                     "country_id" => $updatableData["country_id"],
 
                 "rate_name"=> $updatableData["rate_name"],

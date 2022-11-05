@@ -570,7 +570,7 @@ Route::middleware(['auth:api'])->group(function () {
 
 // end of protected route
 Route::get('/v1.0/shipping-names/get/all', [ShippingController::class, "getAllShippingName"]);
-Route::get('/v1.0/shipping/calculate/price/{subTotal}/{shipping_name}/{country_id}/{state_id}', [ShippingController::class, "calculateShipping"]);
+Route::get('/v1.0/shipping/calculate/price/{subTotal}/{country_id}/{state_id}', [ShippingController::class, "calculateShipping"]);
 Route::get('/v1.0/countries/all', [CountryController::class, "getAllCountry"]);
 Route::get('/v1.0/states/get/country-id/{countryId}', [StateController::class, "getStateById"]);
 Route::post('/v1.0/client/orders', [OrderController::class, "create"]);

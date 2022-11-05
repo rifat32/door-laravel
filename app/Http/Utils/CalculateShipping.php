@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 trait CalculateShipping
 {
     // this function do all the task and returns transaction id or -1
-    public function calculateShippingUtil($subTotal, $shipping_name, $country_id, $state_id)
+    public function calculateShippingUtil($subTotal,  $country_id, $state_id)
     {
         $shippingMain = Shipping::where([
             "state_id" => $state_id
@@ -113,7 +113,7 @@ trait CalculateShipping
                 ->first();
             if ($finalShipping) {
                 $data["price"] = $finalShipping->price;
-                $data["shipping_name"] = $finalShipping->price;
+                $data["shipping_name"] = $finalShipping->shipping_name;
             } else {
                 $data["price"] = 0;
                 $data["shipping_name"] = "";

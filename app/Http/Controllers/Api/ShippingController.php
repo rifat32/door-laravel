@@ -51,8 +51,8 @@ class ShippingController extends Controller
     {
         return $this->deleteShippingService($id,$request);
     }
-    public function calculateShipping($subTotal,$shipping_name,$country_id,$state_id,Request $request) {
-        return $this->calculateShippingService($subTotal,$shipping_name,$country_id,$state_id,$request);
+    public function calculateShipping($subTotal,$country_id,$state_id,Request $request) {
+        return $this->calculateShippingService($subTotal,$country_id,$state_id,$request);
     }
 
 
