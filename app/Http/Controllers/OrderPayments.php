@@ -21,9 +21,15 @@ class OrderPayments extends Controller
      */
     function stripepayments(Request $request)
     {
-
+        if (!isset($request->order_id)) {
+            return "invalid request";
+        }
         $orderid  = $request->order_id;
+
         $order = Order::where("id", $orderid)->first();
+        if (empty($order)) {
+            return "invalid request";
+        }
         $coupon = $order->coupon;
         $shipping_name = "Standard";
         $shipping_price = $order->shipping;
@@ -36,9 +42,9 @@ class OrderPayments extends Controller
         $stripeprivatekey = env('STRIPE_PRIVATE_KEY', '');
 
         $stripe = new StripeClient($stripeprivatekey);
-        /*  $tax = $stripe->taxRates->create([
+        /* $tax = $stripe->taxRates->create([
             "display_name" => "VAT",
-            "inclusive" => false,
+            "inclusive" => true,
             "percentage" => 20
         ]);
         dd($tax); */
@@ -179,7 +185,7 @@ class OrderPayments extends Controller
                     'product_data' => [
                         'name' => $order_detail->product->name,
                         "images" => [$image],
-                        "description" => $productdescription,
+                        /* "description" => $productdescription, */
 
                     ],
                     'unit_amount' => $product_price * 100,
@@ -187,7 +193,11 @@ class OrderPayments extends Controller
                 'quantity' => $order_detail->qty,
                 "tax_rates" => [env("STRIPE_TAX_CODE")]
             ];
+            if (!empty($productdescription)) {
+                $array["Product_info"][$i]['price_data']['product_data']["description"] = $productdescription;
+            }
             $i++;
+            $productdescription = null;
         }
         if (!empty($coupon) && $coupon_discount_price != 0) {
 
