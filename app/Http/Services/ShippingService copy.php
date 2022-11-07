@@ -20,8 +20,8 @@ trait ShippingService
         try {
 
             $insertableData = $request->validated();
-            if(count($insertableData["states"])){
-                foreach($insertableData["states"] as $state) {
+            if (count($insertableData["states"])) {
+                foreach ($insertableData["states"] as $state) {
                     if (!$insertableData["minimum"]) {
                         $insertableData["minimum"] = 0;
                     }
@@ -48,78 +48,77 @@ trait ShippingService
                 $updatableData["minimum"] = 0;
             }
             $shipping = Shipping::with("state", "country")->where(["id" =>  $request["id"]])
-            ->first();
+                ->first();
 
-  $onlyStates = [];
-              foreach($updatableData["states"] as $state) {
+            $onlyStates = [];
+            foreach ($updatableData["states"] as $state) {
                 if (!$updatableData["minimum"]) {
                     $insertableData["minimum"] = 0;
                 }
 
-array_push($onlyStates,$state["id"]);
+                array_push($onlyStates, $state["id"]);
 
                 Shipping::where([
                     "country_id" => $shipping->country_id,
-                    "rate_name"=> $shipping->rate_name,
-                    "price"=> $shipping->price,
-                    "based_on"=> $shipping->based_on,
-                    "minimum"=> $shipping->minimum,
-                    "maximum"=> $shipping->maximum,
+                    "rate_name" => $shipping->rate_name,
+                    "price" => $shipping->price,
+                    "based_on" => $shipping->based_on,
+                    "minimum" => $shipping->minimum,
+                    "maximum" => $shipping->maximum,
                     "state_id" => $state["id"]
-                  ])
+                ])
 
-                  ->update([
-                    "country_id" => $updatableData["country_id"],
+                    ->update([
+                        "country_id" => $updatableData["country_id"],
 
-                "rate_name"=> $updatableData["rate_name"],
-                "price"=> $updatableData["price"],
-                "based_on" => $updatableData["based_on"],
-                "minimum" => $updatableData["minimum"],
-                "maximum"=> $updatableData["maximum"],
-                  ]);
-
+                        "rate_name" => $updatableData["rate_name"],
+                        "price" => $updatableData["price"],
+                        "based_on" => $updatableData["based_on"],
+                        "minimum" => $updatableData["minimum"],
+                        "maximum" => $updatableData["maximum"],
+                    ]);
             }
 
             Shipping::where([
                 "country_id" => $shipping->country_id,
-                "rate_name"=> $shipping->rate_name,
-                "price"=> $shipping->price,
-                "based_on"=> $shipping->based_on,
-                "minimum"=> $shipping->minimum,
-                "maximum"=> $shipping->maximum,
+                "rate_name" => $shipping->rate_name,
+                "price" => $shipping->price,
+                "based_on" => $shipping->based_on,
+                "minimum" => $shipping->minimum,
+                "maximum" => $shipping->maximum,
 
-              ])
-              ->whereNotIn("state_id",$onlyStates)
-              ->delete();
+            ])
+                ->whereNotIn("state_id", $onlyStates)
+                ->delete();
 
 
 
             $data['data'] = Shipping::with("state", "country")
-            ->where([
-                "shippings.country_id" => $updatableData["country_id"],
-                "shippings.rate_name"=> $updatableData["rate_name"],
-                "shippings.price"=> $updatableData["price"],
-                "shippings.based_on"=> $updatableData["based_on"],
-                "shippings.minimum"=> $updatableData["minimum"],
-                "shippings.maximum"=> $updatableData["maximum"],
-              ])
-            ->leftJoin("states",'shippings.state_id', '=', 'states.id')
-            ->groupBy("shippings.country_id","shippings.rate_name","shippings.price","shippings.based_on","shippings.minimum","shippings.maximum")
-            ->select([
-                "shippings.id",
-                "shippings.country_id",
-                "shippings.state_id",
-                "shippings.rate_name",
-                "shippings.price",
-                "shippings.based_on",
-                "shippings.minimum",
-                "shippings.maximum",
-                DB::raw('group_concat(states.name," ") AS state_names')
+                ->where([
+                    "shippings.country_id" => $updatableData["country_id"],
+                    "shippings.rate_name" => $updatableData["rate_name"],
+                    "shippings.price" => $updatableData["price"],
+                    "shippings.based_on" => $updatableData["based_on"],
+                    "shippings.minimum" => $updatableData["minimum"],
+                    "shippings.maximum" => $updatableData["maximum"],
+                ])
+                ->leftJoin("states", 'shippings.state_id', '=', 'states.id')
+                ->groupBy("shippings.country_id", "shippings.rate_name", "shippings.price", "shippings.based_on", "shippings.minimum", "shippings.maximum")
+                ->select([
+                    "shippings.id",
+                    "shippings.country_id",
+                    "shippings.state_id",
+                    "shippings.rate_name",
+                    "shippings.price",
+                    "shippings.based_on",
+                    "shippings.minimum",
+                    "shippings.maximum",
+                    DB::raw('group_concat" ",states.name) AS state_names')
 
                 ])
-            ->first();
-            $states =    State::whereIn("name",explode(" ,",$data['data']->state_names))
-            ->get();
+                ->first();
+            $states =    State::whereIn("name", explode(", ", $data['data']->state_names))
+                ->get();
 
             $data['data']["states"] = $states;
 
@@ -133,33 +132,32 @@ array_push($onlyStates,$state["id"]);
     {
         try {
             $data['data'] =   Shipping::with("state", "country")
-            ->leftJoin("states",'shippings.state_id', '=', 'states.id')
-            ->groupBy("shippings.country_id","shippings.rate_name","shippings.price","shippings.based_on","shippings.minimum","shippings.maximum")
-            ->select([
-                "shippings.id",
-                "shippings.country_id",
-                "shippings.state_id",
-                "shippings.rate_name",
-                "shippings.price",
-                "shippings.based_on",
-                "shippings.minimum",
-                "shippings.maximum",
-                DB::raw('group_concat(states.name," ") AS state_names')
+                ->leftJoin("states", 'shippings.state_id', '=', 'states.id')
+                ->groupBy("shippings.country_id", "shippings.rate_name", "shippings.price", "shippings.based_on", "shippings.minimum", "shippings.maximum")
+                ->select([
+                    "shippings.id",
+                    "shippings.country_id",
+                    "shippings.state_id",
+                    "shippings.rate_name",
+                    "shippings.price",
+                    "shippings.based_on",
+                    "shippings.minimum",
+                    "shippings.maximum",
+                    DB::raw('group_concat(" ",states.name) AS state_names')
 
                 ])
                 ->orderByDesc("shippings.id")
 
-            ->paginate(10);
-            foreach($data['data'] as $key=>$shipping) {
+                ->paginate(10);
+            foreach ($data['data'] as $key => $shipping) {
 
 
-                $states =     State::whereIn("name",explode(" ,",$shipping->state_names))
-                ->get();
+                $states =     State::whereIn("name", explode(", ", $shipping->state_names))
+                    ->get();
 
 
 
                 $data['data'][$key]["states"] = $states;
-
             }
 
             return response()->json($data, 200);
@@ -232,8 +230,7 @@ array_push($onlyStates,$state["id"]);
         try {
             return response()->json([
                 "price" => $this->calculateShippingUtil($subTotal, $country_id, $state_id)["price"]
-            ],200);
-
+            ], 200);
         } catch (Exception $e) {
 
             return $this->sendError($e, 500);
@@ -334,5 +331,4 @@ array_push($onlyStates,$state["id"]);
             return $this->sendError($e, 500);
         }
     }
-
 }
