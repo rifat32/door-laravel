@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Stripe\StripeClient;
 use App\Models\Order;
 use App\Models\OrderDetailOption;
+use App\Models\OrderPayment;
 use App\Models\ProductColor;
 use Illuminate\Support\Facades\Mail;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
@@ -21,6 +22,8 @@ class OrderPayments extends Controller
      */
     function stripepayments(Request $request)
     {
+
+        $domain = env("DOMAIN", "https://shop.woodcroftdoorsandcabinets.co.uk");
         if (!isset($request->order_id)) {
             return "invalid request";
         }
@@ -29,6 +32,21 @@ class OrderPayments extends Controller
         $order = Order::where("id", $orderid)->first();
         if (empty($order)) {
             return "invalid request";
+        }
+        $stripeprivatekey = env('STRIPE_PRIVATE_KEY', '');
+        $stripe = new StripeClient($stripeprivatekey);
+        $checkorderexist = OrderPayment::where("order_id", $orderid)->first();
+        if (!empty($checkorderexist)) {
+            $session = $stripe->checkout->sessions->retrieve($checkorderexist->checkout_session_id);
+            if ($session["status"] == "complete") {
+                echo "<script>window.location.href='{$domain}/other/order-completed?status=Order Completed'</script>";
+                return;
+            } elseif ($session["status"] == "expired") {
+                echo "<script>window.location.href='{$domain}/other/not-found?status=Payment Cancelled'</script>";
+                return;
+            } else {
+                goto a;
+            }
         }
         $coupon = $order->coupon;
         $shipping_name = "Standard";
@@ -39,9 +57,10 @@ class OrderPayments extends Controller
 
 
         // return response()->json($order);
-        $stripeprivatekey = env('STRIPE_PRIVATE_KEY', '');
 
-        $stripe = new StripeClient($stripeprivatekey);
+        /*  $session = $stripe->checkout->sessions->retrieve("cs_test_a15Mzf4SfN6P6OyAtwwlDcV8NcThX5Xj1JuZr6hLxgvSTtMv1kx0W1F79J");
+        dd($session); */
+
         /* $tax = $stripe->taxRates->create([
             "display_name" => "VAT",
             "inclusive" => true,
@@ -248,6 +267,36 @@ class OrderPayments extends Controller
                 ]
             );
         }
+
+        /// create record in database start
+        try {
+            $_order_id = $session["metadata"]["order_id"];
+            $_paymentinent = $session["payment_intent"];
+            $_checkout_session_id = $session["id"];
+            $_currency = $session["currency"];
+            $_amount = $session["amount_total"];
+            $_status = $session["payment_status"];
+            $_receipt_url = null;
+            $_payer_email = null;
+            OrderPayment::create([
+                "checkout_session_id" => $_checkout_session_id,
+                "amount" => $_amount / 100,
+                "payer_email" =>  $_payer_email,
+                "currency" => $_currency,
+                "order_id" => $_order_id,
+                "receipt_url" => $_receipt_url,
+                "payment_intent" => $_paymentinent,
+                "status" =>  $_status,
+                "payment_gateway_name" => "stripe",
+            ]);
+        } catch (\Exception $e) {
+            report($e);
+            error_log($e->getMessage());
+        }
+
+
+        /// create record in database end
+        a:
         $url = $session["url"] ?? null;
         if ($url != null) {
             sleep(1);

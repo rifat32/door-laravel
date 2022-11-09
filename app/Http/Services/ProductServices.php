@@ -698,7 +698,6 @@ trait ProductServices
                     "products.slug"
 
                 )
-
                 ->orderByDesc("products.id")
                 ->paginate(12);
 

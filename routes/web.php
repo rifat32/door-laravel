@@ -37,27 +37,40 @@ Route::post('webhook', function (Request $request) {
     );
     if ($request->type === "charge.succeeded") {
         $paymentintent = $request->data["object"]["payment_intent"];
-        $checkout = $stripe->checkout->sessions->all(["payment_intent" => $paymentintent]);
-
-        /* echo $checkout; */
-        foreach ($checkout as $char) {
-            $order_id = $char->metadata->order_id . "\n";
-            $status = $char->payment_status;
-        }
-        $status = $status ?? "null";
+        /*         $checkout = $stripe->checkout->sessions->all(["payment_intent" => $paymentintent]); */
+        $_payer_email = $request->data["object"]["billing_details"]["email"];
+        $_receipt_url = $request->data["object"]["receipt_url"];
 
         try {
-            OrderPayment::create([
-                "payement_id" => $request->data["object"]["id"],
-                "amount" => $request->data["object"]["amount"] / 100,
-                "payer_email" => $request->data["object"]["billing_details"]["email"],
-                "currency" => $request->data["object"]["currency"],
-                "order_id" => $order_id,
-                "receipt_url" => $request->data["object"]["receipt_url"],
-                "payment_intent" => $request->data["object"]["payment_intent"],
-                "status" =>  /* $request->data["object"]["paid"] */ $status,
-                "payment_gateway_name" => "stripe",
-            ]);
+
+            OrderPayment::where("payment_intent", $paymentintent)->update(["payer_email" => $_payer_email, "receipt_url" => $_receipt_url]);
+            echo "Charge Succeeded Run successfully";
+        } catch (\Exception $e) {
+            report($e);
+            error_log($e->getMessage());
+        }
+    }
+    if ($request->type === "checkout.session.completed") {
+        $paymentintent = $request->data["object"]["payment_intent"];
+        /*         $checkout = $stripe->checkout->sessions->all(["payment_intent" => $paymentintent]); */
+        $_status = $request->data["object"]["payment_status"];
+
+        try {
+
+            OrderPayment::where("payment_intent", $paymentintent)->update(["status" => $_status]);
+            echo "Checkout session Run successfully";
+        } catch (\Exception $e) {
+            report($e);
+            error_log($e->getMessage());
+        }
+    }
+    if ($request->type === "payment_intent.canceled") {
+        $_paymentinent = $request->data["object"]["id"];
+        $_status = $request->data["object"]["status"];
+
+        try {
+            OrderPayment::where("payment_intent", $_paymentinent)->update(["status" => $_status]);
+            echo "Payment Intent Canceled Run Successfully";
         } catch (\Exception $e) {
             report($e);
             error_log($e->getMessage());
@@ -111,3 +124,12 @@ Route::get("/paymentmail", function (Request $request) {
     /*  return json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $email"]); */
     return new paymentconfirmationmail($order_id);
 });
+Route::get("/striperetrive", function () {
+    $stripeprivatekey = env('STRIPE_PRIVATE_KEY', '');
+
+    $stripe = new StripeClient($stripeprivatekey);
+    $stripe->checkout->sessions->expire("cs_test_b1kbgueoxe2wDjWwro6IVB90lDGtREe0drQDVtEOx5pMIWF6zXKtdSpKOh");
+    /*  $checkoutsesssion = $stripe->checkout->sessions->retrieve("cs_test_a1lmrscl25mjuPyYDwhK1a7lly2IJcRXlaDZAK12Wq1Rr4KWgC08mEc8T0");
+    dd($checkoutsesssion->toArray()); */
+});
+

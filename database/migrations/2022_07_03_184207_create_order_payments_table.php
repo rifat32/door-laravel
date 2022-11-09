@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('order_payments', function (Blueprint $table) {
             $table->id();
-            $table->string("payement_id");
+            $table->string("checkout_session_id");
             $table->string("payer_email");
             $table->float("amount", 10, 2);
             $table->string("currency");

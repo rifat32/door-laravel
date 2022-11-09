@@ -155,11 +155,11 @@ class OrderController extends Controller
                         ->first(function ($value, $key) use ($cart) {
                             return $value["thickness"] == $cart["selected_panel_thickness"];
                         });
-                        if (!is_numeric($cart["selected_panel_length"]) || empty($cart["selected_panel_length"])) {
+                    if (!is_numeric($cart["selected_panel_length"]) || empty($cart["selected_panel_length"])) {
 
-                            $error_message = "Please Select A Length";
-                            break;
-                        }
+                        $error_message = "Please Select A Length";
+                        break;
+                    }
                     if (($panel["len_maximum"] + 0) < ($cart["selected_panel_length"] + 0)) {
                         $error_message = "Maximum Length Allowed " .  $panel["len_maximum"];
                         break;
@@ -292,13 +292,13 @@ class OrderController extends Controller
 
             $order->shipping =  $shipping["price"];
             $order->tax =  (($shipping["price"] + $sub_total) * 20) / 100;
-            $order->shipping_name =  $shipping["rate_name"];
+            /*  $order->shipping_name =  $shipping["shipping_name"]; */
             $order->save();
             ///email sending : i am doint this cause i need the order id.
-            if(env("APP_ENV") == "production"){
+            if (env("IS_MAIL_SEND")) {
                 $mail = $order->email;
-            Mail::to($mail)->send(new orderconfirmationmail($order->id));
-               }
+                Mail::to($mail)->send(new orderconfirmationmail($order->id));
+            }
 
 
 
@@ -546,13 +546,13 @@ class OrderController extends Controller
 
             $order->shipping =  $shipping["price"];
             $order->tax =  (($shipping["price"] + $sub_total) * 20) / 100;
-            $order->shipping_name =  $shipping["shipping_name"];
+            /* $order->shipping_name =  $shipping["shipping_name"]; */
             $order->save();
             ///email sending : i am doint this cause i need the order id.
-           if(env("APP_ENV") == "production"){
-            $mail = $order->email;
-            Mail::to($mail)->send(new orderconfirmationmail($order->id));
-           }
+            if (env("IS_MAIL_SEND")) {
+                $mail = $order->email;
+                Mail::to($mail)->send(new orderconfirmationmail($order->id));
+            }
 
 
             // echo json_encode(["type" => "success", "message" => "Your mail send successfully from post method to this $mail"]);
