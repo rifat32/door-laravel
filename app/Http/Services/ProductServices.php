@@ -497,7 +497,8 @@ trait ProductServices
                     'products.image',
                     'products.status',
                     'products.is_featured',
-                    "products.style_id"
+                    "products.style_id",
+                    "products.slug"
 
                 )
                 ->orderByDesc("id")

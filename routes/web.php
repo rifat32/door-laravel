@@ -132,4 +132,3 @@ Route::get("/striperetrive", function () {
     /*  $checkoutsesssion = $stripe->checkout->sessions->retrieve("cs_test_a1lmrscl25mjuPyYDwhK1a7lly2IJcRXlaDZAK12Wq1Rr4KWgC08mEc8T0");
     dd($checkoutsesssion->toArray()); */
 });
-
