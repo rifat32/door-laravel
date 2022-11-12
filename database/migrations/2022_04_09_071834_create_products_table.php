@@ -30,6 +30,12 @@ class CreateProductsTable extends Migration
             $table->integer("length_lower_limit")->nullable();
             $table->integer("length_upper_limit")->nullable();
             $table->boolean("length_is_required")->default(0);
+
+            
+            $table->integer("height_width_lower_limit")->nullable();
+            $table->integer("height_width_upper_limit")->nullable();
+            $table->boolean("height_width_is_required")->default(0);
+
             $table->string('slug')->unique();
             $table->text('panels')->nullable();
             $table->timestamps();
