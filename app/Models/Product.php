@@ -24,9 +24,15 @@ class Product extends Model
         "length_lower_limit",
         "length_upper_limit",
         "length_is_required",
-        "height_width_lower_limit",
-        "height_width_upper_limit",
-        "height_width_is_required",
+        
+        "height_lower_limit",
+        "height_upper_limit",
+        "height_is_required",
+
+        "width_lower_limit",
+        "width_upper_limit",
+        "width_is_required",
+
         "slug",
         "panels"
     ];
