@@ -17,7 +17,7 @@ use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class OrderPayments extends Controller
 {
-    /* 
+    /*
     Stripe Payment Start
      */
     function stripepayments(Request $request)
@@ -163,6 +163,14 @@ class OrderPayments extends Controller
             }
             if (!empty($orderdetailarray["selected_length"])) {
                 $lenghtdes = "Length: {$orderdetailarray["selected_length"]} MM, ";
+                $productdescription .= $lenghtdes;
+            }
+            if (!empty($orderdetailarray["selected_height"])) {
+                $lenghtdes = "Length: {$orderdetailarray["selected_height"]} MM, ";
+                $productdescription .= $lenghtdes;
+            }
+            if (!empty($orderdetailarray["selected_width"])) {
+                $lenghtdes = "Length: {$orderdetailarray["selected_width"]} MM, ";
                 $productdescription .= $lenghtdes;
             }
 

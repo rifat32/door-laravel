@@ -30,6 +30,8 @@ class OrderDetail extends Model
         "custom_height",
         "custom_width",
         "selected_length",
+        "selected_height",
+        "selected_width",
         "selected_panel_thickness",
         "selected_panel_length",
         "selected_panel_depth"
