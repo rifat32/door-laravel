@@ -39,10 +39,10 @@ class OrderPayments extends Controller
         if (!empty($checkorderexist)) {
             $session = $stripe->checkout->sessions->retrieve($checkorderexist->checkout_session_id);
             if ($session["status"] == "complete") {
-                echo "<script>window.location.href='{$domain}/other/order-completed?status=Order Completed'</script>";
+                echo "<script>window.location.href='{$domain}/order-completed?status=Order Completed'</script>";
                 return;
             } elseif ($session["status"] == "expired") {
-                echo "<script>window.location.href='{$domain}/other/not-found?status=Payment Cancelled'</script>";
+                echo "<script>window.location.href='{$domain}/order-canceled?status=Payment Cancelled'</script>";
                 return;
             } else {
                 goto a;
@@ -211,7 +211,7 @@ class OrderPayments extends Controller
                     'currency' => 'gbp',
                     'product_data' => [
                         'name' => $order_detail->product->name,
-                        "images" => [$image],
+                        /* "images" => [$image], */
                         /* "description" => $productdescription, */
 
                     ],
@@ -263,8 +263,8 @@ class OrderPayments extends Controller
             ); */
             $session = $stripe->checkout->sessions->create(
                 [
-                    "success_url" => "https://shop.woodcroftdoorsandcabinets.co.uk/other/order-completed",
-                    "cancel_url" => "https://shop.woodcroftdoorsandcabinets.co.uk/other/not-found",
+                    "success_url" => "https://shop.woodcroftdoorsandcabinets.co.uk/order-completed",
+                    "cancel_url" => "https://shop.woodcroftdoorsandcabinets.co.uk/order-canceled",
                     'mode' => 'payment',
                     'line_items' => [$array["Product_info"]],
                     "metadata" => $array["order_id"]["metadata"],
