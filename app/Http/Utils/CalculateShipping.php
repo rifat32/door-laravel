@@ -11,6 +11,7 @@ trait CalculateShipping
     // this function do all the task and returns transaction id or -1
     public function calculateShippingUtil($subTotal,  $country_id, $state_id)
     {
+        $shipping = null;
         $shippingMain = Shipping::where([
             "state_id" => $state_id
         ])->first();
@@ -33,37 +34,54 @@ trait CalculateShipping
             ->orderByDesc(DB::raw("shippings.price+0"))
             ->first();
         if (!$shipping) {
-            $shipping = $shippingQuery
+            $shipping = Shipping::where([
+                // "rate_name" => $shipping_name,
+                "country_id" => $country_id,
+                "state_id" => $state_id,
+            ])
                 ->where("minimum", "<=", $subTotal)
                 ->where("maximum", NULL)
-                ->orderBy(DB::raw("shippings.price+0"))
+                ->orderByDesc(DB::raw("shippings.price+0"))
                 ->first();
         }
         if (!$shipping) {
-            $shipping = $shippingQuery
+            $shipping =  Shipping::where([
+                // "rate_name" => $shipping_name,
+                "country_id" => $country_id,
+                "state_id" => $state_id,
+            ])
                 ->where("minimum", "=", 0)
                 ->where("maximum", ">=", $subTotal)
-                ->orderBy(DB::raw("shippings.price+0"))
+                ->orderByDesc(DB::raw("shippings.price+0"))
                 ->first();
         }
         if (!$shipping) {
-            $shipping = $shippingQuery
+            $shipping =  Shipping::where([
+                // "rate_name" => $shipping_name,
+                "country_id" => $country_id,
+                "state_id" => $state_id,
+            ])
                 ->where("minimum", "=", 0)
                 ->where("maximum", NULL)
-                ->orderBy(DB::raw("shippings.price+0"))
+                ->orderByDesc(DB::raw("shippings.price+0"))
                 ->first();
         }
 
         a:
         // if state is all then this query will run
-        $shipping = null;
+
+        $shipping = $shipping != null ? $shipping : null;
         if (!$shipping) {
             $shippingQuery =   Shipping::where([
                 // "rate_name" => $shipping_name,
                 "country_id" => $country_id,
                 "state_id" => NULL,
             ]);
-            $shipping = $shippingQuery
+            $shipping = Shipping::where([
+                // "rate_name" => $shipping_name,
+                "country_id" => $country_id,
+                "state_id" => $state_id,
+            ])
                 ->where("minimum", "<=", $subTotal)
                 ->where("maximum", ">=", $subTotal)
                 ->orderByDesc(DB::raw("shippings.price+0"))
@@ -73,26 +91,38 @@ trait CalculateShipping
 
 
         if (!$shipping) {
-            $shipping = $shippingQuery
+            $shipping =  Shipping::where([
+                // "rate_name" => $shipping_name,
+                "country_id" => $country_id,
+                "state_id" => $state_id,
+            ])
                 ->where("minimum", "<=", $subTotal)
                 ->where("maximum", NULL)
-                ->orderBy(DB::raw("shippings.price+0"))
+                ->orderByDesc(DB::raw("shippings.price+0"))
                 ->first();
         }
         if (!$shipping) {
-            $shipping = $shippingQuery
+            $shipping = Shipping::where([
+                // "rate_name" => $shipping_name,
+                "country_id" => $country_id,
+                "state_id" => $state_id,
+            ])
                 ->where("minimum", "=", 0)
                 ->where("maximum", ">=", $subTotal)
-                ->orderBy(DB::raw("shippings.price+0"))
+                ->orderByDesc(DB::raw("shippings.price+0"))
                 ->first();
         }
 
 
         if (!$shipping) {
-            $shipping = $shippingQuery
+            $shipping =  Shipping::where([
+                // "rate_name" => $shipping_name,
+                "country_id" => $country_id,
+                "state_id" => $state_id,
+            ])
                 ->where("minimum", "=", 0)
                 ->where("maximum", NULL)
-                ->orderBy(DB::raw("shippings.price+0"))
+                ->orderByDesc(DB::raw("shippings.price+0"))
                 ->first();
         }
 
@@ -109,7 +139,7 @@ trait CalculateShipping
             ])
                 ->where("minimum", "=", 0)
                 ->where("maximum", NULL)
-                ->orderBy(DB::raw("shippings.price+0"))
+                ->orderByDesc(DB::raw("shippings.price+0"))
                 ->first();
             if ($finalShipping) {
                 $data["price"] = $finalShipping->price;

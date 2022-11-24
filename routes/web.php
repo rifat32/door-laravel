@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ShippingController;
 use App\Mail\orderconfirmationmail;
 use App\Mail\orderdeliveredmail;
 use App\Mail\WelcomeMail;
@@ -132,3 +133,4 @@ Route::get("/striperetrive", function () {
     /*  $checkoutsesssion = $stripe->checkout->sessions->retrieve("cs_test_a1lmrscl25mjuPyYDwhK1a7lly2IJcRXlaDZAK12Wq1Rr4KWgC08mEc8T0");
     dd($checkoutsesssion->toArray()); */
 });
+Route::get("/checkshipping/{subTotal}/{country_id}/{state_id}", [ShippingController::class, "calculateShipping"]);

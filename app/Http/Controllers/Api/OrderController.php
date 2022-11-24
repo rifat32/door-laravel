@@ -292,7 +292,7 @@ class OrderController extends Controller
 
             $order->shipping =  $shipping["price"];
             $order->tax =  (($shipping["price"] + $sub_total) * 20) / 100;
-            /*  $order->shipping_name =  $shipping["shipping_name"]; */
+            $order->shipping_name =  $shipping["shipping_name"];
             $order->save();
             ///email sending : i am doint this cause i need the order id.
             if (env("IS_MAIL_SEND")) {
