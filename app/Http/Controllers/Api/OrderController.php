@@ -200,7 +200,7 @@ class OrderController extends Controller
                         "product_id" => $cart["id"]
                     ])
                         ->first();
-                    $cart["price"]  = $variation->price;
+/*                     $cart["price"]  = $variation->price; */
                     $variation->qty -= $cart["qty"];
                     if (($variation->qty * 1) < ($cart["qty"] * 1)) {
                         throw new Exception("quantity not available");
@@ -461,7 +461,8 @@ class OrderController extends Controller
                         "product_id" => $cart["id"]
                     ])
                         ->first();
-                    $cart["price"]  = $variation->price;
+/*                         error_log($cart["price"]." This is the cart price"); */
+                    /* $cart["price"]  = $variation->price; */
                     if (($variation->qty * 1) < ($cart["qty"] * 1)) {
                         throw new Exception("quantity not available");
                     }
