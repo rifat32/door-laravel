@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 class Product extends Model
 {
-    use HasFactory, Sluggable, SoftDeletes;
+    use HasFactory, SoftDeletes,HasSlug;
     protected $table = "products";
     protected $fillable = [
         "name",
@@ -75,12 +76,22 @@ class Product extends Model
         return $this->hasMany(ProductOption::class, "product_id", "id");
     }
 
-    public function sluggable(): array
+/*     public function sluggable(): array
     {
         return [
             'slug' => [
                 'source' => 'name'
             ]
         ];
+    } */
+        /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
     }
+    
 }
