@@ -173,6 +173,18 @@ class OrderPayments extends Controller
                 $lenghtdes = "Length: {$orderdetailarray["selected_width"]} MM, ";
                 $productdescription .= $lenghtdes;
             }
+            if (!empty($orderdetailarray["selected_panel_thickness"])) {
+                $panelthicknessdes = "Panel Thickness: {$orderdetailarray["selected_panel_thickness"]}, ";
+                $productdescription .= $panelthicknessdes;
+            }
+            if (!empty($orderdetailarray["selected_panel_length"])) {
+                $panellengthdes = "Panel Length: {$orderdetailarray["selected_panel_length"]} MM, ";
+                $productdescription .= $panellengthdes;
+            }
+            if (!empty($orderdetailarray["selected_panel_depth"])) {
+                $paneldepthdes = "Panel Depth: {$orderdetailarray["selected_panel_depth"]} MM, ";
+                $productdescription .= $paneldepthdes;
+            }
 
             foreach ($optionarray as $key => $value) {
                 $optiondes = "{$value['option_name']}: {$value['value_name']}";

@@ -190,10 +190,34 @@ trait ProductServices
     public function updateProductBulkPriceService($request)
     {
         try {
+            error_log(json_encode($request->all()));
+
             $updatableData = $request->validated();
             $amount = $updatableData["amount"];
             $type = $updatableData["type"];
             foreach ($updatableData["products"] as $product) {
+                // This block of code for updating the panel products START
+                $productinfo=Product::where("id",$product["id"])->first();
+                    if($productinfo->type == "panel"){
+                        $panelinfoarray=json_decode($productinfo->panels,true);
+                          foreach($panelinfoarray as $key=>$panelinfo){
+                            if ($type == "fixed") {
+                                   $panelinfoarray[$key]["price"]=$amount;
+                                   $productinfo->panels=json_encode($panelinfoarray);
+                                   $productinfo->save();
+                            }else{
+                                $increaseAmount =  $panelinfoarray[$key]["price"] * ($amount / 100);
+                                $finalAmount = $panelinfoarray[$key]["price"] + $increaseAmount;
+                                $panelinfoarray[$key]["price"]=$finalAmount;
+                                 $productinfo->panels=json_encode($panelinfoarray);
+                                   $productinfo->save();
+
+
+                            }  
+                          }
+                    }
+                    // This block of code for updating the panel products END\\
+                    
                 if ($type == "fixed") {
                     Variation::where([
                         "product_id" => $product["id"]
