@@ -22,6 +22,14 @@ class OrderPayments extends Controller
      */
     function stripepayments(Request $request)
     {
+        $stripeprivatekey = env('STRIPE_PRIVATE_KEY', '');
+        $stripe = new StripeClient($stripeprivatekey);
+/*         $tax = $stripe->taxRates->create([
+            "display_name" => "VAT",
+            "inclusive" => true,
+            "percentage" => 20
+        ]);
+        dd($tax); */
 
         $domain = env("DOMAIN", "https://shop.woodcroftdoorsandcabinets.co.uk");
         if (!isset($request->order_id)) {
@@ -33,8 +41,7 @@ class OrderPayments extends Controller
         if (empty($order)) {
             return "invalid request";
         }
-        $stripeprivatekey = env('STRIPE_PRIVATE_KEY', '');
-        $stripe = new StripeClient($stripeprivatekey);
+
         $checkorderexist = OrderPayment::where("order_id", $orderid)->first();
         if (!empty($checkorderexist)) {
             $session = $stripe->checkout->sessions->retrieve($checkorderexist->checkout_session_id);
@@ -84,7 +91,7 @@ class OrderPayments extends Controller
             "coupon_data" => [
                 'discounts' => [],
             ],
-            "shipping_data" => ['shipping_options' => [['shipping_rate_data' => ['display_name' => 'Shipping Cost', 'type' => 'fixed_amount', 'fixed_amount' => ['amount' => 0 * 100, 'currency' => 'gbp']]]],],
+            "shipping_data" => ['shipping_options' => [['shipping_rate_data' => ['display_name' => 'Shipping Cost','tax_behavior' => 'exclusive','tax_code' => 'txcd_99999999', 'type' => 'fixed_amount', 'fixed_amount' => ['amount' => 0 * 100, 'currency' => 'gbp']]]],],
             "vat" => [],
             "order_id" => ['metadata' => ['order_id' => $orderid]],
             "payment_method" => ['payment_method_types' => ['card', 'klarna'],],
@@ -221,16 +228,19 @@ class OrderPayments extends Controller
             $array["Product_info"][$i] = [
                 'price_data' => [
                     'currency' => 'gbp',
+                    'tax_behavior' => 'exclusive',
                     'product_data' => [
                         'name' => $order_detail->product->name,
                         /* "images" => [$image], */
                         /* "description" => $productdescription, */
+                      
 
                     ],
                     'unit_amount' => $product_price * 100,
                 ],
                 'quantity' => $order_detail->qty,
-                "tax_rates" => [env("STRIPE_TAX_CODE")]
+                /* "tax_rates" => [env("STRIPE_TAX_CODE")] */
+                
             ];
             if (!empty($productdescription)) {
                 $array["Product_info"][$i]['price_data']['product_data']["description"] = $productdescription;
@@ -283,6 +293,7 @@ class OrderPayments extends Controller
                     "payment_method_types" => $array["payment_method"]["payment_method_types"],
                     "discounts" => $array["coupon_data"]["discounts"],
                     "shipping_options" => $array["shipping_data"]["shipping_options"],
+                    'automatic_tax' => ['enabled' => true],
 
                 ]
             );
