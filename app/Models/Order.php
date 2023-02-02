@@ -41,6 +41,12 @@ class Order extends Model
     {
         return $this->hasOne(OrderPayment::class,"order_id","id");
     }
+    public function country(){
+        return $this->hasOne(Country::class,"id","country_id");
+    }
+    public function state(){
+        return $this->belongsTo(State::class,"state_id");
+    }
 
 
 }

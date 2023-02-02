@@ -24,12 +24,6 @@ class OrderPayments extends Controller
     {
         $stripeprivatekey = env('STRIPE_PRIVATE_KEY', '');
         $stripe = new StripeClient($stripeprivatekey);
-/*         $tax = $stripe->taxRates->create([
-            "display_name" => "VAT",
-            "inclusive" => true,
-            "percentage" => 20
-        ]);
-        dd($tax); */
 
         $domain = env("DOMAIN", "https://shop.woodcroftdoorsandcabinets.co.uk");
         if (!isset($request->order_id)) {
@@ -55,46 +49,64 @@ class OrderPayments extends Controller
                 goto a;
             }
         }
+/* Creating a customer */
+
+$customername=sprintf("%s %s",$order->fname,$order->lname);
+$phonenumber=$order->phone;
+$country=$order->country->iso2;
+$state=$order->state->name;
+$city=$order->city;
+$billingaddress1=$order->billing_address;
+$billingaddress2=$order->billing_address2;
+$zipcode=$order->zipcode;
+$email=$order->email;
+$customerid=$order->customer_id;
+$address=["city"=>$city,"country"=>$country,"line1"=>$billingaddress1,"line2"=>$billingaddress2,"postal_code"=>$zipcode,"state"=>$state];
+$iscustomerexists=$stripe->customers->all(["email"=>$email])["data"];
+$value=null;
+if(!empty($iscustomerexists)){
+    foreach($iscustomerexists as $customers){
+        if(count($value=array_diff($customers->shipping->address->toarray(),$address)) == 0)
+        {
+            $customer=$customers;
+                 break;
+        }else{
+            $customer=$customers;
+        }
+}
+}else{
+    $customer=$stripe->customers->create([
+        "address"=>$address,
+        "name"=>$customername,
+        "phone"=>$phonenumber,
+        "email"=>$email,
+        "metadata"=>["customer_id"=>$customerid],
+        "shipping"=>["address"=>$address,"name"=>$customername]
+    
+    ]);
+}
+if(!empty($value))
+{
+
+    $customer=$stripe->customers->update(
+        $customer->id,
+        ["shipping"=>["address"=>$address,"name"=>$customername]]); 
+}
+/* creating a customer end */
         $coupon = $order->coupon;
         $shipping_name = "Standard";
         $shipping_price = $order->shipping;
         $orderdetails = [];
-
-
-
-
-        // return response()->json($order);
-
-        /*  $session = $stripe->checkout->sessions->retrieve("cs_test_a15Mzf4SfN6P6OyAtwwlDcV8NcThX5Xj1JuZr6hLxgvSTtMv1kx0W1F79J");
-        dd($session); */
-
-        /* $tax = $stripe->taxRates->create([
-            "display_name" => "VAT",
-            "inclusive" => true,
-            "percentage" => 20
-        ]);
-        dd($tax); */
-        // $array=[
-        // [] - Product Info
-        // []- coupon info
-        // [] - shipping
-        // [] - vat
-        // ];
-        /*
-        ** if coupon exist then i have to made coupon first then i have to pass this in array
-        ** To save data in database i have to made one webhook url because when data submit this url will be called
-        */
-
         $array = [
             "data" => true,
             "Product_info" => [],
             "coupon_data" => [
                 'discounts' => [],
             ],
-            "shipping_data" => ['shipping_options' => [['shipping_rate_data' => ['display_name' => 'Shipping Cost','tax_behavior' => 'exclusive','tax_code' => 'txcd_99999999', 'type' => 'fixed_amount', 'fixed_amount' => ['amount' => 0 * 100, 'currency' => 'gbp']]]],],
+            "shipping_data" => ['shipping_options' => [['shipping_rate_data' => ['display_name' => 'Shipping Cost', 'type' => 'fixed_amount','tax_behavior' => 'exclusive','tax_code' => 'txcd_92010001', 'fixed_amount' => ['amount' => 0 * 100, 'currency' => 'gbp']]]],],
             "vat" => [],
             "order_id" => ['metadata' => ['order_id' => $orderid]],
-            "payment_method" => ['payment_method_types' => ['card', 'klarna'],],
+            "payment_method" => ['payment_method_types' => ['card'],],
         ];
         $array["shipping_data"]["shipping_options"][0]["shipping_rate_data"]["display_name"] = $shipping_price == 0 ? "Free Shipping" : $shipping_name;
         $array["shipping_data"]["shipping_options"][0]["shipping_rate_data"]["fixed_amount"]["amount"] = ($shipping_price * 100);
@@ -239,7 +251,6 @@ class OrderPayments extends Controller
                     'unit_amount' => $product_price * 100,
                 ],
                 'quantity' => $order_detail->qty,
-                /* "tax_rates" => [env("STRIPE_TAX_CODE")] */
                 
             ];
             if (!empty($productdescription)) {
@@ -294,10 +305,12 @@ class OrderPayments extends Controller
                     "discounts" => $array["coupon_data"]["discounts"],
                     "shipping_options" => $array["shipping_data"]["shipping_options"],
                     'automatic_tax' => ['enabled' => true],
+                    "customer"=>$customer->id,
 
                 ]
             );
         }
+
 
         /// create record in database start
         try {
