@@ -37,6 +37,7 @@ class OrderPayments extends Controller
         }
 
         $checkorderexist = OrderPayment::where("order_id", $orderid)->first();
+
         if (!empty($checkorderexist)) {
             $session = $stripe->checkout->sessions->retrieve($checkorderexist->checkout_session_id);
             if ($session["status"] == "complete") {
@@ -82,7 +83,7 @@ if(!empty($iscustomerexists)){
         "email"=>$email,
         "metadata"=>["customer_id"=>$customerid],
         "shipping"=>["address"=>$address,"name"=>$customername]
-    
+
     ]);
 }
 if(!empty($value))
@@ -90,7 +91,7 @@ if(!empty($value))
 
     $customer=$stripe->customers->update(
         $customer->id,
-        ["shipping"=>["address"=>$address,"name"=>$customername]]); 
+        ["shipping"=>["address"=>$address,"name"=>$customername]]);
 }
 /* creating a customer end */
         $coupon = $order->coupon;
@@ -245,13 +246,13 @@ if(!empty($value))
                         'name' => $order_detail->product->name,
                         /* "images" => [$image], */
                         /* "description" => $productdescription, */
-                      
+
 
                     ],
                     'unit_amount' => $product_price * 100,
                 ],
                 'quantity' => $order_detail->qty,
-                
+
             ];
             if (!empty($productdescription)) {
                 $array["Product_info"][$i]['price_data']['product_data']["description"] = $productdescription;
@@ -259,12 +260,22 @@ if(!empty($value))
             $i++;
             $productdescription = null;
         }
-        if (!empty($coupon) && $coupon_discount_price != 0) {
+        if (!empty($coupon) && $coupon_discount_price != 0 && $order_detail->coupon_discount_type == "percentage") {
 
 
             $couponstripe = $stripe->coupons->create([
                 "name" => $coupon->name,
-                "amount_off" => $coupon_discount_price * 100,
+                "percent_off" => $order_detail->coupon_discount_amount,
+                "currency" => "gbp",
+                "duration" => "once",
+                /* "max_redemptions" => 1, */
+            ]);
+
+            array_push($array["coupon_data"]["discounts"], ["coupon" => $couponstripe->id ?? "coupon"]);
+        }elseif(!empty($coupon) && $coupon_discount_price != 0 ){
+            $couponstripe = $stripe->coupons->create([
+                "name" => $coupon->name,
+                "amount_off" => $order_detail->coupon_discount_amount * 100,
                 "currency" => "gbp",
                 "duration" => "once",
                 /* "max_redemptions" => 1, */
